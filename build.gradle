@@ -1,0 +1,76 @@
+// If you would like more information on the gradle-appengine-plugin please refer to the github page
+// https://github.com/GoogleCloudPlatform/gradle-appengine-plugin
+
+buildscript {
+  repositories {
+    mavenCentral()
+      jcenter()
+  }
+  dependencies {
+    // App Engine Gradle plugin
+    classpath 'com.google.cloud.tools:appengine-gradle-plugin:2.2.0'
+  }
+}
+
+// Production
+// def deployProjectId = 'detect-cluster-ivr'
+
+// Dev
+def deployProjectId = 'dev-dothat-api'
+
+repositories {
+  mavenCentral()
+  jcenter();
+}
+
+apply plugin: 'java'                              // Standard Java tasks
+apply plugin: 'war'                               // Standard Web Archive plugin
+apply plugin: 'com.google.cloud.tools.appengine'  // App Engine tasks
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+sourceSets {
+  main {
+    java {
+      srcDirs 'src/main/java'
+    }
+  }
+}
+
+dependencies {
+  // App Engine API
+  compile 'com.google.appengine:appengine-api-1.0-sdk:1.9.80'
+
+  providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+  compile group: 'javax.inject', name: 'javax.inject', version: '1'
+  compile 'jstl:jstl:1.2'
+
+  // Endpoints Frameworks v2.0
+  compile 'com.google.endpoints:endpoints-framework:2.0.13'
+
+  // Logging
+  compile 'org.slf4j:slf4j-api:1.7.21'
+  compile 'org.slf4j:slf4j-jdk14:1.7.21'
+
+  // Objectify for data storage and access
+  compile 'com.googlecode.objectify:objectify:6.0.6'
+
+  // Common Utils and Libraries
+  compile 'com.google.guava:guava:29.0-jre'
+  compile 'joda-time:joda-time:2.10.6'
+  compile 'org.json:json:20190722:'
+}
+
+appengine {
+  run {
+    host = "0.0.0.0"
+    port = 8888
+    // jvmFlags = ['-Ddatastore.backing_store=../local_db.bin']
+    // jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5555']
+  }
+  deploy {   // deploy configuration
+    projectId = deployProjectId
+    version = '1'
+  }
+}
