@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlet Definitions -->
+
+  <servlet>
+    <servlet-name>NodeVisitLogger</servlet-name>
+    <servlet-class>com.dothat.ivr.webhook.NodeVisitLogger</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NodeVisitLogger</servlet-name>
+    <!--
+    Message received notifications are received on URL on the format
+    /ivr/node/<ivr-provider>/log/
+    -->
+    <url-pattern>/ivr/node/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>CallLogger</servlet-name>
+    <servlet-class>com.dothat.ivr.webhook.CallLogger</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CallLogger</servlet-name>
+    <!--
+    Message received notifications are received on URL on the format
+    /ivr/call/<ivr-provider>/log/
+    -->
+    <url-pattern>/ivr/call/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- Static File Definitions -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <!-- App Initialization -->
+  <listener>
+    <listener-class>com.dothat.startup.AppInitializer</listener-class>
+  </listener>
+
+  <!-- Objectify Filter -->
+  <filter>
+    <filter-name>ObjectifyFilter</filter-name>
+    <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>ObjectifyFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+</web-app>
