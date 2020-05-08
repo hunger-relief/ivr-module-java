@@ -29,7 +29,7 @@ public class CallLogger extends HttpServlet {
     String uri = req.getRequestURI();
     String queryString = req.getQueryString();
     Map<String, List<String>> parameters = RequestParameterExtractor.extractFromGetRequest(queryString);
-    JSONObject json = new JSONObject(parameters);
+    JSONObject json = new JSONObject(RequestParameterExtractor.prepareForJson(parameters));
     processRequest(uri, json, resp);
   }
   
@@ -39,7 +39,7 @@ public class CallLogger extends HttpServlet {
     String contentType = req.getContentType();
     if (ContentType.TEXT_PLAIN.equals(contentType)) {
       Map<String, List<String>> parameters = RequestParameterExtractor.extractFromPostRequest(req);
-      JSONObject json = new JSONObject(parameters);
+      JSONObject json = new JSONObject(RequestParameterExtractor.prepareForJson(parameters));
       processRequest(uri, json, resp);
     } else if (ContentType.JSON.equals(contentType)) {
       JSONObject json = RequestParameterExtractor.extractFromJsonRequest(req);

@@ -22,6 +22,19 @@ class RequestParameterExtractor {
 
   private static final Logger logger = LoggerFactory.getLogger(RequestParameterExtractor.class);
   
+  static Map<String, Object> prepareForJson(Map<String, List<String>> parameters) {
+    Map<String, Object> map = new HashMap<>();
+    for (String key : parameters.keySet()) {
+      List<String> values = parameters.get(key);
+      if (values.size() == 1) {
+        map.put(key, values.get(0));
+      } else if (values.size() > 1) {
+        map.put(key, values);
+      }
+    }
+    return map;
+  }
+  
   static Map<String, List<String>> extractFromGetRequest(String queryString)
       throws UnsupportedEncodingException {
     Map<String, List<String>> parameters = new HashMap<>();
@@ -38,7 +51,7 @@ class RequestParameterExtractor {
             value = nameValuePair.substring(separatorIndex + 1);
           }
         }
-        key = key.toUpperCase();
+        // key = key.toUpperCase();
         if (!parameters.containsKey(key)) {
           parameters.put(key, new LinkedList<>());
         }
@@ -54,7 +67,7 @@ class RequestParameterExtractor {
     if (parameterMap != null) {
       for (Object mapKey : parameterMap.keySet()) {
         String key = (String) mapKey;
-        key = key.toUpperCase();
+        // key = key.toUpperCase();
         if (!parameters.containsKey(key)) {
           parameters.put(key, new LinkedList<>());
         }
