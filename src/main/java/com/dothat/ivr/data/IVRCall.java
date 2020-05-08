@@ -14,9 +14,9 @@ public class IVRCall {
   private String ivrVirtualNumber;
   
   private Country country;
-  private String countryCode;
+  private String countryValue;
   private String state;
-  private String stateCode;
+  private String stateValue;
   private String locationHint;
   
   private SimpleDate callDate;
@@ -85,12 +85,12 @@ public class IVRCall {
     this.country = country;
   }
   
-  public String getCountryCode() {
-    return countryCode;
+  public String getCountryValue() {
+    return countryValue;
   }
   
-  public void setCountryCode(String countryCode) {
-    this.countryCode = countryCode;
+  public void setCountryValue(String countryValue) {
+    this.countryValue = countryValue;
   }
   
   public String getState() {
@@ -101,12 +101,12 @@ public class IVRCall {
     this.state = state;
   }
   
-  public String getStateCode() {
-    return stateCode;
+  public String getStateValue() {
+    return stateValue;
   }
   
-  public void setStateCode(String stateCode) {
-    this.stateCode = stateCode;
+  public void setStateValue(String stateValue) {
+    this.stateValue = stateValue;
   }
   
   public String getLocationHint() {

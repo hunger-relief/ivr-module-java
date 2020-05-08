@@ -64,9 +64,9 @@ public class IVRCallEntity {
     virtualNumber = data.getIvrVirtualNumber();
 
     country = data.getCountry();
-    countryCode = data.getCountryCode();
+    countryCode = data.getCountryValue();
     state = data.getState();
-    stateCode = data.getStateCode();
+    stateCode = data.getStateValue();
     locationHint = data.getLocationHint();
 
     callDate = JodaUtils.toLocalDate(data.getCallDate(), true);
@@ -94,9 +94,9 @@ public class IVRCallEntity {
     data.setIvrVirtualNumber(virtualNumber);
     
     data.setCountry(country);
-    data.setCountryCode(countryCode);
+    data.setCountryValue(countryCode);
     data.setState(state);
-    data.setStateCode(stateCode);
+    data.setStateValue(stateCode);
     data.setLocationHint(locationHint);
 
     data.setCallDate(JodaUtils.toSimpleDate(callDate));
