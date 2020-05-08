@@ -13,10 +13,13 @@ buildscript {
 }
 
 // Production
-// def deployProjectId = 'detect-cluster-ivr'
+// def deployProjectId = 'hunger-relief-coop'
 
 // Dev
-def deployProjectId = 'dev-dothat-api'
+// def deployProjectId = 'hunger-relief-dev'
+
+// Automatic
+def deployProjectId = 'GCLOUD_CONFIG'
 
 repositories {
   mavenCentral()

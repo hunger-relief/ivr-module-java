@@ -6,7 +6,17 @@ package com.dothat.location.data;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum Country {
-  INDIA,
-  UNKNOWN,
+  INDIA("IN"),
+  UNKNOWN(""),
   ;
+  
+  private String isoCode;
+  
+  Country(String isoCode) {
+    this.isoCode = isoCode;
+  }
+  
+  public String getIsoCode() {
+    return isoCode;
+  }
 }
