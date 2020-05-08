@@ -20,6 +20,7 @@ public class IVRDataExtractorRegistry {
   private final Map<IVRProvider, IVRDataExtractor.Factory> extractMap = new HashMap<>();
   
   private IVRDataExtractorRegistry() {
+    extractMap.put(IVRProvider.KALEYRA, new KaleyraDataExtractor.Factory());
     extractMap.put(IVRProvider.MY_OPERATOR, new MyOperatorDataExtractor.Factory());
   }
   
