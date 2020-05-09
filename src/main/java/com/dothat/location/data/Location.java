@@ -2,6 +2,8 @@ package com.dothat.location.data;
 
 import com.google.api.server.spi.types.DateAndTime;
 
+import java.util.Objects;
+
 /**
  * Data object for a location or area where the service is provided.
  *
@@ -89,5 +91,21 @@ public class Location {
   
   public void setModificationTimestamp(DateAndTime modificationTimestamp) {
     this.modificationTimestamp = modificationTimestamp;
+  }
+  
+  public boolean isIdentical(Location data) {
+    return data != null
+        && Objects.equals(country, data.country)
+        && Objects.equals(state, data.state)
+        && isEqualUpperCase(city, data.city)
+        && isEqualUpperCase(zone, data.zone)
+        && isEqualUpperCase(area, data.area)
+        && isEqualUpperCase(location, data.location)
+        ;
+  }
+  
+  private boolean isEqualUpperCase(String lhs, String rhs) {
+    return ((lhs == null && rhs == null)
+        || (lhs != null && rhs != null && lhs.toUpperCase().equals(rhs.toUpperCase())));
   }
 }
