@@ -1,9 +1,9 @@
-package com.dothat.validator;
+package com.dothat.common.validate;
 
 import com.dothat.location.data.Country;
-import com.dothat.validator.phone.CountryCode;
-import com.dothat.validator.phone.CountryCodeLookup;
-import com.dothat.validator.phone.PhoneFormat;
+import com.dothat.common.validate.phone.CountryCode;
+import com.dothat.common.validate.phone.CountryCodeLookup;
+import com.dothat.common.validate.phone.PhoneFormat;
 
 /**
  * Sanitizers a phone number.

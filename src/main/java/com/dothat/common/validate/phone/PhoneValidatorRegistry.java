@@ -1,7 +1,7 @@
-package com.dothat.validator.phone;
+package com.dothat.common.validate.phone;
 
 import com.dothat.location.data.Country;
-import com.dothat.validator.phone.impl.IndiaPhoneValidator;
+import com.dothat.common.validate.phone.impl.IndiaPhoneValidator;
 
 import java.util.HashMap;
 import java.util.Map;

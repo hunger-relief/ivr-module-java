@@ -1,7 +1,7 @@
 package com.dothat.identity.store;
 
 import com.dothat.identity.data.IdSourceType;
-import com.dothat.objectify.PersistenceService;
+import com.dothat.common.objectify.PersistenceService;
 
 /**
  * Checks Uniqueness constraint for External Source Id.

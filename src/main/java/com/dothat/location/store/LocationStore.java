@@ -1,8 +1,8 @@
 package com.dothat.location.store;
 
 import com.dothat.location.data.Location;
-import com.dothat.objectify.JodaUtils;
-import com.dothat.objectify.PersistenceService;
+import com.dothat.common.objectify.JodaUtils;
+import com.dothat.common.objectify.PersistenceService;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;

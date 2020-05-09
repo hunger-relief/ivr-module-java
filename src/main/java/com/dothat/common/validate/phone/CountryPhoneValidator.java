@@ -1,4 +1,4 @@
-package com.dothat.validator.phone;
+package com.dothat.common.validate.phone;
 
 /**
  * Interface for Country specific validation of phone number.

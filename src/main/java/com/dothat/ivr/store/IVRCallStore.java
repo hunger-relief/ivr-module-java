@@ -1,8 +1,8 @@
 package com.dothat.ivr.store;
 
 import com.dothat.ivr.data.IVRCall;
-import com.dothat.objectify.JodaUtils;
-import com.dothat.objectify.PersistenceService;
+import com.dothat.common.objectify.JodaUtils;
+import com.dothat.common.objectify.PersistenceService;
 import com.googlecode.objectify.Key;
 import org.joda.time.DateTime;
 

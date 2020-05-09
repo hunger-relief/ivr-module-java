@@ -3,7 +3,7 @@ package com.dothat.identity.store;
 import com.dothat.identity.data.IdSourceType;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.identity.data.ExternalID;
-import com.dothat.objectify.PersistenceService;
+import com.dothat.common.objectify.PersistenceService;
 import com.googlecode.objectify.Key;
 
 import java.util.List;
