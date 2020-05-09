@@ -1,4 +1,4 @@
-package com.dothat.ivr.data;
+package com.dothat.ivr.notif.data;
 
 import com.dothat.common.field.Field;
 

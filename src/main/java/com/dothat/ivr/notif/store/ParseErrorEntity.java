@@ -1,8 +1,8 @@
-package com.dothat.ivr.store;
+package com.dothat.ivr.notif.store;
 
-import com.dothat.ivr.data.IVRDataField;
-import com.dothat.ivr.data.ParseError;
-import com.dothat.ivr.data.ParseErrorType;
+import com.dothat.ivr.notif.data.IVRDataField;
+import com.dothat.ivr.notif.data.ParseError;
+import com.dothat.ivr.notif.data.ParseErrorType;
 
 /**
  * Entity that store Parse Errors

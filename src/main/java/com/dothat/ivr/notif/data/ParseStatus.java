@@ -1,4 +1,4 @@
-package com.dothat.ivr.data;
+package com.dothat.ivr.notif.data;
 
 /**
  * Enum to indicate whether the Notification was parsed successfully.

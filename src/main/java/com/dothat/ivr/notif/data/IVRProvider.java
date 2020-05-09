@@ -1,4 +1,4 @@
-package com.dothat.ivr.data;
+package com.dothat.ivr.notif.data;
 
 /**
  * Enum for IVR Service Providers supported by the system

@@ -1,7 +1,7 @@
-package com.dothat.ivr.extractor;
+package com.dothat.ivr.notif.extractor;
 
-import com.dothat.ivr.data.IVRCall;
-import com.dothat.ivr.data.IVRProvider;
+import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRProvider;
 import org.json.JSONObject;
 
 /**

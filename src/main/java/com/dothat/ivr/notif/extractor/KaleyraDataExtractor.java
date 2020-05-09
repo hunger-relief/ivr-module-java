@@ -1,8 +1,8 @@
-package com.dothat.ivr.extractor;
+package com.dothat.ivr.notif.extractor;
 
-import com.dothat.ivr.data.IVRCall;
-import com.dothat.ivr.data.IVRDataField;
-import com.dothat.ivr.data.IVRProvider;
+import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRDataField;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.State;
 import com.dothat.location.impl.IndiaState;
