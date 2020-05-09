@@ -1,6 +1,8 @@
 package com.dothat.ivr.data;
 
-public enum IVRDataField {
+import com.dothat.common.field.Field;
+
+public enum IVRDataField implements Field {
   CALL_ID,
   CALL_NODE_ID,
   
@@ -16,4 +18,10 @@ public enum IVRDataField {
   CALL_DURATION,
   CALL_START_TIMESTAMP,
   CALL_END_TIMESTAMP,
+  ;
+  
+  @Override
+  public String getFieldName() {
+    return name();
+  }
 }
