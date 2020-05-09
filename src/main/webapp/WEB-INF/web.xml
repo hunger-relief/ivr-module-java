@@ -28,6 +28,19 @@
     <url-pattern>/ivr/call/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RegisterLocationServlet</servlet-name>
+    <servlet-class>com.dothat.location.servlet.RegisterLocationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterLocationServlet</servlet-name>
+    <!--
+    Requests are received on URL on the format
+    /location/register/
+    -->
+    <url-pattern>/location/register/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Static File Definitions -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
