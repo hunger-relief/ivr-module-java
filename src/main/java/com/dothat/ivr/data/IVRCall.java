@@ -13,7 +13,7 @@ public class IVRCall {
   
   private String callerNumber;
   private String ivrNumber;
-  private String ivrVirtualNumber;
+  private String dialedNumber;
   
   private Country country;
   private String countryValue;
@@ -74,12 +74,12 @@ public class IVRCall {
     this.ivrNumber = ivrNumber;
   }
   
-  public String getIvrVirtualNumber() {
-    return ivrVirtualNumber;
+  public String getDialedNumber() {
+    return dialedNumber;
   }
   
-  public void setIvrVirtualNumber(String ivrVirtualNumber) {
-    this.ivrVirtualNumber = ivrVirtualNumber;
+  public void setDialedNumber(String dialedNumber) {
+    this.dialedNumber = dialedNumber;
   }
   
   public Country getCountry() {

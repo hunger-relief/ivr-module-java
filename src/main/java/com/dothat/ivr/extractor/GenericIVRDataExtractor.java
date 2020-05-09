@@ -50,7 +50,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     String countryValue = getValue(json, IVRDataField.COUNTRY);
     data.setCountryValue(countryValue);
     Country country = Country.UNKNOWN;
-    if (Strings.isNullOrEmpty(countryValue)) {
+    if (!Strings.isNullOrEmpty(countryValue)) {
       country = getCountryCodeMap().get(data.getCountryValue());
       if (country == null) {
         errorList.add(new ParseError(ParseErrorType.INVALID_VALUE, IVRDataField.COUNTRY));
@@ -65,7 +65,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     data.setState(state == null ? "UNKNOWN" : state.getCode());
   
     data.setCallerNumber(getPhone(country, json, IVRDataField.CALLER_NUMBER));
-    data.setIvrVirtualNumber(getPhone(country, json, IVRDataField.VIRTUAL_NUMBER));
+    data.setDialedNumber(getPhone(country, json, IVRDataField.DIALED_NUMBER));
     data.setIvrNumber(getPhone(country, json, IVRDataField.IVR_NUMBER));
 
     if (errorList.isEmpty()) {
@@ -80,7 +80,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
   
   protected String getValue(JSONObject json, IVRDataField field) {
     String fieldName = getFieldNameMap().get(field);
-    if (fieldName == null) {
+    if (Strings.isNullOrEmpty(fieldName)) {
       errorList.add(new ParseError(ParseErrorType.MISSING_FIELD_CONFIG, field));
       logger.error("No field name defined for {}", field);
       return null;
@@ -107,7 +107,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     }
     if (country == null) {
       errorList.add(new ParseError(ParseErrorType.CANNOT_PARSE, field));
-      return null;
+      return phone;
     }
     PhoneNumberSanitizer sanitizer = new PhoneNumberSanitizer(country);
     try {
