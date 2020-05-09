@@ -1,4 +1,4 @@
-package com.dothat.objectify;
+package com.dothat.common.objectify;
 
 import com.google.api.server.spi.types.DateAndTime;
 import com.google.api.server.spi.types.SimpleDate;

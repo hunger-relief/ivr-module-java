@@ -1,9 +1,9 @@
-package com.dothat.validator;
+package com.dothat.common.validate;
 
 import com.dothat.location.data.Country;
-import com.dothat.validator.phone.CountryCodeLookup;
-import com.dothat.validator.phone.CountryPhoneValidator;
-import com.dothat.validator.phone.PhoneValidatorRegistry;
+import com.dothat.common.validate.phone.CountryCodeLookup;
+import com.dothat.common.validate.phone.CountryPhoneValidator;
+import com.dothat.common.validate.phone.PhoneValidatorRegistry;
 
 import java.util.regex.Pattern;
 

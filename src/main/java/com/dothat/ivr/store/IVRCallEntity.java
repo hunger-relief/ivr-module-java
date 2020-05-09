@@ -5,7 +5,7 @@ import com.dothat.ivr.data.IVRProvider;
 import com.dothat.ivr.data.ParseError;
 import com.dothat.ivr.data.ParseStatus;
 import com.dothat.location.data.Country;
-import com.dothat.objectify.JodaUtils;
+import com.dothat.common.objectify.JodaUtils;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;

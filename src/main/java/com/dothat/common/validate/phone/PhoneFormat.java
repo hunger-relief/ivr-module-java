@@ -1,4 +1,4 @@
-package com.dothat.validator.phone;
+package com.dothat.common.validate.phone;
 
 /**
  * Data for format used by the country.

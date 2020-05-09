@@ -5,7 +5,7 @@ import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.identity.data.ExternalID;
 import com.dothat.identity.store.IdentityStore;
 import com.dothat.identity.store.IdentityStoreImpl;
-import com.dothat.validator.PhoneNumberValidator;
+import com.dothat.common.validate.PhoneNumberValidator;
 
 import java.util.UUID;
 

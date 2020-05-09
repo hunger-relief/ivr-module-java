@@ -1,4 +1,4 @@
-package com.dothat.objectify;
+package com.dothat.common.objectify;
 
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyFactory;

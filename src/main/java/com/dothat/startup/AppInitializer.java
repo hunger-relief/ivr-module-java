@@ -1,6 +1,5 @@
 package com.dothat.startup;
 
-import com.dothat.objectify.PersistenceService;
 import com.google.appengine.api.utils.SystemProperty;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.googlecode.objectify.ObjectifyFactory;

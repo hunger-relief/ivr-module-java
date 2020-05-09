@@ -1,4 +1,4 @@
-package com.dothat.validator.phone;
+package com.dothat.common.validate.phone;
 
 import com.dothat.location.data.Country;
 

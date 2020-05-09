@@ -1,6 +1,6 @@
-package com.dothat.validator.phone.impl;
+package com.dothat.common.validate.phone.impl;
 
-import com.dothat.validator.phone.CountryPhoneValidator;
+import com.dothat.common.validate.phone.CountryPhoneValidator;
 
 /**
  * Validates the Phone Number for India

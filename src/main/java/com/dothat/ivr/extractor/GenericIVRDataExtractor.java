@@ -3,7 +3,7 @@ package com.dothat.ivr.extractor;
 import com.dothat.ivr.data.*;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.State;
-import com.dothat.validator.PhoneNumberSanitizer;
+import com.dothat.common.validate.PhoneNumberSanitizer;
 import com.google.common.base.Strings;
 import org.json.JSONException;
 import org.json.JSONObject;
