@@ -23,8 +23,12 @@ public class PhoneNumberSanitizer {
 
     // Remove all leading zeros
     phone = phone.replaceAll("^[0]+", "");
-    
+
     CountryCode code = CountryCodeLookup.getInstance().getCode(country);
+    // If country is null or no code is setup for the country, just return the original number
+    if (code == null) {
+      throw new IllegalStateException("No Country Code defined for " + country);
+    }
     String countryCode = code.getCode();
     PhoneFormat format = code.getFormat();
 
