@@ -1,14 +1,14 @@
-package com.dothat.ivr;
+package com.dothat.ivr.notif;
 
-import com.dothat.ivr.data.IVRCall;
-import com.dothat.ivr.store.IVRCallStore;
+import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.store.IVRCallStore;
 
 /**
  * Service layer for IVR based Services.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class IVRLogService {
+public class IVRNotificationService {
   private final IVRCallStore store = new IVRCallStore();
   
   public Long save(IVRCall data) {

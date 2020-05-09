@@ -1,6 +1,6 @@
-package com.dothat.ivr.extractor;
+package com.dothat.ivr.notif.extractor;
 
-import com.dothat.ivr.data.*;
+import com.dothat.ivr.notif.data.*;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.State;
 import com.dothat.common.validate.PhoneNumberSanitizer;

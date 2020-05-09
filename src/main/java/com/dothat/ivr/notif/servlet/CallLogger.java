@@ -1,10 +1,10 @@
-package com.dothat.ivr.webhook;
+package com.dothat.ivr.notif.servlet;
 
-import com.dothat.ivr.IVRLogService;
-import com.dothat.ivr.data.IVRCall;
-import com.dothat.ivr.data.IVRProvider;
-import com.dothat.ivr.extractor.IVRDataExtractor;
-import com.dothat.ivr.extractor.IVRDataExtractorRegistry;
+import com.dothat.ivr.notif.IVRNotificationService;
+import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRProvider;
+import com.dothat.ivr.notif.extractor.IVRDataExtractor;
+import com.dothat.ivr.notif.extractor.IVRDataExtractorRegistry;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class CallLogger extends HttpServlet {
       logger.info("Content received on URI " + uri + " will be processed by extractor for " + provider);
       // Extract and Save the call
       IVRCall call = extractor.extractCallData(uri, json);
-      callId = new IVRLogService().save(call);
+      callId = new IVRNotificationService().save(call);
     }
     // Save the Call
     resp.setContentType("text/plain");

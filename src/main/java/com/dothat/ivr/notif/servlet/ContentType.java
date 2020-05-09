@@ -1,4 +1,4 @@
-package com.dothat.ivr.webhook;
+package com.dothat.ivr.notif.servlet;
 
 /**
  * Constants for Content Types.

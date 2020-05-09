@@ -1,4 +1,4 @@
-package com.dothat.ivr.data;
+package com.dothat.ivr.notif.data;
 
 /**
  * Tracks Parsing Errors of Incoming notifications.

@@ -5,7 +5,7 @@
 
   <servlet>
     <servlet-name>NodeVisitLogger</servlet-name>
-    <servlet-class>com.dothat.ivr.webhook.NodeVisitLogger</servlet-class>
+    <servlet-class>com.dothat.ivr.notif.servlet.NodeVisitLogger</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>NodeVisitLogger</servlet-name>
@@ -17,7 +17,7 @@
   </servlet-mapping>
   <servlet>
     <servlet-name>CallLogger</servlet-name>
-    <servlet-class>com.dothat.ivr.webhook.CallLogger</servlet-class>
+    <servlet-class>com.dothat.ivr.notif.servlet.CallLogger</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>CallLogger</servlet-name>

@@ -1,6 +1,6 @@
-package com.dothat.ivr.webhook;
+package com.dothat.ivr.notif.servlet;
 
-import com.dothat.ivr.data.IVRProvider;
+import com.dothat.ivr.notif.data.IVRProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

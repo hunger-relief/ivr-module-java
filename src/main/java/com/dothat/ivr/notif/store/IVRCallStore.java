@@ -1,6 +1,6 @@
-package com.dothat.ivr.store;
+package com.dothat.ivr.notif.store;
 
-import com.dothat.ivr.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.objectify.PersistenceService;
 import com.googlecode.objectify.Key;

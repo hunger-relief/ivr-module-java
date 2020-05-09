@@ -1,9 +1,9 @@
-package com.dothat.ivr.store;
+package com.dothat.ivr.notif.store;
 
-import com.dothat.ivr.data.IVRCall;
-import com.dothat.ivr.data.IVRProvider;
-import com.dothat.ivr.data.ParseError;
-import com.dothat.ivr.data.ParseStatus;
+import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRProvider;
+import com.dothat.ivr.notif.data.ParseError;
+import com.dothat.ivr.notif.data.ParseStatus;
 import com.dothat.location.data.Country;
 import com.dothat.common.objectify.JodaUtils;
 import com.googlecode.objectify.annotation.Entity;

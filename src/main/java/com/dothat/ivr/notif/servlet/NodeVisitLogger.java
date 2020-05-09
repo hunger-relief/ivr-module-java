@@ -4,7 +4,7 @@
    https://github.com/GoogleCloudPlatform/gradle-appengine-templates/tree/master/HelloWorld
 */
 
-package com.dothat.ivr.webhook;
+package com.dothat.ivr.notif.servlet;
 
 
 import javax.servlet.http.HttpServlet;
