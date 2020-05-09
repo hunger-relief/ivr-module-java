@@ -2,6 +2,8 @@ package com.dothat.ivr.store;
 
 import com.dothat.ivr.data.IVRCall;
 import com.dothat.ivr.data.IVRProvider;
+import com.dothat.ivr.data.ParseError;
+import com.dothat.ivr.data.ParseStatus;
 import com.dothat.location.data.Country;
 import com.dothat.objectify.JodaUtils;
 import com.googlecode.objectify.annotation.Entity;
@@ -9,6 +11,9 @@ import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Entity to store IVR call data using Objectify.
@@ -29,13 +34,13 @@ public class IVRCallEntity {
   private String ivrNumber;
   private String virtualNumber;
   
+  @Index
   private Country country;
+  @Index
   private String state;
   private String locationHint;
-  @Index
-  private String countryCode;
-  @Index
-  private String stateCode;
+  private String countryValue;
+  private String circle;
   
   @Index
   private LocalDate callDate;
@@ -44,6 +49,10 @@ public class IVRCallEntity {
   
   private String notificationUri;
   private String notificationContent;
+  
+  @Index
+  private ParseStatus parseStatus;
+  private List<ParseErrorEntity> errorList;
   
   private DateTime creationTimestamp;
   private DateTime modificationTimestamp;
@@ -64,9 +73,9 @@ public class IVRCallEntity {
     virtualNumber = data.getIvrVirtualNumber();
 
     country = data.getCountry();
-    countryCode = data.getCountryValue();
+    countryValue = data.getCountryValue();
     state = data.getState();
-    stateCode = data.getStateValue();
+    circle = data.getCircle();
     locationHint = data.getLocationHint();
 
     callDate = JodaUtils.toLocalDate(data.getCallDate(), true);
@@ -76,6 +85,14 @@ public class IVRCallEntity {
     notificationUri = data.getNotificationUri();
     notificationContent = data.getNotificationContent();
 
+    parseStatus = data.getParseStatus();
+    if (data.getErrorList() != null && !data.getErrorList().isEmpty()) {
+      errorList = new ArrayList<>();
+      for (ParseError error : data.getErrorList()) {
+        errorList.add(new ParseErrorEntity(error));
+      }
+    }
+    
     if (data.getCreationTimestamp() != null) {
       creationTimestamp = JodaUtils.toDateTime(data.getCreationTimestamp());
     }
@@ -94,9 +111,9 @@ public class IVRCallEntity {
     data.setIvrVirtualNumber(virtualNumber);
     
     data.setCountry(country);
-    data.setCountryValue(countryCode);
+    data.setCountryValue(countryValue);
     data.setState(state);
-    data.setStateValue(stateCode);
+    data.setCircle(circle);
     data.setLocationHint(locationHint);
 
     data.setCallDate(JodaUtils.toSimpleDate(callDate));
@@ -105,6 +122,15 @@ public class IVRCallEntity {
     
     data.setNotificationUri(notificationUri);
     data.setNotificationContent(notificationContent);
+    
+    data.setParseStatus(parseStatus);
+    if (errorList != null && !errorList.isEmpty()) {
+      List<ParseError> errors = new ArrayList<>();
+      for (ParseErrorEntity error : errorList) {
+        errors.add(error.getData());
+      }
+      data.setErrorList(errors);
+    }
     
     data.setCreationTimestamp(JodaUtils.toDateAndTime(creationTimestamp));
     data.setModificationTimestamp(JodaUtils.toDateAndTime(modificationTimestamp));
