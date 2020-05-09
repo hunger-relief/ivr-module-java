@@ -4,6 +4,8 @@ import com.dothat.location.data.Country;
 import com.google.api.server.spi.types.DateAndTime;
 import com.google.api.server.spi.types.SimpleDate;
 
+import java.util.List;
+
 public class IVRCall {
   private Long callId;
   private IVRProvider provider;
@@ -16,7 +18,7 @@ public class IVRCall {
   private Country country;
   private String countryValue;
   private String state;
-  private String stateValue;
+  private String circle;
   private String locationHint;
   
   private SimpleDate callDate;
@@ -25,6 +27,9 @@ public class IVRCall {
   
   private String notificationUri;
   private String notificationContent;
+  
+  private ParseStatus parseStatus;
+  private List<ParseError> errorList;
   
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
@@ -101,12 +106,12 @@ public class IVRCall {
     this.state = state;
   }
   
-  public String getStateValue() {
-    return stateValue;
+  public String getCircle() {
+    return circle;
   }
   
-  public void setStateValue(String stateValue) {
-    this.stateValue = stateValue;
+  public void setCircle(String circle) {
+    this.circle = circle;
   }
   
   public String getLocationHint() {
@@ -139,6 +144,22 @@ public class IVRCall {
   
   public void setEndTimestamp(DateAndTime endTimestamp) {
     this.endTimestamp = endTimestamp;
+  }
+  
+  public ParseStatus getParseStatus() {
+    return parseStatus;
+  }
+  
+  public void setParseStatus(ParseStatus parseStatus) {
+    this.parseStatus = parseStatus;
+  }
+  
+  public List<ParseError> getErrorList() {
+    return errorList;
+  }
+  
+  public void setErrorList(List<ParseError> errorList) {
+    this.errorList = errorList;
   }
   
   public String getNotificationUri() {
