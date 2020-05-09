@@ -31,8 +31,9 @@ public class IVRCallEntity {
   
   @Index
   private String callerNumber;
+  @Index
+  private String dialedNumber;
   private String ivrNumber;
-  private String virtualNumber;
   
   @Index
   private Country country;
@@ -69,8 +70,8 @@ public class IVRCallEntity {
     providerCallId = data.getProviderCallId();
 
     callerNumber = data.getCallerNumber();
+    dialedNumber = data.getDialedNumber();
     ivrNumber = data.getIvrNumber();
-    virtualNumber = data.getIvrVirtualNumber();
 
     country = data.getCountry();
     countryValue = data.getCountryValue();
@@ -108,7 +109,7 @@ public class IVRCallEntity {
     
     data.setCallerNumber(callerNumber);
     data.setIvrNumber(ivrNumber);
-    data.setIvrVirtualNumber(virtualNumber);
+    data.setDialedNumber(dialedNumber);
     
     data.setCountry(country);
     data.setCountryValue(countryValue);
