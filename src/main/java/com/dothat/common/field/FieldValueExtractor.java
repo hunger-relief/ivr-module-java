@@ -2,6 +2,8 @@ package com.dothat.common.field;
 
 import com.dothat.common.field.error.FieldError;
 import com.dothat.common.field.error.FieldErrorType;
+import com.dothat.common.validate.PhoneNumberSanitizer;
+import com.dothat.location.data.Country;
 import com.google.common.base.Strings;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,4 +68,24 @@ public class FieldValueExtractor {
       return null;
     }
   }
+  
+  public String extractPhone(Country country, JSONObject json, Field field, boolean isRequired) {
+    String phone = extract(json, field, isRequired);
+    if (Strings.isNullOrEmpty(phone)) {
+      // Error was already added above.
+      return phone;
+    }
+    if (country == null) {
+      errorList.add(new FieldError(FieldErrorType.CANNOT_PARSE, field));
+      return phone;
+    }
+    PhoneNumberSanitizer sanitizer = new PhoneNumberSanitizer(country);
+    try {
+      return sanitizer.sanitize(phone);
+    } catch (IllegalStateException ise) {
+      errorList.add(new FieldError(FieldErrorType.CONFIG_ERROR, field));
+      return phone;
+    }
+  }
+
 }
