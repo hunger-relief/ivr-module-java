@@ -10,7 +10,7 @@ import com.dothat.common.field.Field;
 public enum IVRMappingField implements Field {
   COUNTRY("country"),
   PHONE("phone"),
-  CIRCLE("phone"),
+  CIRCLE("circle"),
   LOCATION_ID("location_id"),
   REQUEST_TYPE("request_type"),
   ;
