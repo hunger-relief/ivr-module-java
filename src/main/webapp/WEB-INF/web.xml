@@ -41,6 +41,19 @@
     <url-pattern>/location/register/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>IVRCallProcessor</servlet-name>
+    <servlet-class>com.dothat.ivr.notif.task.IVRCallProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IVRCallProcessor</servlet-name>
+    <!--
+    Requests are received on URL on the format
+    /location/register/
+    -->
+    <url-pattern>/task/call/processor/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Static File Definitions -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
