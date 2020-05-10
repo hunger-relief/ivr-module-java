@@ -15,6 +15,10 @@ public class ReliefRequest {
 
   private ObfuscatedID requesterID;
   private RequestType requestType;
+  
+  private RequestStatus requestStatus;
+  private AssignmentStatus assignmentStatus;
+  private VerificationStatus verificationStatus;
 
   private Location location;
 
@@ -48,6 +52,30 @@ public class ReliefRequest {
   
   public void setRequestType(RequestType requestType) {
     this.requestType = requestType;
+  }
+  
+  public RequestStatus getRequestStatus() {
+    return requestStatus;
+  }
+  
+  public void setRequestStatus(RequestStatus requestStatus) {
+    this.requestStatus = requestStatus;
+  }
+  
+  public AssignmentStatus getAssignmentStatus() {
+    return assignmentStatus;
+  }
+  
+  public void setAssignmentStatus(AssignmentStatus assignmentStatus) {
+    this.assignmentStatus = assignmentStatus;
+  }
+  
+  public VerificationStatus getVerificationStatus() {
+    return verificationStatus;
+  }
+  
+  public void setVerificationStatus(VerificationStatus verificationStatus) {
+    this.verificationStatus = verificationStatus;
   }
   
   public Location getLocation() {
