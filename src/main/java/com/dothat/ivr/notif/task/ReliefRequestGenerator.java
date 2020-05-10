@@ -7,9 +7,8 @@ import com.dothat.ivr.mapping.data.IVRMapping;
 import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.location.data.Location;
 import com.dothat.relief.provider.ReliefProviderService;
-import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.relief.request.data.RequestType;
-import com.dothat.relief.request.data.SourceType;
+import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.relief.request.data.*;
 
 /**
  * Generates a Relief Request based on Call Notification.
@@ -40,8 +39,12 @@ public class ReliefRequestGenerator {
 
     // Now find a Provider for the Request
     // TODO(abhideep): See if this can be moved out to different service.
-    data.setProvider(providerService.assignProvider(obfId, requestType, location));
-    
+    ReliefProvider provider = providerService.assignProvider(obfId, requestType, location);
+    data.setProvider(provider);
+
+    data.setAssignmentStatus(provider == null ? AssignmentStatus.UNASSIGNED : AssignmentStatus.ASSIGNED);
+    data.setRequestStatus(RequestStatus.RECEIVED);
+    data.setVerificationStatus(VerificationStatus.UNVERIFIED);
     return data;
   }
 }

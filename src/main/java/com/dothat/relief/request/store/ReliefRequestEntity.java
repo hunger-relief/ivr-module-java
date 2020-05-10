@@ -4,9 +4,7 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.location.store.LocationEntity;
 import com.dothat.relief.provider.data.ReliefProvider;
-import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.relief.request.data.RequestType;
-import com.dothat.relief.request.data.SourceType;
+import com.dothat.relief.request.data.*;
 import com.google.common.base.Strings;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
@@ -30,8 +28,12 @@ public class ReliefRequestEntity {
   private String requesterUUID;
   @Index
   private RequestType requestType;
-
-  @Index @Load
+  
+  private RequestStatus requestStatus;
+  private AssignmentStatus assignmentStatus;
+  private VerificationStatus verificationStatus;
+  
+  @Load
   private Ref<LocationEntity> location;
   
   private String source;
@@ -54,6 +56,10 @@ public class ReliefRequestEntity {
       requesterUUID = data.getRequesterID().getIdentifier();
     }
     requestType = data.getRequestType();
+
+    requestStatus = data.getRequestStatus();
+    assignmentStatus = data.getAssignmentStatus();
+    verificationStatus = data.getVerificationStatus();
   
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
@@ -80,7 +86,13 @@ public class ReliefRequestEntity {
       id.setIdentifier(requesterUUID);
       data.setRequesterID(id);
     }
+    
     data.setRequestType(requestType);
+
+    data.setRequestStatus(requestStatus);
+    data.setAssignmentStatus(assignmentStatus);
+    data.setVerificationStatus(verificationStatus);
+
     if (location != null) {
       data.setLocation(location.get().getData());
     }
