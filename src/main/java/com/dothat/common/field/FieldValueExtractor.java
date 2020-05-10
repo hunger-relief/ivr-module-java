@@ -54,7 +54,7 @@ public class FieldValueExtractor {
       return null;
     }
     try {
-      String value = json.getString(fieldName);
+      String value = json.optString(fieldName, null);
       if (Strings.isNullOrEmpty(value) && isRequired) {
         errorList.add(new FieldError(FieldErrorType.MISSING_VALUE, field));
         logger.error("No value retrieved for {} from {}", field.getFieldName(), json);
