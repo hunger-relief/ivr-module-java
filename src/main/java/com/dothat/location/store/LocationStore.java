@@ -22,6 +22,11 @@ public class LocationStore {
     PersistenceService.factory().register(LocationEntity.class);
   }
   
+  public static void init() {
+    // Empty initialization used to trigger the static block
+  }
+  
+  
   public Long store(Location data) {
     DateTime now = DateTime.now();
     if (data.getCreationTimestamp() == null) {

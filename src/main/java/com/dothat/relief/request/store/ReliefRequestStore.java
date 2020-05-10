@@ -2,6 +2,7 @@ package com.dothat.relief.request.store;
 
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.common.queue.TaskGenerator;
+import com.dothat.location.store.LocationStore;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.googlecode.objectify.Key;
 
@@ -14,6 +15,13 @@ public class ReliefRequestStore {
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(ReliefRequestEntity.class);
+  
+    // Initialize Dependencies
+    LocationStore.init();
+  }
+  
+  public static void init() {
+    // Empty initialization used to trigger the static block
   }
   
   public Long store(ReliefRequest data, TaskGenerator<ReliefRequest> taskGenerator) {

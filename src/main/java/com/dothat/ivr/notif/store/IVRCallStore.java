@@ -19,6 +19,10 @@ public class IVRCallStore {
     PersistenceService.factory().register(IVRCallEntity.class);
   }
   
+  public static void init() {
+    // Empty initialization used to trigger the static block
+  }
+  
   public Long store(IVRCall data, TaskGenerator<IVRCall> taskGenerator) {
     DateTime now = DateTime.now();
     if (data.getCreationTimestamp() == null) {

@@ -3,6 +3,7 @@ package com.dothat.ivr.mapping.store;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.ivr.mapping.data.IVRMapping;
+import com.dothat.location.store.LocationStore;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
@@ -20,8 +21,15 @@ public class IVRMappingStore {
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(IVRMappingEntity.class);
+  
+    // Initialize Dependencies
+    LocationStore.init();
   }
   
+  public static void init() {
+    // Empty initialization used to trigger the static block
+  }
+
   public Long store(IVRMapping data) {
     DateTime now = DateTime.now();
     if (data.getCreationTimestamp() == null) {
