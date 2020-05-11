@@ -30,7 +30,7 @@ public class ReliefRequestEntity {
   private RequestType requestType;
   
   private RequestStatus requestStatus;
-  private AssignmentStatus assignmentStatus;
+  private ClaimStatus claimStatus;
   private VerificationStatus verificationStatus;
   
   @Load
@@ -58,7 +58,7 @@ public class ReliefRequestEntity {
     requestType = data.getRequestType();
 
     requestStatus = data.getRequestStatus();
-    assignmentStatus = data.getAssignmentStatus();
+    claimStatus = data.getClaimStatus();
     verificationStatus = data.getVerificationStatus();
   
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
@@ -90,7 +90,7 @@ public class ReliefRequestEntity {
     data.setRequestType(requestType);
 
     data.setRequestStatus(requestStatus);
-    data.setAssignmentStatus(assignmentStatus);
+    data.setClaimStatus(claimStatus);
     data.setVerificationStatus(verificationStatus);
 
     if (location != null) {

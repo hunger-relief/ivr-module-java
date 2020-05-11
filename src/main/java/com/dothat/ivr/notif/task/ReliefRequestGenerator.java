@@ -42,7 +42,7 @@ public class ReliefRequestGenerator {
     ReliefProvider provider = providerService.assignProvider(obfId, requestType, location);
     data.setProvider(provider);
 
-    data.setAssignmentStatus(provider == null ? AssignmentStatus.UNASSIGNED : AssignmentStatus.ASSIGNED);
+    data.setClaimStatus(provider == null ? ClaimStatus.UNCLAIMED : ClaimStatus.CLAIMED);
     data.setRequestStatus(RequestStatus.RECEIVED);
     data.setVerificationStatus(VerificationStatus.UNVERIFIED);
     return data;

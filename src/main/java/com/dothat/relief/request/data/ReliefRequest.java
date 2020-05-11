@@ -17,7 +17,7 @@ public class ReliefRequest {
   private RequestType requestType;
   
   private RequestStatus requestStatus;
-  private AssignmentStatus assignmentStatus;
+  private ClaimStatus claimStatus;
   private VerificationStatus verificationStatus;
 
   private Location location;
@@ -62,12 +62,12 @@ public class ReliefRequest {
     this.requestStatus = requestStatus;
   }
   
-  public AssignmentStatus getAssignmentStatus() {
-    return assignmentStatus;
+  public ClaimStatus getClaimStatus() {
+    return claimStatus;
   }
   
-  public void setAssignmentStatus(AssignmentStatus assignmentStatus) {
-    this.assignmentStatus = assignmentStatus;
+  public void setClaimStatus(ClaimStatus claimStatus) {
+    this.claimStatus = claimStatus;
   }
   
   public VerificationStatus getVerificationStatus() {

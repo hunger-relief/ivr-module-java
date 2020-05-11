@@ -12,5 +12,6 @@ public enum RequestStatus {
   OBSOLETE,
   SCHEDULED,
   DELIVERED,
+  CANCELLED,
   ;
 }
