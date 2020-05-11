@@ -41,7 +41,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
   protected abstract Map<String, State<?>> getStateCodeMap();
   
   @Override
-  public IVRCall extractCallData(String uri, JSONObject json) {
+  public IVRCall extractCall(String uri, JSONObject json) {
     IVRCall data = new IVRCall();
     data.setProvider(provider);
     data.setNotificationUri(uri);
@@ -68,6 +68,26 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     data.setDialedNumber(getPhone(country, json, IVRDataField.DIALED_NUMBER));
     data.setIvrNumber(getPhone(country, json, IVRDataField.IVR_NUMBER));
 
+    if (errorList.isEmpty()) {
+      data.setParseStatus(ParseStatus.SUCCESS);
+    } else {
+      data.setParseStatus(ParseStatus.FAILED);
+      data.setErrorList(errorList);
+    }
+    data.setNotificationContent(json.toString(2));
+    return data;
+  }
+  
+  @Override
+  public IVRCallNode extractCallNode(String uri, JSONObject json) {
+    IVRCallNode data = new IVRCallNode();
+    data.setProvider(provider);
+    data.setProviderNodeId(getValue(json, IVRDataField.CALL_NODE_ID));
+    data.setProviderCallId(getValue(json, IVRDataField.CALL_ID));
+
+    data.setKeyPress(getValue(json, IVRDataField.KEY_PRESS));
+
+    data.setNotificationUri(uri);
     if (errorList.isEmpty()) {
       data.setParseStatus(ParseStatus.SUCCESS);
     } else {

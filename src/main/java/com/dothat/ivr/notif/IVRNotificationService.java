@@ -1,6 +1,7 @@
 package com.dothat.ivr.notif;
 
 import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.ParseStatus;
 import com.dothat.ivr.notif.store.IVRCallStore;
 import com.dothat.ivr.notif.task.IVRCallProcessorTaskGenerator;
@@ -22,5 +23,18 @@ public class IVRNotificationService {
 
   public IVRCall lookupCallById(Long callId) {
     return store.find(callId);
+  }
+  
+  public IVRCall lookupCallByProviderId(String providerCallId) {
+    return store.find(providerCallId);
+  }
+  
+  public Long saveCallNode(IVRCallNode node) {
+    IVRCall call = null;
+    if (node.getCall() != null && node.getProviderCallId() != null) {
+      call = lookupCallByProviderId(node.getProviderCallId());
+      node.setCall(call);
+    }
+    return store.store(node, null);
   }
 }

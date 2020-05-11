@@ -24,6 +24,7 @@ public class CallLogUrlRegistry {
     uriMap.put("/ivr/call/myoperator/log/", IVRProvider.MY_OPERATOR);
     uriMap.put("/ivr/call/kaleyra/log/", IVRProvider.KALEYRA);
     uriMap.put("/ivr/call/knowlarity/", IVRProvider.KNOWLARITY);
+    uriMap.put("/ivr/node/kaleyra/log/", IVRProvider.KALEYRA);
   }
   
   public static CallLogUrlRegistry getInstance() {

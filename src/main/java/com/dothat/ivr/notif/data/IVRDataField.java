@@ -14,6 +14,8 @@ public enum IVRDataField implements Field {
   IVR_NUMBER,
   DIALED_NUMBER,
 
+  KEY_PRESS,
+  
   CALL_TIMESTAMP,
   CALL_DURATION,
   CALL_START_TIMESTAMP,

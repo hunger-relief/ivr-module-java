@@ -1,6 +1,7 @@
 package com.dothat.ivr.notif.extractor;
 
 import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.IVRDataField;
 import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.data.Country;
@@ -40,7 +41,7 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
     countryCodeMap.put(CountryCode.INDIA.getCode(), Country.INDIA);
     
     stateCodeMap.put("DELHI", IndiaState.DELHI);
-    stateCodeMap.put("HR", IndiaState.HARYANA);
+    stateCodeMap.put("HARYANA", IndiaState.HARYANA);
   }
   
   @Override
@@ -59,8 +60,8 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
   }
   
   @Override
-  public IVRCall extractCallData(String uri, JSONObject json) {
-    IVRCall data = super.extractCallData(uri, json);
+  public IVRCall extractCall(String uri, JSONObject json) {
+    IVRCall data = super.extractCall(uri, json);
     // Set Call Timestamp
     DateTime now = DateTime.now();
     LocalDate today = LocalDate.now();
@@ -69,6 +70,23 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
 
     data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
+    return data;
+  }
+  
+  @Override
+  public IVRCallNode extractCallNode(String uri, JSONObject json) {
+    IVRCall call = extractCall(uri, json);
+    IVRCallNode data = super.extractCallNode(uri, json);
+    data.setCall(call);
+
+    // Set Call Timestamp
+    DateTime now = DateTime.now();
+    // TODO(abhideep): Get this from the Web Hook / API data itself.
+    data.setTimestamp(JodaUtils.toDateAndTime(now));
+  
+    data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
+    data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
+
     return data;
   }
   
