@@ -31,7 +31,7 @@ public class ReliefRequestGenerator {
     data.setRequesterID(obfId);
 
     // Then the Location, Service based on the number that was called.
-    IVRMapping mapping = mappingService.lookup(call.getDialedNumber(), call.getCircle());
+    IVRMapping mapping = mappingService.lookup(call.getDialedNumber(), call.getCircle(), false);
     Location location = mapping.getLocation();
     RequestType requestType = mapping.getRequestType();
     data.setLocation(location);
