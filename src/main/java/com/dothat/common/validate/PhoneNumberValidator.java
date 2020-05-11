@@ -26,7 +26,7 @@ public class PhoneNumberValidator {
     String number = "";
     int dashIndex = phoneNumber.indexOf("-");
     int countryStartIndex = 1;
-    int countryEndIndex = dashIndex - 1;
+    int countryEndIndex = dashIndex;
     int numberStartIndex = dashIndex + 1;
 
     // Extract just the Country Code from the formatted phone number
@@ -40,14 +40,14 @@ public class PhoneNumberValidator {
 
     // Make sure the number has a country code.
     if (countryCode.isEmpty()) {
-      throw new IllegalArgumentException("Phone number doesn't have a country code");
+      throw new IllegalArgumentException("Phone number " + phoneNumber + " doesn't have a country code");
     }
     // Make sure the country code is supported by the system.
     Country country = CountryCodeLookup.getInstance().getCountry(countryCode);
     if (country == null) {
-      throw new IllegalArgumentException("Country code " + countryCode + " not supported by the System");
+      throw new IllegalArgumentException("Country code " + countryCode + " from phone number " + phoneNumber
+          + " not supported by the System");
     }
-  
   
     // Make sure the number is provided.
     if (number.isEmpty()) {

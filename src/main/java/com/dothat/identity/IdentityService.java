@@ -1,11 +1,11 @@
 package com.dothat.identity;
 
+import com.dothat.common.validate.PhoneNumberValidator;
+import com.dothat.identity.data.ExternalID;
 import com.dothat.identity.data.IdSourceType;
 import com.dothat.identity.data.ObfuscatedID;
-import com.dothat.identity.data.ExternalID;
 import com.dothat.identity.store.IdentityStore;
 import com.dothat.identity.store.IdentityStoreImpl;
-import com.dothat.common.validate.PhoneNumberValidator;
 
 import java.util.UUID;
 
@@ -43,7 +43,7 @@ public class IdentityService {
     validator.validate(phoneNumber);
 
     // Generate a UUID as the obfuscated ID for the phone number
-    String obfuscatedId = UUID.fromString(phoneNumber).toString();
+    String obfuscatedId = UUID.randomUUID().toString();
   
     // Associate the Obfuscated ID with the Phone number, and save both in the system
     ExternalID data = new ExternalID();

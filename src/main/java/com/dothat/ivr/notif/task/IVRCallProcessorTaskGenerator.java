@@ -15,7 +15,7 @@ public class IVRCallProcessorTaskGenerator extends QueueTaskGenerator<IVRCall> {
   
   public static final String PROCESSOR_QUEUE_NAME = "queue-call-processor";
   public static final String PROCESSOR_URI = "/task/call/processor";
-  public static final String PROCESSOR_MODULE_NAME = "";
+  public static final String PROCESSOR_MODULE_NAME = "default";
 
   
   public IVRCallProcessorTaskGenerator() {

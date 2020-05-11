@@ -5,6 +5,8 @@ import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import java.io.IOException;
  * @author abhideep@ (Abhideep Singh)
  */
 public class IVRCallProcessor extends HttpServlet {
+  private static final Logger logger = LoggerFactory.getLogger(IVRCallProcessor.class);
   
   public static final String CALL_ID_PARAM_NAME = "callId";
   
@@ -24,6 +27,7 @@ public class IVRCallProcessor extends HttpServlet {
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String callIdParam = req.getParameter(CALL_ID_PARAM_NAME);
     if (Strings.isNullOrEmpty(callIdParam)) {
+      logger.error("Call Id not specified");
       resp.sendError(400, "Call Id not specified");
       return;
     }
@@ -31,13 +35,15 @@ public class IVRCallProcessor extends HttpServlet {
       Long callId = Long.valueOf(callIdParam);
       IVRCall call = new IVRNotificationService().lookupCallById(callId);
       if (call == null) {
+        logger.error("No Call found for Id {} ", callId);
         resp.sendError(404, "No Call found for Id " + callId);
         return;
       }
       ReliefRequest data = new ReliefRequestGenerator().generate(call);
       Long requestId = new ReliefRequestService().save(data);
     } catch (Throwable t) {
-      resp.sendError(500, "Invalid Call Processoe with Call Id " + callIdParam);
+      logger.error("Error while processing Call with Call Id {}", callIdParam, t);
+      resp.sendError(500, "Error while processing Call with Call Id " + callIdParam);
     }
   }
 }
