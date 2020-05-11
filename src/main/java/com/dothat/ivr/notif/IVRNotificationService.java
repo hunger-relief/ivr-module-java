@@ -30,11 +30,10 @@ public class IVRNotificationService {
   }
   
   public Long saveCallNode(IVRCallNode node) {
-    IVRCall call = null;
-    if (node.getCall() != null && node.getProviderCallId() != null) {
-      call = lookupCallByProviderId(node.getProviderCallId());
-      node.setCall(call);
-    }
     return store.store(node, null);
+  }
+  
+  public IVRCallNode lookupNodeById(Long callNodeId) {
+    return store.findNode(callNodeId);
   }
 }

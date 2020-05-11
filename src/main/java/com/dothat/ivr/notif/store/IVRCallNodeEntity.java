@@ -23,13 +23,15 @@ import java.util.List;
 public class IVRCallNodeEntity {
   @Id
   private Long callNodeId;
-
+  
+  @Index
   private IVRProvider provider;
   private String providerCallId;
   private String providerNodeId;
 
   private String callerNumber;
   private String ivrNumber;
+  @Index
   private String dialedNumber;
   
   private Country country;

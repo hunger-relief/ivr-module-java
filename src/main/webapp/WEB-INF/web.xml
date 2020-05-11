@@ -29,11 +29,11 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>CallNodeNodeLogger</servlet-name>
-    <servlet-class>com.dothat.ivr.notif.servlet.CallNodeNodeLogger</servlet-class>
+    <servlet-name>CallNodeLogger</servlet-name>
+    <servlet-class>com.dothat.ivr.notif.servlet.CallNodeLogger</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CallNodeNodeLogger</servlet-name>
+    <servlet-name>CallNodeLogger</servlet-name>
     <!--
     Message received notifications are received on URL on the format
     /ivr/node/<ivr-provider>/log/
