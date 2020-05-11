@@ -1,53 +1,38 @@
 package com.dothat.ivr.notif.store;
 
-import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.common.objectify.JodaUtils;
+import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.ivr.notif.data.ParseError;
 import com.dothat.ivr.notif.data.ParseStatus;
-import com.dothat.location.data.Country;
-import com.dothat.common.objectify.JodaUtils;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.*;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Entity to store IVR call data using Objectify.
+ * Entity to store IVR call node notification using Objectify.
  *
  * @author abhideep@ (Abhideep Singh)
  */
 @Entity
-public class IVRCallEntity {
+public class IVRCallNodeEntity {
   @Id
-  private Long callId;
+  private Long callNodeId;
 
-  @Index
+  @Parent @Load
+  Ref<IVRCallEntity> call;
+  
   private IVRProvider provider;
-  @Index
   private String providerCallId;
+  private String providerNodeId;
+
+  private String keyPress;
   
-  @Index
-  private String callerNumber;
-  @Index
-  private String dialedNumber;
-  private String ivrNumber;
-  
-  @Index
-  private Country country;
-  @Index
-  private String state;
-  private String locationHint;
-  private String countryValue;
-  private String circle;
-  
-  @Index
-  private LocalDate callDate;
-  private DateTime startTimestamp;
-  private DateTime endTimestamp;
+  private DateTime timestamp;
   
   private String notificationUri;
   private String notificationContent;
@@ -59,34 +44,27 @@ public class IVRCallEntity {
   private DateTime creationTimestamp;
   private DateTime modificationTimestamp;
   
-  private IVRCallEntity() {
+  private IVRCallNodeEntity() {
     // Empty Constructor for use by Objectify only
   }
   
-  public IVRCallEntity(IVRCall data) {
+  public IVRCallNodeEntity(IVRCallNode data) {
     this();
-    callId = data.getCallId();
+    callNodeId = data.getCallNodeId();
+  
+    call = Ref.create(Key.create(IVRCallEntity.class, data.getCall().getCallId()));
 
     provider = data.getProvider();
     providerCallId = data.getProviderCallId();
-
-    callerNumber = data.getCallerNumber();
-    dialedNumber = data.getDialedNumber();
-    ivrNumber = data.getIvrNumber();
-
-    country = data.getCountry();
-    countryValue = data.getCountryValue();
-    state = data.getState();
-    circle = data.getCircle();
-    locationHint = data.getLocationHint();
-
-    callDate = JodaUtils.toLocalDate(data.getCallDate(), true);
-    startTimestamp = JodaUtils.toDateTime(data.getStartTimestamp());
-    endTimestamp = JodaUtils.toDateTime(data.getEndTimestamp());
+    providerNodeId = data.getProviderNodeId();
+  
+    keyPress = data.getKeyPress();
 
     notificationUri = data.getNotificationUri();
     notificationContent = data.getNotificationContent();
-
+  
+    timestamp = JodaUtils.toDateTime(data.getTimestamp());
+    
     parseStatus = data.getParseStatus();
     if (data.getErrorList() != null && !data.getErrorList().isEmpty()) {
       errorList = new ArrayList<>();
@@ -101,26 +79,21 @@ public class IVRCallEntity {
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
   
-  IVRCall getData() {
-    IVRCall data = new IVRCall();
-    data.setCallId(callId);
+  IVRCallNode getData() {
+    IVRCallNode data = new IVRCallNode();
+    data.setCallNodeId(callNodeId);
+    
+    if (call != null) {
+      data.setCall(call.get().getData());
+    }
     
     data.setProvider(provider);
+    data.setProviderNodeId(providerNodeId);
     data.setProviderCallId(providerCallId);
-    
-    data.setCallerNumber(callerNumber);
-    data.setIvrNumber(ivrNumber);
-    data.setDialedNumber(dialedNumber);
-    
-    data.setCountry(country);
-    data.setCountryValue(countryValue);
-    data.setState(state);
-    data.setCircle(circle);
-    data.setLocationHint(locationHint);
+  
+    data.setKeyPress(keyPress);
 
-    data.setCallDate(JodaUtils.toSimpleDate(callDate));
-    data.setStartTimestamp(JodaUtils.toDateAndTime(startTimestamp));
-    data.setEndTimestamp(JodaUtils.toDateAndTime(endTimestamp));
+    data.setTimestamp(JodaUtils.toDateAndTime(timestamp));
     
     data.setNotificationUri(notificationUri);
     data.setNotificationContent(notificationContent);

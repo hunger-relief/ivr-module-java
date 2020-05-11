@@ -1,6 +1,7 @@
 package com.dothat.ivr.notif.extractor;
 
 import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.IVRProvider;
 import org.json.JSONObject;
 
@@ -12,7 +13,9 @@ import org.json.JSONObject;
 public interface IVRDataExtractor {
   IVRProvider getProvider();
   
-  IVRCall extractCallData(String uri, JSONObject json);
+  IVRCall extractCall(String uri, JSONObject json);
+  
+  IVRCallNode extractCallNode(String uri, JSONObject json);
   
   interface Factory {
     IVRDataExtractor create();
