@@ -14,7 +14,12 @@ class ObfuscatedIdEntity {
   @Id
   String identifier;
   
+  private ObfuscatedIdEntity() {
+    // Empty Constructor for use by Objectify only
+  }
+  
   ObfuscatedIdEntity(ObfuscatedID data) {
+    this();
     this.identifier = data.getIdentifier();
   }
   

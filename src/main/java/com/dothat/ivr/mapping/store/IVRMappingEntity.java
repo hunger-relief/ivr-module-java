@@ -44,14 +44,18 @@ public class IVRMappingEntity {
   public IVRMappingEntity(IVRMapping data) {
     mappingId = data.getMappingId();
     phoneNumber = data.getPhoneNumber();
-    circle = data.getCircle();
+
     if (data.getCircle() != null) {
+      circle = data.getCircle();
       circleIndex = data.getCircle().toUpperCase();
     }
+
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
     }
-    requestType = data.getRequestType();
+    if (data.getRequestType() != null) {
+      requestType = data.getRequestType();
+    }
 
     if (data.getCreationTimestamp() != null) {
       creationTimestamp = JodaUtils.toDateTime(data.getCreationTimestamp());
