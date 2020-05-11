@@ -56,7 +56,7 @@ public class CallLogger extends HttpServlet {
     if (extractor != null) {
       logger.info("Content received on URI " + uri + " will be processed by extractor for " + provider);
       // Extract and Save the call
-      IVRCall call = extractor.extractCallData(uri, json);
+      IVRCall call = extractor.extractCall(uri, json);
       callId = new IVRNotificationService().saveCall(call);
     }
     // Save the Call
