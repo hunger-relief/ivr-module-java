@@ -1,5 +1,6 @@
 package com.dothat.ivr.notif.extractor;
 
+import com.dothat.common.field.Field;
 import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.IVRDataField;
@@ -23,7 +24,7 @@ import java.util.Map;
  */
 public class KaleyraDataExtractor extends GenericIVRDataExtractor {
   
-  private final Map<IVRDataField, String> fieldNameMap = new HashMap<>();
+  private final Map<Field, String> fieldNameMap = new HashMap<>();
   private final Map<String, Country> countryCodeMap = new HashMap<>();
   private final Map<String, State<?>> stateCodeMap = new HashMap<>();
   
@@ -48,7 +49,7 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
   }
   
   @Override
-  protected Map<IVRDataField, String> getFieldNameMap() {
+  protected Map<Field, String> getFieldNameMap() {
     return fieldNameMap;
   }
   
