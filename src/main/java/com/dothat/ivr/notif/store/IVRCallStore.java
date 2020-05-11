@@ -20,6 +20,7 @@ public class IVRCallStore {
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(IVRCallEntity.class);
+    PersistenceService.factory().register(IVRCallNodeEntity.class);
   }
   
   public static void init() {

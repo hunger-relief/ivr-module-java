@@ -27,7 +27,6 @@ public class IVRCallEntity {
 
   @Index
   private IVRProvider provider;
-  @Index
   private String providerCallId;
   
   @Index
