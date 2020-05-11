@@ -84,7 +84,23 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     data.setProvider(provider);
     data.setProviderNodeId(getValue(json, IVRDataField.CALL_NODE_ID));
     data.setProviderCallId(getValue(json, IVRDataField.CALL_ID));
-
+  
+    String countryValue = getValue(json, IVRDataField.COUNTRY);
+    data.setCountryValue(countryValue);
+    Country country = Country.UNKNOWN;
+    if (!Strings.isNullOrEmpty(countryValue)) {
+      country = getCountryCodeMap().get(data.getCountryValue());
+      if (country == null) {
+        errorList.add(new ParseError(ParseErrorType.INVALID_VALUE, IVRDataField.COUNTRY));
+        country = Country.UNKNOWN;
+      }
+    }
+    data.setCountry(country);
+  
+    data.setCallerNumber(getPhone(country, json, IVRDataField.CALLER_NUMBER));
+    data.setDialedNumber(getPhone(country, json, IVRDataField.DIALED_NUMBER));
+    data.setIvrNumber(getPhone(country, json, IVRDataField.IVR_NUMBER));
+    
     data.setKeyPress(getValue(json, IVRDataField.KEY_PRESS));
 
     data.setNotificationUri(uri);

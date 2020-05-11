@@ -1,5 +1,6 @@
 package com.dothat.ivr.notif.data;
 
+import com.dothat.location.data.Country;
 import com.google.api.server.spi.types.DateAndTime;
 
 import java.util.List;
@@ -7,11 +8,16 @@ import java.util.List;
 public class IVRCallNode {
   private Long callNodeId;
 
-  private IVRCall call;
-
   private IVRProvider provider;
   private String providerCallId;
   private String providerNodeId;
+  
+  private String callerNumber;
+  private String ivrNumber;
+  private String dialedNumber;
+
+  private Country country;
+  private String countryValue;
   
   private String keyPress;
 
@@ -32,14 +38,6 @@ public class IVRCallNode {
   
   public void setCallNodeId(Long callNodeId) {
     this.callNodeId = callNodeId;
-  }
-  
-  public IVRCall getCall() {
-    return call;
-  }
-  
-  public void setCall(IVRCall call) {
-    this.call = call;
   }
   
   public IVRProvider getProvider() {
@@ -64,6 +62,46 @@ public class IVRCallNode {
   
   public void setProviderNodeId(String providerNodeId) {
     this.providerNodeId = providerNodeId;
+  }
+  
+  public String getCallerNumber() {
+    return callerNumber;
+  }
+  
+  public void setCallerNumber(String callerNumber) {
+    this.callerNumber = callerNumber;
+  }
+  
+  public String getIvrNumber() {
+    return ivrNumber;
+  }
+  
+  public void setIvrNumber(String ivrNumber) {
+    this.ivrNumber = ivrNumber;
+  }
+  
+  public String getDialedNumber() {
+    return dialedNumber;
+  }
+  
+  public void setDialedNumber(String dialedNumber) {
+    this.dialedNumber = dialedNumber;
+  }
+  
+  public Country getCountry() {
+    return country;
+  }
+  
+  public void setCountry(Country country) {
+    this.country = country;
+  }
+  
+  public String getCountryValue() {
+    return countryValue;
+  }
+  
+  public void setCountryValue(String countryValue) {
+    this.countryValue = countryValue;
   }
   
   public String getKeyPress() {

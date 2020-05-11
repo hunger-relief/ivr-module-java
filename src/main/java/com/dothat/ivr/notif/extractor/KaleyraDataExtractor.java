@@ -37,11 +37,14 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
     fieldNameMap.put(IVRDataField.CIRCLE, "circle");
     fieldNameMap.put(IVRDataField.CALL_TIMESTAMP, "calltime");
     fieldNameMap.put(IVRDataField.CALL_DURATION, "duration");
+    fieldNameMap.put(IVRDataField.CALL_NODE_ID, "nodeid");
+    fieldNameMap.put(IVRDataField.KEY_PRESS, "keypress");
     
     countryCodeMap.put(CountryCode.INDIA.getCode(), Country.INDIA);
     
     stateCodeMap.put("DELHI", IndiaState.DELHI);
     stateCodeMap.put("HARYANA", IndiaState.HARYANA);
+    stateCodeMap.put("TAMIL NADU", IndiaState.TAMIL_NADU);
   }
   
   @Override
@@ -75,9 +78,7 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
   
   @Override
   public IVRCallNode extractCallNode(String uri, JSONObject json) {
-    IVRCall call = extractCall(uri, json);
     IVRCallNode data = super.extractCallNode(uri, json);
-    data.setCall(call);
 
     // Set Call Timestamp
     DateTime now = DateTime.now();

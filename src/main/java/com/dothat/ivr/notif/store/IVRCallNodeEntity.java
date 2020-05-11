@@ -5,9 +5,10 @@ import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.ivr.notif.data.ParseError;
 import com.dothat.ivr.notif.data.ParseStatus;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.*;
+import com.dothat.location.data.Country;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -23,13 +24,17 @@ public class IVRCallNodeEntity {
   @Id
   private Long callNodeId;
 
-  @Parent @Load
-  Ref<IVRCallEntity> call;
-  
   private IVRProvider provider;
   private String providerCallId;
   private String providerNodeId;
 
+  private String callerNumber;
+  private String ivrNumber;
+  private String dialedNumber;
+  
+  private Country country;
+  private String countryValue;
+  
   private String keyPress;
   
   private DateTime timestamp;
@@ -52,12 +57,17 @@ public class IVRCallNodeEntity {
     this();
     callNodeId = data.getCallNodeId();
   
-    call = Ref.create(Key.create(IVRCallEntity.class, data.getCall().getCallId()));
-
     provider = data.getProvider();
     providerCallId = data.getProviderCallId();
     providerNodeId = data.getProviderNodeId();
   
+    callerNumber = data.getCallerNumber();
+    dialedNumber = data.getDialedNumber();
+    ivrNumber = data.getIvrNumber();
+    
+    country = data.getCountry();
+    countryValue = data.getCountryValue();
+    
     keyPress = data.getKeyPress();
 
     notificationUri = data.getNotificationUri();
@@ -83,14 +93,17 @@ public class IVRCallNodeEntity {
     IVRCallNode data = new IVRCallNode();
     data.setCallNodeId(callNodeId);
     
-    if (call != null) {
-      data.setCall(call.get().getData());
-    }
-    
     data.setProvider(provider);
     data.setProviderNodeId(providerNodeId);
     data.setProviderCallId(providerCallId);
   
+    data.setCallerNumber(callerNumber);
+    data.setIvrNumber(ivrNumber);
+    data.setDialedNumber(dialedNumber);
+  
+    data.setCountry(country);
+    data.setCountryValue(countryValue);
+
     data.setKeyPress(keyPress);
 
     data.setTimestamp(JodaUtils.toDateAndTime(timestamp));
