@@ -53,8 +53,17 @@ public class FieldValueExtractor {
       logger.error("No field name defined for {}", field.getFieldName());
       return null;
     }
+
     try {
-      String value = json.optString(fieldName, null);
+      String value = null;
+      if (json.has(fieldName)) {
+        value = json.optString(fieldName, null);
+      }
+      
+      if (value == null) {
+        logger.info("Field {} has a null value in json {}", fieldName, json);
+      }
+
       if (Strings.isNullOrEmpty(value) && isRequired) {
         errorList.add(new FieldError(FieldErrorType.MISSING_VALUE, field));
         logger.error("No value retrieved for {} from {}", field.getFieldName(), json);

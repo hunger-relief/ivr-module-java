@@ -25,8 +25,13 @@ class ExternalIdEntity {
   
   @Index
   IdSourceType sourceType;
-
+  
+  private ExternalIdEntity() {
+    // Empty Constructor for use by Objectify only
+  }
+  
   ExternalIdEntity(ExternalID data) {
+    this();
     localId = data.getLocalId();
     externalId = data.getExternalId();
     sourceType = data.getSourceType();

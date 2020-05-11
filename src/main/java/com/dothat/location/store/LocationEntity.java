@@ -51,22 +51,21 @@ public class LocationEntity {
   public LocationEntity(Location data) {
     this();
     locationId = data.getLocationId();
-    location = data.getLocation();
-    if (location != null) {
+    if (data.getLocation() != null) {
+      location = data.getLocation();
       locationIndex = toIndexValue(data.getLocation());
     }
-    area = data.getArea();
-    if (area != null) {
+    if (data.getArea() != null) {
+      area = data.getArea();
       areaIndex = toIndexValue(data.getArea());
     }
-    zone = data.getZone();
-    if (zone != null) {
+    if (data.getZone() != null) {
+      zone = data.getZone();
       zoneIndex = toIndexValue(data.getZone());
     }
+  
     city = data.getCity();
-    if (city != null) {
-      cityIndex = toIndexValue(data.getCity());
-    }
+    cityIndex = toIndexValue(data.getCity());
     state = data.getState().getCode();
     country = data.getCountry();
   }

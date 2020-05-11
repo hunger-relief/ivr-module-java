@@ -15,7 +15,12 @@ class UniqueExternalIdEntity {
 
   Long sourceId;
   
+  private UniqueExternalIdEntity() {
+    // Empty Constructor for use by Objectify only
+  }
+
   UniqueExternalIdEntity(Long sourceId, String uniqueId) {
+    this();
     this.uniqueId = uniqueId;
     this.sourceId = sourceId;
   }

@@ -56,7 +56,7 @@ public class IVRMappingStore {
         .filter("phoneNumber", phoneNumber);
   
     if (!Strings.isNullOrEmpty(circle)) {
-      query = query.filter("circleIndex", circle);
+      query = query.filter("circleIndex", circle.toUpperCase());
     }
   
     List<IVRMappingEntity> mappings = query.list();
