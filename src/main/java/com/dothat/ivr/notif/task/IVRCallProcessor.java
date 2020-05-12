@@ -31,8 +31,10 @@ public class IVRCallProcessor extends HttpServlet {
       resp.sendError(400, "Call Id not specified");
       return;
     }
+    Long requestId = null;
+    Long callId = null;
     try {
-      Long callId = Long.valueOf(callIdParam);
+      callId = Long.valueOf(callIdParam);
       IVRCall call = new IVRNotificationService().lookupCallById(callId);
       if (call == null) {
         logger.error("No Call found for Id {} ", callId);
@@ -40,10 +42,14 @@ public class IVRCallProcessor extends HttpServlet {
         return;
       }
       ReliefRequest data = new ReliefRequestGenerator().generate(call);
-      Long requestId = new ReliefRequestService().save(data);
+      requestId = new ReliefRequestService().save(data);
     } catch (Throwable t) {
       logger.error("Error while processing Call with Call Id {}", callIdParam, t);
       resp.sendError(500, "Error while processing Call with Call Id " + callIdParam);
+      return;
     }
+    resp.setContentType("text/plain");
+    resp.getWriter().println("Created Relief Request with id " + requestId + " call with Id " + callId);
+    resp.flushBuffer();
   }
 }
