@@ -52,6 +52,11 @@ dependencies {
   // Endpoints Frameworks v2.0
   compile 'com.google.endpoints:endpoints-framework:2.0.13'
 
+  // Google Sheets API, OAuth Client, and API Client
+  compile 'com.google.api-client:google-api-client:1.30.4'
+  compile 'com.google.oauth-client:google-oauth-client-jetty:1.30.4'
+  compile 'com.google.apis:google-api-services-sheets:v4-rev581-1.25.0'
+
   // Logging
   compile 'org.slf4j:slf4j-api:1.7.21'
   compile 'org.slf4j:slf4j-jdk14:1.7.21'
