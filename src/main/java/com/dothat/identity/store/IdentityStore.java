@@ -22,8 +22,11 @@ public interface IdentityStore {
   
   /**
    * Store an obfuscated Id for the given Source ID.
+   *
    * @param data Data for the source ID.
    * @return The Obfuscated Id that was created.
    */
   ObfuscatedID store(ExternalID data);
+  
+  ExternalID loadSource(IdSourceType sourceType, String obfuscatedId);
 }
