@@ -59,11 +59,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>IVRCallProcessor</servlet-name>
-    <!--
-    Requests are received on URL on the format
-    /location/register/
-    -->
     <url-pattern>/task/call/processor/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>BroadcastReliefRequest</servlet-name>
+    <servlet-class>com.dothat.sync.task.BroadcastReliefRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BroadcastReliefRequest</servlet-name>
+    <url-pattern>/task/request/broadcast/*</url-pattern>
   </servlet-mapping>
 
   <!-- Static File Definitions -->
