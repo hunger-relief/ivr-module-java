@@ -1,6 +1,7 @@
 package com.dothat.relief.request;
 
 import com.dothat.common.objectify.JodaUtils;
+import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.store.ReliefRequestStore;
 import org.joda.time.DateTime;
@@ -20,5 +21,9 @@ public class ReliefRequestService {
     }
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
     return store.store(data, null);
+  }
+  
+  public ReliefRequest lookupRequestById(Long requestId) {
+    return store.find(requestId);
   }
 }

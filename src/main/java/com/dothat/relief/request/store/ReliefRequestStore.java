@@ -44,4 +44,16 @@ public class ReliefRequestStore {
       return requestId;
     });
   }
+  
+  public ReliefRequest find(Long requestId) {
+    ReliefRequestEntity request = PersistenceService.service().load()
+        .type(ReliefRequestEntity.class)
+        .id(requestId)
+        .now();
+    
+    if (request == null) {
+      return null;
+    }
+    return request.getData();
+  }
 }
