@@ -32,10 +32,14 @@ public class ReliefRequestGenerator {
 
     // Then the Location, Service based on the number that was called.
     IVRMapping mapping = mappingService.lookup(call.getDialedNumber(), call.getCircle(), false);
-    Location location = mapping.getLocation();
-    RequestType requestType = mapping.getRequestType();
-    data.setLocation(location);
-    data.setRequestType(requestType);
+    Location location  = null;
+    RequestType requestType = null;
+    if (mapping != null) {
+      location = mapping.getLocation();
+      requestType = mapping.getRequestType();
+      data.setLocation(location);
+      data.setRequestType(requestType);
+    }
 
     // Now find a Provider for the Request
     // TODO(abhideep): See if this can be moved out to different service.
