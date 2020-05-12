@@ -10,6 +10,15 @@
         <max-concurrent-requests>10</max-concurrent-requests>
     </queue>
     <queue>
+        <name>queue-node-processor</name>
+        <!--
+        <target>ivr-server</target>
+        -->
+        <rate>20/s</rate>
+        <bucket-size>40</bucket-size>
+        <max-concurrent-requests>10</max-concurrent-requests>
+    </queue>
+    <queue>
         <name>queue-request-processor</name>
         <!--
         <target>default</target>

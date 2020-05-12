@@ -4,6 +4,7 @@ import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.ivr.notif.data.IVRCallNode;
 import com.dothat.ivr.notif.data.ParseStatus;
 import com.dothat.ivr.notif.store.IVRCallStore;
+import com.dothat.ivr.notif.task.IVRCallNodeProcessorTaskGenerator;
 import com.dothat.ivr.notif.task.IVRCallProcessorTaskGenerator;
 
 /**
@@ -30,6 +31,9 @@ public class IVRNotificationService {
   }
   
   public Long saveCallNode(IVRCallNode node) {
+    if (ParseStatus.SUCCESS.equals(node.getParseStatus())) {
+      return store.store(node, new IVRCallNodeProcessorTaskGenerator());
+    }
     return store.store(node, null);
   }
   
