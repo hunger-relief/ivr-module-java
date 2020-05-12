@@ -80,6 +80,15 @@
     <url-pattern>/task/request/broadcast/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>BroadcastProfileUpdate</servlet-name>
+    <servlet-class>com.dothat.sync.task.BroadcastProfileUpdate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BroadcastProfileUpdate</servlet-name>
+    <url-pattern>/task/attribute/broadcast/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Static File Definitions -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

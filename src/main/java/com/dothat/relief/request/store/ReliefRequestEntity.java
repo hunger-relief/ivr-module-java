@@ -28,6 +28,7 @@ public class ReliefRequestEntity {
   private String requesterUUID;
   @Index
   private RequestType requestType;
+  @Index
   private DateTime requestTimestamp;
   
   private RequestStatus requestStatus;

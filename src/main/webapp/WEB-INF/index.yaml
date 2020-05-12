@@ -1,0 +1,18 @@
+indexes:
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: requestTimestamp
+
+  - kind: ProfileAttributeEntity
+    properties:
+      - name: identityUUID
+      - name: source
+      - name: sourceId
+
+  - kind: ProfileAttributeEntity
+    properties:
+      - name: identityUUID
+      - name: attributeName
+      - name: timestamp
+        direction: desc

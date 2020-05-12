@@ -20,3 +20,10 @@ queue:
     retry_parameters:
       min_backoff_seconds: 10
       max_backoff_seconds: 200
+  - name: queue-attribute-processor
+    rate: 500/s
+    bucket_size: 100
+    max_concurrent_requests: 1000
+    retry_parameters:
+      min_backoff_seconds: 10
+      max_backoff_seconds: 200
