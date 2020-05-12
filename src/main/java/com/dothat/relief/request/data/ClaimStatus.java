@@ -6,8 +6,18 @@ package com.dothat.relief.request.data;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum ClaimStatus {
-  UNCLAIMED,
-  CLAIMED,
-  RETURNED,
+  UNCLAIMED("Unclaimed"),
+  CLAIMED("Claimed"),
+  RETURNED("Returned"),
   ;
+  
+  private String displayValue;
+  
+  ClaimStatus(String displayValue) {
+    this.displayValue = displayValue;
+  }
+  
+  public String getDisplayValue() {
+    return displayValue;
+  }
 }

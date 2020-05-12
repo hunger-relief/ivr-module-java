@@ -6,12 +6,22 @@ package com.dothat.relief.request.data;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum RequestStatus {
-  RECEIVED,
-  ACCEPTED,
-  DUPLICATE,
-  OBSOLETE,
-  SCHEDULED,
-  DELIVERED,
-  CANCELLED,
+  RECEIVED("Received"),
+  ACCEPTED("Accepted"),
+  DUPLICATE("Duplicate"),
+  OBSOLETE("Obsolete"),
+  SCHEDULED("Scheduled"),
+  DELIVERED("Delivered"),
+  CANCELLED("Cancelled"),
   ;
+  
+  private String displayValue;
+  
+  RequestStatus(String displayValue) {
+    this.displayValue = displayValue;
+  }
+  
+  public String getDisplayValue() {
+    return displayValue;
+  }
 }
