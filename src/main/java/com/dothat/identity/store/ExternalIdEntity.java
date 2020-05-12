@@ -40,6 +40,18 @@ class ExternalIdEntity {
     }
   }
   
+  ExternalID getData() {
+    ExternalID data = new ExternalID();
+    data.setLocalId(localId);
+    data.setExternalId(externalId);
+    data.setSourceType(sourceType);
+    ObfuscatedID id = getObfuscatedId();
+    if (id != null) {
+      data.setObfuscatedId(id.getIdentifier());
+    }
+    return data;
+  }
+  
   ObfuscatedID getObfuscatedId() {
     return obfuscatedId.get().getData();
   }

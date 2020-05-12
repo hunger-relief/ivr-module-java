@@ -60,4 +60,19 @@ public class IdentityStoreImpl implements IdentityStore {
       return id;
     });
   }
+  
+  @Override
+  public ExternalID loadSource(IdSourceType sourceType, String obfuscatedId) {
+    List<ExternalIdEntity> idList = PersistenceService.service().load()
+        .type(ExternalIdEntity.class)
+        .ancestor(Key.create(ObfuscatedIdEntity.class, obfuscatedId))
+        .filter("sourceType", sourceType.name())
+        .list();
+    if (idList == null || idList.size() == 0) {
+      return null;
+    } else if (idList.size() == 1) {
+      return idList.get(0).getData();
+    }
+    throw new IllegalStateException("More than one entry found for " + sourceType + " with Id " + obfuscatedId);
+  }
 }

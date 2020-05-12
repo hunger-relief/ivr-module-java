@@ -6,6 +6,7 @@ import com.dothat.identity.data.IdSourceType;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.identity.store.IdentityStore;
 import com.dothat.identity.store.IdentityStoreImpl;
+import com.google.common.base.Strings;
 
 import java.util.UUID;
 
@@ -51,5 +52,12 @@ public class IdentityService {
     data.setExternalId(phoneNumber);
     data.setObfuscatedId(obfuscatedId);
     return store.store(data);
+  }
+  
+  public ExternalID lookupNumberById(ObfuscatedID obfuscatedId) {
+    if (obfuscatedId == null || Strings.isNullOrEmpty(obfuscatedId.getIdentifier())) {
+      return null;
+    }
+    return store.loadSource(IdSourceType.PHONE_NUMBER, obfuscatedId.getIdentifier());
   }
 }
