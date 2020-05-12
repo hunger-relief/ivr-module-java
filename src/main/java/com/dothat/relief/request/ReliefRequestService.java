@@ -4,6 +4,7 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.store.ReliefRequestStore;
+import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
 import org.joda.time.DateTime;
 
 /**
@@ -20,7 +21,7 @@ public class ReliefRequestService {
       data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     }
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
-    return store.store(data, null);
+    return store.store(data, new RequestBroadcastTaskGenerator());
   }
   
   public ReliefRequest lookupRequestById(Long requestId) {
