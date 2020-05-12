@@ -28,7 +28,7 @@ public class ProfileAttributeGenerator {
     if (node.getProvider() != null) {
       data.setSource(node.getProvider().name());
     }
-    data.setSourceId(node.getCallerNumber());
+    data.setSourceId(node.getProviderCallId());
 
     // First get the UUID
     ObfuscatedID obfId = identityService.registerNumber(node.getCallerNumber());

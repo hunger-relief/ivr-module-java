@@ -1,11 +1,13 @@
 package com.dothat.relief.request;
 
 import com.dothat.common.objectify.JodaUtils;
-import com.dothat.ivr.notif.data.IVRCall;
+import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.store.ReliefRequestStore;
 import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
 import org.joda.time.DateTime;
+
+import java.util.List;
 
 /**
  * Service Layer to manage Relief Requests.
@@ -26,5 +28,9 @@ public class ReliefRequestService {
   
   public ReliefRequest lookupRequestById(Long requestId) {
     return store.find(requestId);
+  }
+  
+  public List<ReliefRequest> lookupAllForIdentity(ObfuscatedID obfuscatedId, int limit) {
+    return store.findAll(obfuscatedId.getIdentifier(), limit);
   }
 }

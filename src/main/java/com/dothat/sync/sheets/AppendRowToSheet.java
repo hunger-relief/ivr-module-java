@@ -3,10 +3,8 @@ package com.dothat.sync.sheets;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import com.google.common.collect.Lists;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,14 +33,5 @@ public class AppendRowToSheet {
         service.spreadsheets().values().update(spreadsheetId, newRowRange, body)
             .setValueInputOption("USER_ENTERED")
             .execute();
-//    List<List<Object>> dateCell = Lists.newArrayList();
-//    dateCell.add(Lists.newArrayList(values.get(0).get(0)));
-//    ValueRange dateValue = new ValueRange().setValues(dateCell);
-//
-//    final String dateCellRange = sheetName + "!A" + newRow;
-//    UpdateValuesResponse updateDateResult =
-//        service.spreadsheets().values().update(spreadsheetId, dateCellRange, dateValue)
-//            .setValueInputOption("USER_ENTERED")
-//            .execute();
   }
 }

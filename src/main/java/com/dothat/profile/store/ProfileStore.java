@@ -3,7 +3,11 @@ package com.dothat.profile.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.common.queue.TaskGenerator;
 import com.dothat.profile.data.ProfileAttribute;
+import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Objectify based Store to manage Relief Request Data.
@@ -42,14 +46,50 @@ public class ProfileStore {
   }
   
   public ProfileAttribute find(Long attributeId) {
-    ProfileAttributeEntity request = PersistenceService.service().load()
+    ProfileAttributeEntity attribute = PersistenceService.service().load()
         .type(ProfileAttributeEntity.class)
         .id(attributeId)
         .now();
     
-    if (request == null) {
+    if (attribute == null) {
       return null;
     }
-    return request.getData();
+    return attribute.getData();
+  }
+  
+  
+  public List<ProfileAttribute> findAllForSource(String obfuscatedId, String source,  String sourceId) {
+    List<ProfileAttributeEntity> list = PersistenceService.service().load()
+        .type(ProfileAttributeEntity.class)
+        .filter("identityUUID", obfuscatedId)
+        .filter("source", source)
+        .filter("sourceId", sourceId)
+        .list();
+  
+    if (list == null) {
+      return null;
+    }
+    List<ProfileAttribute> dataList = new ArrayList<>();
+    for (ProfileAttributeEntity entity : list) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
+  }
+  
+  public List<ProfileAttribute> findAllForName(String obfuscatedId, String sourceId) {
+    List<ProfileAttributeEntity> list = PersistenceService.service().load()
+        .type(ProfileAttributeEntity.class)
+        .filter("attributeName", sourceId)
+        .filter("identityUUID", obfuscatedId)
+        .list();
+    
+    if (list == null) {
+      return null;
+    }
+    List<ProfileAttribute> dataList = new ArrayList<>();
+    for (ProfileAttributeEntity entity : list) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
   }
 }
