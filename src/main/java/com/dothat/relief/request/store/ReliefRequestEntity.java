@@ -28,6 +28,7 @@ public class ReliefRequestEntity {
   private String requesterUUID;
   @Index
   private RequestType requestType;
+  private DateTime requestTimestamp;
   
   private RequestStatus requestStatus;
   private ClaimStatus claimStatus;
@@ -56,6 +57,7 @@ public class ReliefRequestEntity {
       requesterUUID = data.getRequesterID().getIdentifier();
     }
     requestType = data.getRequestType();
+    requestTimestamp = JodaUtils.toDateTime(data.getRequestTimestamp());
 
     requestStatus = data.getRequestStatus();
     claimStatus = data.getClaimStatus();
@@ -88,6 +90,7 @@ public class ReliefRequestEntity {
     }
     
     data.setRequestType(requestType);
+    data.setRequestTimestamp(JodaUtils.toDateAndTime(requestTimestamp));
 
     data.setRequestStatus(requestStatus);
     data.setClaimStatus(claimStatus);

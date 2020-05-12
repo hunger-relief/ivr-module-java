@@ -26,9 +26,9 @@ public class RequestRowComposer {
   public List<List<Object>> compose(ReliefRequest data, List<ProfileAttribute> attributeList) {
     ExternalID number = new IdentityService().lookupNumberById(data.getRequesterID());
     String phoneNUmber = number ==  null ? "" : number.getExternalId();
-    // Strip out the country code if any
+    // Strip out the country code if any and add ' to make it a string literal
     int index = phoneNUmber.indexOf("-");
-    phoneNUmber = phoneNUmber.substring(index + 1);
+    phoneNUmber = "'" + phoneNUmber.substring(index + 1);
     
     Map<String, String> fieldMap = new ReliefRequestFieldExtractor().generateFieldValueMap(
         phoneNUmber, data);

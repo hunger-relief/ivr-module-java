@@ -22,6 +22,7 @@ public class IVRCall {
   private String locationHint;
   
   private SimpleDate callDate;
+  private DateAndTime callTimestamp;
   private DateAndTime startTimestamp;
   private DateAndTime endTimestamp;
   
@@ -128,6 +129,14 @@ public class IVRCall {
   
   public void setCallDate(SimpleDate callDate) {
     this.callDate = callDate;
+  }
+  
+  public DateAndTime getCallTimestamp() {
+    return callTimestamp;
+  }
+  
+  public void setCallTimestamp(DateAndTime callTimestamp) {
+    this.callTimestamp = callTimestamp;
   }
   
   public DateAndTime getStartTimestamp() {
