@@ -45,6 +45,7 @@ public class IVRCallEntity {
   
   @Index
   private LocalDate callDate;
+  private DateTime callTimestamp;
   private DateTime startTimestamp;
   private DateTime endTimestamp;
   
@@ -80,6 +81,7 @@ public class IVRCallEntity {
     locationHint = data.getLocationHint();
 
     callDate = JodaUtils.toLocalDate(data.getCallDate(), true);
+    callTimestamp = JodaUtils.toDateTime(data.getCallTimestamp());
     startTimestamp = JodaUtils.toDateTime(data.getStartTimestamp());
     endTimestamp = JodaUtils.toDateTime(data.getEndTimestamp());
 
@@ -118,6 +120,7 @@ public class IVRCallEntity {
     data.setLocationHint(locationHint);
 
     data.setCallDate(JodaUtils.toSimpleDate(callDate));
+    data.setCallTimestamp(JodaUtils.toDateAndTime(callTimestamp));
     data.setStartTimestamp(JodaUtils.toDateAndTime(startTimestamp));
     data.setEndTimestamp(JodaUtils.toDateAndTime(endTimestamp));
     

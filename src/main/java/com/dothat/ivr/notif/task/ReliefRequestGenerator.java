@@ -25,7 +25,8 @@ public class ReliefRequestGenerator {
 
     data.setSourceType(SourceType.IVR);
     data.setSource(call.getCallerNumber());
-    
+    data.setRequestTimestamp(call.getCallTimestamp());
+
     // First get the UUID
     ObfuscatedID obfId = identityService.registerNumber(call.getCallerNumber());
     data.setRequesterID(obfId);

@@ -1,6 +1,8 @@
 package com.dothat.relief.request.field;
 
 import com.dothat.common.objectify.JodaUtils;
+import com.dothat.common.time.CountryTimeZoneLookup;
+import com.dothat.location.data.Country;
 import com.dothat.relief.request.data.ReliefRequest;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -8,6 +10,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * Extract all the fields fromm a Relief Request.
@@ -15,7 +18,6 @@ import java.util.Map;
  * @author abhideep@ (Abhideep Singh)
  */
 public class ReliefRequestFieldExtractor {
-  private static final DateTimeFormatter DATE_FORMAT = DateTimeFormat.forPattern("MMM dd hh:mm");
   
   public Map<String, String> generateFieldValueMap(String phone, ReliefRequest data) {
     Map<String, String> map = new HashMap<>();
@@ -23,7 +25,14 @@ public class ReliefRequestFieldExtractor {
     if (timestamp == null) {
       timestamp = DateTime.now();
     }
-    map.put(RequestField.REQUEST_DATE.name(), DATE_FORMAT.print(timestamp));
+    Country country = Country.UNKNOWN;
+    if (data.getLocation() != null) {
+      country = data.getLocation().getCountry();
+    }
+
+    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm")
+        .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
+    map.put(RequestField.REQUEST_DATE.name(), dateFormatter.print(timestamp));
     
     if (data.getRequesterID() != null) {
       map.put(RequestField.UUID.name(), data.getRequesterID().getIdentifier());

@@ -16,6 +16,8 @@ public class ReliefRequest {
   private ObfuscatedID requesterID;
   private RequestType requestType;
   
+  private DateAndTime requestTimestamp;
+
   private RequestStatus requestStatus;
   private ClaimStatus claimStatus;
   private VerificationStatus verificationStatus;
@@ -52,6 +54,14 @@ public class ReliefRequest {
   
   public void setRequestType(RequestType requestType) {
     this.requestType = requestType;
+  }
+  
+  public DateAndTime getRequestTimestamp() {
+    return requestTimestamp;
+  }
+  
+  public void setRequestTimestamp(DateAndTime requestTimestamp) {
+    this.requestTimestamp = requestTimestamp;
   }
   
   public RequestStatus getRequestStatus() {
