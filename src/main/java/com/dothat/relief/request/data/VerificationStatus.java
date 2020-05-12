@@ -6,15 +6,25 @@ package com.dothat.relief.request.data;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum VerificationStatus {
-  UNVERIFIED,
+  UNVERIFIED("Unverified"),
 
-  INFO_REQUESTED,
-  INFO_RECEIVED,
+  INFO_REQUESTED("Info Requested"),
+  INFO_RECEIVED("Info Received"),
 
-  REVIEW_REQUESTED,
-  REVIEW_PROCESSING,
+  REVIEW_REQUESTED("Review Requested"),
+  REVIEW_PROCESSING("Processing Review"),
   
-  VERIFIED,
-  FLAGGED,
+  VERIFIED("Verified"),
+  FLAGGED("Flagged"),
   ;
+  
+  private String displayValue;
+  
+  VerificationStatus(String displayValue) {
+    this.displayValue = displayValue;
+  }
+  
+  public String getDisplayValue() {
+    return displayValue;
+  }
 }
