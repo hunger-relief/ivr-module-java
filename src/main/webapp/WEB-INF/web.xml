@@ -63,6 +63,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>IVRCallNodeProcessor</servlet-name>
+    <servlet-class>com.dothat.ivr.notif.task.IVRCallNodeProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IVRCallNodeProcessor</servlet-name>
+    <url-pattern>/task/node/processor/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>BroadcastReliefRequest</servlet-name>
     <servlet-class>com.dothat.sync.task.BroadcastReliefRequest</servlet-class>
   </servlet>
