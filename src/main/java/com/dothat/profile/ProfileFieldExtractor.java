@@ -38,6 +38,8 @@ public class ProfileFieldExtractor {
 
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm a")
         .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
+    row.add("=ROW()");
+    row.add("Unsynced");
     row.add(dateFormatter.print(timestamp));
     
     if (data.getIdentityUUID() != null) {
