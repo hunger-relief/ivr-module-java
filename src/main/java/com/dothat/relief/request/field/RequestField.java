@@ -6,6 +6,8 @@ package com.dothat.relief.request.field;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum RequestField {
+  ROW_NUM,
+  SYNC_STATUS,
   REQUEST_DATE,
   UUID,
   PHONE,

@@ -4,6 +4,7 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.time.CountryTimeZoneLookup;
 import com.dothat.location.data.Country;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestType;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -30,6 +31,8 @@ public class ReliefRequestFieldExtractor {
       country = data.getLocation().getCountry();
     }
 
+    map.put(RequestField.ROW_NUM.name(), "=ROW()");
+    map.put(RequestField.SYNC_STATUS.name(), "Unsynced");
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm a")
         .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
     map.put(RequestField.REQUEST_DATE.name(), dateFormatter.print(timestamp));
@@ -39,7 +42,9 @@ public class ReliefRequestFieldExtractor {
     }
     
     addString(map, RequestField.PHONE, phone);
-    addString(map, RequestField.REQUEST_TYPE, data.getRequestType().getDisplayValue());
+    if (data.getRequestType() != null) {
+      addString(map, RequestField.REQUEST_TYPE, data.getRequestType().getDisplayValue());
+    }
 
     if (data.getLocation() != null) {
       addString(map, RequestField.LOCATION, data.getLocation().getLocation());
@@ -53,12 +58,18 @@ public class ReliefRequestFieldExtractor {
     }
     // TODO(abhideep): Take Source Type into Account
     addString(map, RequestField.REQUEST_SOURCE, data.getSource());
-    addString(map, RequestField.CLAIM_STATUS, data.getClaimStatus().getDisplayValue());
+    if (data.getClaimStatus() != null) {
+      addString(map, RequestField.CLAIM_STATUS, data.getClaimStatus().getDisplayValue());
+    }
     if (data.getProvider() != null) {
       addString(map, RequestField.PROVIDER_CODE, data.getProvider().getProviderCode());
     }
-    addString(map, RequestField.VERIFY_STATUS, data.getVerificationStatus().getDisplayValue());
-    addString(map, RequestField.REQUEST_STATUS, data.getRequestStatus().getDisplayValue());
+    if (data.getVerificationStatus() != null) {
+      addString(map, RequestField.VERIFY_STATUS, data.getVerificationStatus().getDisplayValue());
+    }
+    if (data.getRequestStatus() != null) {
+      addString(map, RequestField.REQUEST_STATUS, data.getRequestStatus().getDisplayValue());
+    }
     return map;
   }
   
