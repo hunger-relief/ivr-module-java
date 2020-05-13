@@ -30,7 +30,7 @@ public class ReliefRequestFieldExtractor {
       country = data.getLocation().getCountry();
     }
 
-    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm")
+    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm a")
         .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
     map.put(RequestField.REQUEST_DATE.name(), dateFormatter.print(timestamp));
     
