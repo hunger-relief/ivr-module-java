@@ -14,12 +14,14 @@ import com.google.common.base.Strings;
  */
 public class ReliefProviderService {
   private static final String GNEM = "GNEM";
-  private static final String GNEM_SHEET = "1nYypj7tClNkDzmctfnpN1kKf9fiNN1236cvNrNPEeZI";
+  private static final String GNEM_SHEET = "18DLnhZJ2r7fT9hxCSK2DEsQPp3X1lIvRfMFMgxpe_C0";
+  private static final String DEMO = "DEMO";
+  private static final String DEMO_SHEET = "1nYypj7tClNkDzmctfnpN1kKf9fiNN1236cvNrNPEeZI";
   
   public ReliefProvider assignProvider(ObfuscatedID requesterId, RequestType requestType, Location location) {
     // TODO(abhideep): Add Provider lookup logic here
     ReliefProvider data = new ReliefProvider();
-    data.setProviderCode(GNEM);
+    data.setProviderCode(DEMO);
     return data;
   }
   
@@ -27,10 +29,10 @@ public class ReliefProviderService {
     if (provider == null || Strings.isNullOrEmpty(provider.getProviderCode())) {
       return null;
     }
-    if (GNEM.equals(provider.getProviderCode())) {
+    if (DEMO.equals(provider.getProviderCode())) {
       ProviderConfig data = new ProviderConfig();
-      data.setProviderCode(GNEM);
-      data.setGoogleSheetId(GNEM_SHEET);
+      data.setProviderCode(DEMO);
+      data.setGoogleSheetId(DEMO_SHEET);
       return data;
     }
     return null;

@@ -36,7 +36,7 @@ public class ProfileFieldExtractor {
     // TODO(abhideep): Figure this out based on ObfuscatedId
     Country country = Country.INDIA;
 
-    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm")
+    DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm a")
         .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
     row.add(dateFormatter.print(timestamp));
     

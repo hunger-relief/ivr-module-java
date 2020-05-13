@@ -87,7 +87,7 @@ public class BroadcastProfileUpdate extends HttpServlet {
           + " and source Id " + attribute.getSourceId());
       List<List<Object>> values = new ProfileFieldExtractor().extractValues(attribute);
       
-      new AppendRowToSheet(sheets).appendRow(config.getGoogleSheetId(), "Profiles", values);
+      new AppendRowToSheet(sheets).appendRow(config.getGoogleSheetId(), AppendRowConfig.forProfile(), values);
       logger.info("Added row to Profiles Sheet");
 
       new UpdateCellTask(sheets).updateCell(

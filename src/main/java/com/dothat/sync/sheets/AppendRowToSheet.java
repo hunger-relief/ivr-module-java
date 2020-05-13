@@ -20,18 +20,18 @@ public class AppendRowToSheet {
     this.service = service;
   }
   
-  public void appendRow(String spreadsheetId, String sheetName, List<List<Object>> values) throws IOException {
-    final String range = sheetName + "!A1:D";
+  public void appendRow(String spreadsheetId, AppendRowConfig config, List<List<Object>> values) throws IOException {
+    final String range = config.getSheetName() + config.getLookupSheetRange();
     ValueRange result = service.spreadsheets().values().get(spreadsheetId, range).execute();
     int numRows = result.getValues() != null ? result.getValues().size() : 0;
     String newRow = String.valueOf(numRows + 1);
   
-    final String newRowRange = sheetName + "!A" + newRow + ":Z" + newRow;
+    final String newRowRange = config.getSheetName() + config.getStartColumn() + newRow
+        + config.getEndColumn() + newRow;
 
     ValueRange body = new ValueRange().setValues(values);
-    UpdateValuesResponse updateResult =
-        service.spreadsheets().values().update(spreadsheetId, newRowRange, body)
-            .setValueInputOption("USER_ENTERED")
-            .execute();
+    service.spreadsheets().values().update(spreadsheetId, newRowRange, body)
+        .setValueInputOption("USER_ENTERED")
+        .execute();
   }
 }
