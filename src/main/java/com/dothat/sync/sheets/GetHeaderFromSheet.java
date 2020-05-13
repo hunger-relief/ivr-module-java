@@ -28,7 +28,7 @@ public class GetHeaderFromSheet {
         .execute();
     List<List<Object>> rangeValues = result.getValues();
     if (rangeValues == null || rangeValues.size() == 0) {
-      return null;
+      return new ArrayList<>();
     }
     return toStringValues(rangeValues.get(0));
   }
