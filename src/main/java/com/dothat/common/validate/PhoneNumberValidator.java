@@ -24,10 +24,9 @@ public class PhoneNumberValidator {
     }
     String countryCode = "";
     String number = "";
-    int dashIndex = phoneNumber.indexOf("-");
     int countryStartIndex = 1;
-    int countryEndIndex = dashIndex;
-    int numberStartIndex = dashIndex + 1;
+    int countryEndIndex = phoneNumber.indexOf("-");
+    int numberStartIndex = countryEndIndex + 1;
 
     // Extract just the Country Code from the formatted phone number
     if (countryStartIndex <= countryEndIndex) {

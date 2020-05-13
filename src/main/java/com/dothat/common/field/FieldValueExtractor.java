@@ -3,6 +3,7 @@ package com.dothat.common.field;
 import com.dothat.common.field.error.FieldError;
 import com.dothat.common.field.error.FieldErrorType;
 import com.dothat.common.validate.PhoneNumberSanitizer;
+import com.dothat.common.validate.PhoneNumberValidator;
 import com.dothat.location.data.Country;
 import com.google.common.base.Strings;
 import org.json.JSONException;
@@ -89,12 +90,21 @@ public class FieldValueExtractor {
       return phone;
     }
     PhoneNumberSanitizer sanitizer = new PhoneNumberSanitizer(country);
+  
+    String phoneNumber;
     try {
-      return sanitizer.sanitize(phone);
+      phoneNumber = sanitizer.sanitize(phone);
     } catch (IllegalStateException ise) {
       errorList.add(new FieldError(FieldErrorType.CONFIG_ERROR, field));
       return phone;
     }
-  }
 
+    try {
+      new PhoneNumberValidator().validate(phoneNumber);
+    } catch (IllegalArgumentException iae) {
+      errorList.add(new FieldError(FieldErrorType.INVALID_VALUE, field));
+      return phone;
+    }
+    return phoneNumber;
+  }
 }
