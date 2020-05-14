@@ -18,10 +18,13 @@ public class ReliefProviderService {
   private static final String DEMO = "DEMO";
   private static final String DEMO_SHEET = "1nYypj7tClNkDzmctfnpN1kKf9fiNN1236cvNrNPEeZI";
   
+  public static final String DEFAULT = DEMO;
+  public static final String DEFAULT_SHEET = DEMO_SHEET;
+  
   public ReliefProvider assignProvider(ObfuscatedID requesterId, RequestType requestType, Location location) {
     // TODO(abhideep): Add Provider lookup logic here
     ReliefProvider data = new ReliefProvider();
-    data.setProviderCode(DEMO);
+    data.setProviderCode(DEFAULT);
     return data;
   }
   
@@ -29,10 +32,10 @@ public class ReliefProviderService {
     if (provider == null || Strings.isNullOrEmpty(provider.getProviderCode())) {
       return null;
     }
-    if (DEMO.equals(provider.getProviderCode())) {
+    if (DEFAULT.equals(provider.getProviderCode())) {
       ProviderConfig data = new ProviderConfig();
-      data.setProviderCode(DEMO);
-      data.setGoogleSheetId(DEMO_SHEET);
+      data.setProviderCode(DEFAULT);
+      data.setGoogleSheetId(DEFAULT_SHEET);
       return data;
     }
     return null;

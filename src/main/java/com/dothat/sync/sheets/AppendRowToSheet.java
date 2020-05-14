@@ -27,7 +27,7 @@ public class AppendRowToSheet {
     String newRow = String.valueOf(numRows + 1);
   
     final String newRowRange = config.getSheetName() + config.getStartColumn() + newRow
-        + config.getEndColumn() + newRow;
+        + ":" + config.getEndColumn() + newRow;
 
     ValueRange body = new ValueRange().setValues(values);
     service.spreadsheets().values().update(spreadsheetId, newRowRange, body)
