@@ -9,12 +9,10 @@ import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.common.collect.Lists;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +21,11 @@ import java.util.List;
 public class SheetsProvider {
   private static final List<String> SCOPES =
     Lists.newArrayList(SheetsScopes.SPREADSHEETS, SheetsScopes.DRIVE_READONLY);
-  private static final String CREDENTIALS_FILE_PATH = "/sync-sheet-hunger-relief-dev.json";
+
+  private static final String CREDENTIALS_FILE_PATH_DEV = "/sync-sheet-hunger-relief-dev.json";
+  private static final String CREDENTIALS_FILE_PATH_PROD = "/sync-to-sheet-credentials-hunger-relief-coop.json";
+  
+  private static final String CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH_DEV;
   public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
   
   public static Sheets createSheetsService() throws IOException, GeneralSecurityException {
