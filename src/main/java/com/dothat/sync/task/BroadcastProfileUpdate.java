@@ -48,7 +48,7 @@ public class BroadcastProfileUpdate extends HttpServlet {
 
     // TODO(abhideep): Lookup all Providers who need to be send this broadcast or take that as an attribute.
     ReliefProvider provider = new ReliefProvider();
-    provider.setProviderCode("GNEM");
+    provider.setProviderCode(ReliefProviderService.DEFAULT);
     
     ProviderConfig config = new ReliefProviderService().getProviderConfig(provider);
     if (config == null || Strings.isNullOrEmpty(config.getGoogleSheetId())) {
