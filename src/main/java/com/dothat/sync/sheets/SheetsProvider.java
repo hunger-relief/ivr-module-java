@@ -25,7 +25,7 @@ public class SheetsProvider {
   private static final String CREDENTIALS_FILE_PATH_DEV = "/sync-sheet-hunger-relief-dev.json";
   private static final String CREDENTIALS_FILE_PATH_PROD = "/sync-to-sheet-credentials-hunger-relief-coop.json";
   
-  private static final String CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH_DEV;
+  private static final String CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH_PROD;
   public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
   
   public static Sheets createSheetsService() throws IOException, GeneralSecurityException {

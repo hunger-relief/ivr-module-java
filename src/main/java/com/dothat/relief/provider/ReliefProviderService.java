@@ -18,8 +18,8 @@ public class ReliefProviderService {
   private static final String DEMO = "DEMO";
   private static final String DEMO_SHEET = "1nYypj7tClNkDzmctfnpN1kKf9fiNN1236cvNrNPEeZI";
   
-  public static final String DEFAULT = DEMO;
-  public static final String DEFAULT_SHEET = DEMO_SHEET;
+  public static final String DEFAULT = GNEM;
+  public static final String DEFAULT_SHEET = GNEM_SHEET;
   
   public ReliefProvider assignProvider(ObfuscatedID requesterId, RequestType requestType, Location location) {
     // TODO(abhideep): Add Provider lookup logic here
