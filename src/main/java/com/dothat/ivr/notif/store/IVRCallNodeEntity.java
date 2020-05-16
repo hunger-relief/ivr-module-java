@@ -26,9 +26,11 @@ public class IVRCallNodeEntity {
   
   @Index
   private IVRProvider provider;
+  @Index
   private String providerCallId;
   private String providerNodeId;
-
+  
+  @Index
   private String callerNumber;
   private String ivrNumber;
   @Index
@@ -39,6 +41,7 @@ public class IVRCallNodeEntity {
   
   private String keyPress;
   
+  @Index
   private DateTime timestamp;
   
   private String notificationUri;
