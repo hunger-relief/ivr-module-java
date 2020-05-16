@@ -6,7 +6,6 @@ import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ProviderConfig;
-import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.sync.sheets.*;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.common.base.Strings;
@@ -47,12 +46,9 @@ public class BroadcastProfileUpdate extends HttpServlet {
     }
 
     // TODO(abhideep): Lookup all Providers who need to be send this broadcast or take that as an attribute.
-    ReliefProvider provider = new ReliefProvider();
-    provider.setProviderCode(ReliefProviderService.DEFAULT);
-    
-    ProviderConfig config = new ReliefProviderService().getProviderConfig(provider);
+    String providerCode = ReliefProviderService.DEFAULT;
+    ProviderConfig config = new ReliefProviderService().getProviderConfig(providerCode);
     if (config == null || Strings.isNullOrEmpty(config.getGoogleSheetId())) {
-      String providerCode = provider.getProviderCode();
       resp.sendError(500,"No Spreadsheet found for provider " + providerCode);
       return;
     }
