@@ -9,7 +9,9 @@ public enum RequestType {
   COOKED_FOOD("Cooked Food"),
   RATION("Ration"),
   MEDICINE("Medicines"),
+  MIGRATION("Migration"),
   MONEY("Financial Help"),
+  UNKNOWN("Not Sure"),
   ;
   
   private String displayValue;

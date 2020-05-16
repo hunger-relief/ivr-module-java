@@ -11,6 +11,10 @@ public enum IVRMappingField implements Field {
   COUNTRY("country"),
   PHONE("phone"),
   CIRCLE("circle"),
+  NODE_ID("node_id"),
+  RESPONSE("response"),
+  ATTRIBUTE_NAME("attr_name"),
+  ATTRIBUTE_VALUE("attr_value"),
   LOCATION_ID("location_id"),
   REQUEST_TYPE("request_type"),
   ;
