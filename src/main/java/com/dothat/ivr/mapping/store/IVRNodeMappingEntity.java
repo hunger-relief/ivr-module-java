@@ -2,6 +2,7 @@ package com.dothat.ivr.mapping.store;
 
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.ivr.mapping.data.IVRNodeMapping;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.store.LocationEntity;
 import com.dothat.relief.request.data.RequestType;
 import com.googlecode.objectify.Key;
@@ -23,10 +24,10 @@ public class IVRNodeMappingEntity {
   private Long nodeMappingId;
   
   @Index
-  private String phoneNumber;
-  private String circle;
+  private IVRProvider provider;
+
   @Index
-  private String circleIndex;
+  private String phoneNumber;
   
   @Index
   String nodeId;
@@ -47,13 +48,11 @@ public class IVRNodeMappingEntity {
   }
   
   public IVRNodeMappingEntity(IVRNodeMapping data) {
+    this();
     nodeMappingId = data.getNodeMappingId();
-    phoneNumber = data.getPhoneNumber();
 
-    if (data.getCircle() != null) {
-      circle = data.getCircle();
-      circleIndex = data.getCircle().toUpperCase();
-    }
+    provider = data.getProvider();
+    phoneNumber = data.getPhoneNumber();
 
     nodeId = data.getNodeId();
     response = data.getResponse();
@@ -78,9 +77,9 @@ public class IVRNodeMappingEntity {
   IVRNodeMapping getData() {
     IVRNodeMapping data = new IVRNodeMapping();
 
+    data.setProvider(provider);
     data.setNodeMappingId(nodeMappingId);
     data.setPhoneNumber(phoneNumber);
-    data.setCircle(circle);
     
     data.setNodeId(nodeId);
     data.setResponse(response);
