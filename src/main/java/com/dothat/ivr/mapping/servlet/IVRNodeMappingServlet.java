@@ -1,8 +1,7 @@
 package com.dothat.ivr.mapping.servlet;
 
 import com.dothat.common.request.RequestDataExtractor;
-import com.dothat.ivr.mapping.IVRMappingService;
-import com.dothat.ivr.mapping.data.IVRMapping;
+import com.dothat.ivr.mapping.IVRNodeMappingService;
 import com.dothat.ivr.mapping.data.IVRNodeMapping;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -40,7 +39,7 @@ public class IVRNodeMappingServlet extends HttpServlet {
     String message = "IVR Node Mapping Request registered with Id ";
     try {
       IVRNodeMapping data = new IVRNodeMappingExtractor().extract(json);
-      Long mappingId = new IVRMappingService().registerNode(data);
+      Long mappingId = new IVRNodeMappingService().registerNode(data);
       message = message + mappingId;
     } catch (IllegalArgumentException iae) {
       message = iae.getMessage();

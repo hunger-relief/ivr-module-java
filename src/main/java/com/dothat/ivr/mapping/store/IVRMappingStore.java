@@ -3,6 +3,7 @@ package com.dothat.ivr.mapping.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.ivr.mapping.data.IVRMapping;
 import com.dothat.ivr.mapping.data.IVRNodeMapping;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.store.LocationStore;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -79,18 +80,35 @@ public class IVRMappingStore {
     });
   }
   
-  public List<IVRNodeMapping> findNode(String phoneNumber, String circle, String nodeId, String response) {
-    Query<IVRNodeMappingEntity> query = PersistenceService.service().load().type(IVRNodeMappingEntity.class)
-        .filter("phoneNumber", phoneNumber)
+  public IVRNodeMapping findNode(IVRProvider provider, String phoneNumber,
+                                 String nodeId, String keyPress) {
+    Query<IVRNodeMappingEntity> query = PersistenceService.service().load()
+        .type(IVRNodeMappingEntity.class)
+        .filter("provider", provider)
         .filter("nodeId", nodeId)
-        .filter("response", response);
+        .filter("response", keyPress)
+        .filter("phoneNumber", phoneNumber);
   
-    if (!Strings.isNullOrEmpty(circle)) {
-      query = query.filter("circleIndex", circle.toUpperCase());
+    List<IVRNodeMappingEntity> mappings = query.list();
+    if (mappings == null || mappings.isEmpty()) {
+      return null;
+    }
+    if (mappings.size() == 1) {
+      return mappings.get(0).getData();
+    }
+    throw new IllegalStateException("");
+  }
+  
+  public List<IVRNodeMapping> findAll(IVRProvider provider, String phoneNumber, String nodeId) {
+    Query<IVRNodeMappingEntity> query = PersistenceService.service().load().type(IVRNodeMappingEntity.class)
+        .filter("provider", provider)
+        .filter("nodeId", nodeId);
+  
+    if (!Strings.isNullOrEmpty(phoneNumber)) {
+        query = query.filter("phoneNumber", phoneNumber);
     }
   
     List<IVRNodeMappingEntity> mappings = query.list();
-  
     if (mappings != null) {
       List<IVRNodeMapping> mappingList = Lists.newArrayList();
       for (IVRNodeMappingEntity mapping : mappings) {

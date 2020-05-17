@@ -1,5 +1,6 @@
 package com.dothat.ivr.mapping.data;
 
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.data.Location;
 import com.dothat.relief.request.data.RequestType;
 import com.google.api.server.spi.types.DateAndTime;
@@ -12,8 +13,8 @@ import com.google.api.server.spi.types.DateAndTime;
 public class IVRNodeMapping {
   Long nodeMappingId;
   
+  private IVRProvider provider;
   private String phoneNumber;
-  private String circle;
   
   private String nodeId;
   private String response;
@@ -35,20 +36,20 @@ public class IVRNodeMapping {
     this.nodeMappingId = nodeMappingId;
   }
   
+  public IVRProvider getProvider() {
+    return provider;
+  }
+  
+  public void setProvider(IVRProvider provider) {
+    this.provider = provider;
+  }
+  
   public String getPhoneNumber() {
     return phoneNumber;
   }
   
   public void setPhoneNumber(String phoneNumber) {
     this.phoneNumber = phoneNumber;
-  }
-  
-  public String getCircle() {
-    return circle;
-  }
-  
-  public void setCircle(String circle) {
-    this.circle = circle;
   }
   
   public String getNodeId() {

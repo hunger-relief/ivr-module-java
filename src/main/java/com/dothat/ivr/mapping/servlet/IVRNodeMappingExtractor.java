@@ -4,6 +4,7 @@ import com.dothat.common.field.Field;
 import com.dothat.common.field.FieldValueExtractor;
 import com.dothat.common.field.error.FieldError;
 import com.dothat.ivr.mapping.data.IVRNodeMapping;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.Location;
 import com.dothat.relief.request.data.RequestType;
@@ -27,22 +28,28 @@ class IVRNodeMappingExtractor {
     List<FieldError> errorList = new ArrayList<>();
     FieldValueExtractor extractor = new FieldValueExtractor(errorList);
     extractor.init(getFieldNameMap());
+  
+    String providerValue = extractor.extract(json, IVRMappingField.PROVIDER);
+    if (!Strings.isNullOrEmpty(providerValue)) {
+      try {
+        data.setProvider(IVRProvider.valueOf(providerValue));
+      } catch (Throwable t) {
+        throw new IllegalArgumentException("Invalid IVR Provider " + providerValue);
+      }
+    } else {
+      throw new IllegalArgumentException("IVR Provider is required for the mapping");
+    }
     
-    String countryValue = extractor.extract(json, IVRMappingField.COUNTRY);
+    String countryValue = extractor.extract(json, IVRMappingField.COUNTRY, false);
     Country country = null;
     if (!Strings.isNullOrEmpty(countryValue)) {
       country = Country.valueOf(countryValue);
     }
-    if (country == null) {
-      throw new IllegalArgumentException("Must specify country for the phone number being mapped");
-    }
-    String phone = extractor.extractPhone(country, json, IVRMappingField.PHONE, true);
-    if (Strings.isNullOrEmpty(phone)) {
-      throw new IllegalArgumentException("Must specify phone that is being mapped");
+    String phone = extractor.extractPhone(country, json, IVRMappingField.PHONE, false);
+    if (Strings.isNullOrEmpty(phone) && country == null) {
+      throw new IllegalArgumentException("Must specify country if the phone number is being mapped");
     }
     data.setPhoneNumber(phone);
-    String circle = extractor.extract(json, IVRMappingField.CIRCLE, false);
-    data.setCircle(circle);
   
     String nodeId = extractor.extract(json, IVRMappingField.NODE_ID, true);
     String response = extractor.extract(json, IVRMappingField.RESPONSE, true);
@@ -84,10 +91,6 @@ class IVRNodeMappingExtractor {
       } catch (Throwable t) {
         throw new IllegalArgumentException("Invalid Request Type " + requestType);
       }
-    }
-    if (numValues == 0) {
-      throw new IllegalArgumentException("At least one of attribute Value, location, or request type must " +
-          "be mapped to the IVR node");
     }
     if (numValues > 1) {
       throw new IllegalArgumentException("Only one of attribute Value, location, or request type may " +
