@@ -11,4 +11,5 @@ public enum ProfileField {
   PHONE,
   SOURCE,
   SOURCE_ID,
+  SOURCE_TYPE,
 }
