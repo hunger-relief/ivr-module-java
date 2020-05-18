@@ -25,6 +25,7 @@ public class ReliefRequest {
   private Location location;
 
   private String source;
+  private String sourceId;
   private SourceType sourceType;
   
   private ReliefProvider provider;
@@ -106,6 +107,14 @@ public class ReliefRequest {
   
   public SourceType getSourceType() {
     return sourceType;
+  }
+  
+  public String getSourceId() {
+    return sourceId;
+  }
+  
+  public void setSourceId(String sourceId) {
+    this.sourceId = sourceId;
   }
   
   public void setSourceType(SourceType sourceType) {

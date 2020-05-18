@@ -56,8 +56,10 @@ public class ReliefRequestFieldExtractor {
       }
       addEnum(map, RequestField.COUNTRY, data.getLocation().getCountry());
     }
-    // TODO(abhideep): Take Source Type into Account
     addString(map, RequestField.REQUEST_SOURCE, data.getSource());
+    addString(map, RequestField.REQUEST_SOURCE_ID, data.getSourceId());
+    addString(map, RequestField.REQUEST_SOURCE_TYPE, data.getSourceType().name());
+
     if (data.getClaimStatus() != null) {
       addString(map, RequestField.CLAIM_STATUS, data.getClaimStatus().getDisplayValue());
     }

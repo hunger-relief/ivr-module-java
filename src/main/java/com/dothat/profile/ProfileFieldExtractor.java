@@ -45,10 +45,11 @@ public class ProfileFieldExtractor {
     if (data.getIdentityUUID() != null) {
       row.add(data.getIdentityUUID().getIdentifier());
     }
-    
-    addString(row, ProfileField.PHONE, phoneNumber);
+    addString(row, ProfileField.SOURCE_TYPE, data.getSourceType().name());
     addString(row, ProfileField.SOURCE, data.getSource());
     addString(row, ProfileField.SOURCE_ID, data.getSourceId());
+    
+    addString(row, ProfileField.PHONE, phoneNumber);
     return Collections.singletonList(row);
   }
   
