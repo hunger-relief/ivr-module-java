@@ -58,10 +58,12 @@ public class ProfileStore {
   }
   
   
-  public List<ProfileAttribute> findAllForSource(String obfuscatedId, String source,  String sourceId) {
+  public List<ProfileAttribute> findAllForSource(String obfuscatedId, SourceType sourceType,
+                                                 String source,  String sourceId) {
     List<ProfileAttributeEntity> list = PersistenceService.service().load()
         .type(ProfileAttributeEntity.class)
         .filter("identityUUID", obfuscatedId)
+        .filter("sourceType", sourceType)
         .filter("source", source)
         .filter("sourceId", sourceId)
         .list();
