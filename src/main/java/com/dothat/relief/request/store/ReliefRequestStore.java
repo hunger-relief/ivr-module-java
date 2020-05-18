@@ -3,9 +3,11 @@ package com.dothat.relief.request.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.common.queue.TaskGenerator;
 import com.dothat.location.store.LocationStore;
+import com.dothat.profile.store.ProfileStore;
 import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.relief.request.data.RequestType;
 import com.googlecode.objectify.Key;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +18,12 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class ReliefRequestStore {
+  private static final Logger logger = LoggerFactory.getLogger(ReliefRequestStore.class);
+
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(ReliefRequestEntity.class);
+    PersistenceService.factory().register(UniqueRequestIdEntity.class);
   
     // Initialize Dependencies
     LocationStore.init();
@@ -30,6 +35,14 @@ public class ReliefRequestStore {
   
   public Long store(ReliefRequest data, TaskGenerator<ReliefRequest> taskGenerator) {
     return PersistenceService.service().transact(() -> {
+      // Create and check the constraint first
+      UniqueRequestIdConstraint constraint = new UniqueRequestIdConstraint();
+      Long currentId = constraint.check(data.getSourceType(), data.getSource(), data.getSourceId());
+      if (currentId != null) {
+        logger.warn("Multiple requests received for creating a Request for Notification with source Id "
+            + data.getSourceId() + " from " + data.getSourceType() + " " + data.getSource());
+        return currentId;
+      }
     
       // Save the data
       ReliefRequestEntity request = new ReliefRequestEntity(data);
@@ -41,6 +54,9 @@ public class ReliefRequestStore {
       // Set the Request Id on the Request for new Requests
       data.setRequestId(requestId);
     
+      // Save the constraint to avoid future conflicts
+      constraint.store(data.getRequestId(), data.getSourceType(), data.getSource(), data.getSourceId());
+
       // If there is a task generator, then generate the task.
       if (taskGenerator != null) {
         taskGenerator.generateTask(data);
