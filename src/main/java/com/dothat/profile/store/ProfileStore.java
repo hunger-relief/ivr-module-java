@@ -113,4 +113,20 @@ public class ProfileStore {
     }
     return dataList;
   }
+  
+  public List<ProfileAttribute> findAllForUUID(String obfuscatedId) {
+    List<ProfileAttributeEntity> list = PersistenceService.service().load()
+        .type(ProfileAttributeEntity.class)
+        .filter("identityUUID", obfuscatedId)
+        .list();
+  
+    if (list == null) {
+      return null;
+    }
+    List<ProfileAttribute> dataList = new ArrayList<>();
+    for (ProfileAttributeEntity entity : list) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
+  }
 }
