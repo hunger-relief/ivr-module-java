@@ -25,6 +25,7 @@ public class AppendRowToSheet {
     ValueRange body = new ValueRange().setValues(values);
     service.spreadsheets().values().append(spreadsheetId, lookupRange, body)
         .setValueInputOption("USER_ENTERED")
+        .setInsertDataOption("INSERT_ROWS")
         .execute();
   }
 }

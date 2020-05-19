@@ -6,6 +6,8 @@ package com.dothat.profile;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum ProfileField {
+  ROW_NUM,
+  SYNC_STATUS,
   TIMESTAMP,
   UUID,
   PHONE,
