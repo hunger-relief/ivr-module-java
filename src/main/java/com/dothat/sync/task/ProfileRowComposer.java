@@ -3,7 +3,10 @@ package com.dothat.sync.task;
 import com.dothat.profile.ProfileFieldExtractor;
 import com.dothat.profile.data.ProfileAttribute;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generates the data for a Spreadsheet Row based on the field names in the first row of the SpreadSheet.
@@ -17,11 +20,10 @@ public class ProfileRowComposer {
     this.fieldNames = fieldNames;
   }
   
-  public List<List<Object>> compose(ProfileAttribute data, List<ProfileAttribute> attributeList) {
+  public List<List<Object>> compose(ProfileAttribute data, AttributeFieldExtractor attributeExtractor) {
     Map<String, String> fieldMap = new ProfileFieldExtractor().extractValues(data);
 
-    // TODO(abhideep) : Process Attributes as well.
-    Map<String, String> attributeMap = new HashMap<>();
+    Map<String, String> attributeMap = attributeExtractor.getAttributeDataMap();
 
     List<Object> row = new ArrayList<>();
     for (String fieldName : fieldNames) {
