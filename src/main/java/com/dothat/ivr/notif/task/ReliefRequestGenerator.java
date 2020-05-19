@@ -24,7 +24,8 @@ public class ReliefRequestGenerator {
     ReliefRequest data = new ReliefRequest();
 
     data.setSourceType(SourceType.IVR);
-    data.setSource(call.getCallerNumber());
+    data.setSource(call.getProvider().name());
+    data.setSourceId(call.getProviderCallId());
     data.setRequestTimestamp(call.getCallTimestamp());
 
     // First get the UUID

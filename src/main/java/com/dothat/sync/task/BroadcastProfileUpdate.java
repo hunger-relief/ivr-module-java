@@ -1,15 +1,13 @@
 package com.dothat.sync.task;
 
-import com.dothat.common.objectify.JodaUtils;
-import com.dothat.profile.ProfileFieldExtractor;
 import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ProviderConfig;
-import com.dothat.sync.sheets.*;
+import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.sync.sheets.SheetsProvider;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.common.base.Strings;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,9 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.List;
 
 /**
+ * Syncs the Profile Update to the Sheet for the Relief Provider.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
 public class BroadcastProfileUpdate extends HttpServlet {
@@ -60,58 +59,11 @@ public class BroadcastProfileUpdate extends HttpServlet {
       throw new IOException(gse);
     }
 
-    String fieldName = attribute.getAttributeName();
-    // TODO(abhideep): Decide between Requests and Shared Profiles
-    String sheetName = "Profiles";
-    List<String> fieldNames = new GetHeaderFromSheet(sheets)
-        .getHeaders(config.getGoogleSheetId(), sheetName);
-    String requestSheetName = "Requests";
-    List<String> requestFieldNames = new GetHeaderFromSheet(sheets)
-        .getHeaders(config.getGoogleSheetId(), requestSheetName);
-    
-    if (requestFieldNames.contains(fieldName)) {
-      new UpdateCellTask(sheets).updateCell(
-          config.getGoogleSheetId(), UpdateCellTaskConfig.forRequest(), attribute);
-    }
-    
-    // Load All Attributes. If this is the earliest one, Create a new Row
-    List<ProfileAttribute> attributes = service.lookupAllBySourceId(
-        attribute.getIdentityUUID(), attribute.getSource(), attribute.getSourceId());
-    
-    if (attributes == null || isEarliestAttribute(attribute, attributes)) {
-      logger.info("Found " + attributes.size() + " with source " + attribute.getSource()
-          + " and source Id " + attribute.getSourceId());
-      List<List<Object>> values = new ProfileFieldExtractor().extractValues(attribute);
-      
-      new AppendRowToSheet(sheets).appendRow(config.getGoogleSheetId(), AppendRowConfig.forProfile(), values);
-      logger.info("Added row to Profiles Sheet");
-
-      new UpdateCellTask(sheets).updateCell(
-          config.getGoogleSheetId(), UpdateCellTaskConfig.forProfile(), attribute);
-      logger.info("Updated cells on Profiles Sheet");
-    } else {
-      new UpdateCellTask(sheets).updateCell(
-          config.getGoogleSheetId(), UpdateCellTaskConfig.forProfile(), attribute);
-      logger.info("Updated cells on Profiles Sheet");
-    }
+    // Update the Cell for
+    new UpdateAttributeTask(sheets, config.getGoogleSheetId()).update(attribute);
 
     resp.setContentType("text/plain");
-    resp.getWriter().println("Added 1 Row to the sheet " + sheetName);
+    resp.getWriter().println("Added 1 Row to the sheet Profiles");
     resp.flushBuffer();
-  }
-  
-  boolean isEarliestAttribute(ProfileAttribute attribute, List<ProfileAttribute> attrList) {
-    if (attrList == null || attrList.isEmpty()) {
-      return true;
-    }
-    DateTime attributeTimestamp = JodaUtils.toDateTime(attribute.getTimestamp());
-    for (ProfileAttribute attr : attrList) {
-      DateTime attrTimestamp = JodaUtils.toDateTime(attr.getTimestamp());
-      if (!attr.getAttributeId().equals(attribute.getAttributeId())
-          && attrTimestamp.isBefore(attributeTimestamp)) {
-        return false;
-      }
-    }
-    return true;
   }
 }

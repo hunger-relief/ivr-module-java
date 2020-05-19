@@ -1,7 +1,6 @@
 package com.dothat.sync.sheets;
 
 import com.google.api.services.sheets.v4.Sheets;
-import com.google.api.services.sheets.v4.model.UpdateValuesResponse;
 import com.google.api.services.sheets.v4.model.ValueRange;
 
 import java.io.IOException;
@@ -20,18 +19,13 @@ public class AppendRowToSheet {
     this.service = service;
   }
   
-  public void appendRow(String spreadsheetId, AppendRowConfig config, List<List<Object>> values) throws IOException {
-    final String range = config.getSheetName() + config.getLookupSheetRange();
-    ValueRange result = service.spreadsheets().values().get(spreadsheetId, range).execute();
-    int numRows = result.getValues() != null ? result.getValues().size() : 0;
-    String newRow = String.valueOf(numRows + 1);
-  
-    final String newRowRange = config.getSheetName() + config.getStartColumn() + newRow
-        + ":" + config.getEndColumn() + newRow;
-
+  public void appendRow(String spreadsheetId, AppendRowConfig config,
+                        List<List<Object>> values) throws IOException {
+    String lookupRange = config.getSheetName() + config.getLookupSheetRange();
     ValueRange body = new ValueRange().setValues(values);
-    service.spreadsheets().values().update(spreadsheetId, newRowRange, body)
+    service.spreadsheets().values().append(spreadsheetId, lookupRange, body)
         .setValueInputOption("USER_ENTERED")
+        .setInsertDataOption("INSERT_ROWS")
         .execute();
   }
 }

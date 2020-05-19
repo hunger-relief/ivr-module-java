@@ -5,6 +5,8 @@ import com.dothat.common.queue.TaskGenerator;
 import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +17,12 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class ProfileStore {
+  private static final Logger logger = LoggerFactory.getLogger(ProfileStore.class);
+
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(ProfileAttributeEntity.class);
+    PersistenceService.factory().register(UniqueAttributeEntity.class);
   }
   
   public static void init() {
@@ -26,6 +31,16 @@ public class ProfileStore {
   
   public Long store(ProfileAttribute data, TaskGenerator<ProfileAttribute> taskGenerator) {
     return PersistenceService.service().transact(() -> {
+      // Create and check the constraint first
+      UniqueAttributeConstraint constraint = new UniqueAttributeConstraint();
+      Long currentId = constraint.check(data.getSourceType(), data.getSource(), data.getSourceId(),
+          data.getAttributeName());
+      if (currentId != null) {
+        logger.warn("Multiple requests received for creating Attribute " + data.getAttributeName()
+            + " with source Id " + data.getSourceId() + " from " + data.getSourceType() + " "
+            + data.getSource());
+        return currentId;
+      }
     
       // Save the data
       ProfileAttributeEntity attribute = new ProfileAttributeEntity(data);
@@ -37,6 +52,10 @@ public class ProfileStore {
       // Set the Attribute Id on the Attribute
       data.setAttributeId(attributeId);
     
+      // Save the constraint to avoid future conflicts
+      constraint.store(data.getAttributeId(), data.getSourceType(), data.getSource(), data.getSourceId(),
+          data.getAttributeName());
+
       // If there is a task generator, then generate the task.
       if (taskGenerator != null) {
         taskGenerator.generateTask(data);
@@ -58,10 +77,12 @@ public class ProfileStore {
   }
   
   
-  public List<ProfileAttribute> findAllForSource(String obfuscatedId, String source,  String sourceId) {
+  public List<ProfileAttribute> findAllForSource(String obfuscatedId, SourceType sourceType,
+                                                 String source,  String sourceId) {
     List<ProfileAttributeEntity> list = PersistenceService.service().load()
         .type(ProfileAttributeEntity.class)
         .filter("identityUUID", obfuscatedId)
+        .filter("sourceType", sourceType)
         .filter("source", source)
         .filter("sourceId", sourceId)
         .list();

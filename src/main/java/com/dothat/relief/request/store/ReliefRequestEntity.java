@@ -38,7 +38,11 @@ public class ReliefRequestEntity {
   @Load
   private Ref<LocationEntity> location;
   
+  @Index
   private String source;
+  @Index
+  private String sourceId;
+  @Index
   private SourceType sourceType;
   
   private String providerCode;
@@ -69,6 +73,7 @@ public class ReliefRequestEntity {
     }
 
     source = data.getSource();
+    sourceId = data.getSourceId();
     sourceType = data.getSourceType();
     
     if (data.getProvider() != null) {
@@ -102,6 +107,7 @@ public class ReliefRequestEntity {
     }
     
     data.setSource(source);
+    data.setSourceId(sourceId);
     data.setSourceType(sourceType);
     
     if (!Strings.isNullOrEmpty(providerCode)) {
