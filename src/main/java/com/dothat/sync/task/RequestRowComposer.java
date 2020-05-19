@@ -1,13 +1,9 @@
-package com.dothat.sync.sheets;
+package com.dothat.sync.task;
 
-import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.IdentityService;
 import com.dothat.identity.data.ExternalID;
-import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.field.ReliefRequestFieldExtractor;
-import com.dothat.relief.request.field.RequestField;
-import org.joda.time.DateTime;
 
 import java.util.*;
 
@@ -23,7 +19,7 @@ public class RequestRowComposer {
     this.fieldNames = fieldNames;
   }
   
-  public List<List<Object>> compose(ReliefRequest data, List<ProfileAttribute> attributeList) {
+  public List<List<Object>> compose(ReliefRequest data, AttributeFieldExtractor attributeExtractor) {
     ExternalID number = new IdentityService().lookupNumberById(data.getRequesterID());
     String phoneNUmber = number ==  null ? "" : number.getExternalId();
     // Strip out the country code if any and add ' to make it a string literal
@@ -32,9 +28,8 @@ public class RequestRowComposer {
     
     Map<String, String> fieldMap = new ReliefRequestFieldExtractor().generateFieldValueMap(
         phoneNUmber, data);
-
-    // TODO(abhideep) : Process Attributes as well.
-    Map<String, String> attributeMap = new HashMap<>();
+  
+    Map<String, String> attributeMap = attributeExtractor.getAttributeDataMap();
 
     List<Object> row = new ArrayList<>();
     for (String fieldName : fieldNames) {
@@ -48,6 +43,6 @@ public class RequestRowComposer {
         row.add("");
       }
     }
-    return Arrays.asList(row);
+    return Collections.singletonList(row);
   }
 }

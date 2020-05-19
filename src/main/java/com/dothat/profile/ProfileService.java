@@ -33,4 +33,8 @@ public class ProfileService {
   public List<ProfileAttribute> lookupAllByAttributeName(ObfuscatedID obfuscatedId, String attributeName) {
     return store.findAllForName(obfuscatedId.getIdentifier(), attributeName);
   }
+  
+  public List<ProfileAttribute> lookupByUUID(ObfuscatedID obfuscatedId) {
+    return store.findAllForUUID(obfuscatedId.getIdentifier());
+  }
 }
