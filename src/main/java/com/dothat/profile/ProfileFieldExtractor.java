@@ -11,8 +11,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Extract all the fields fromm a Relief Request.
@@ -21,7 +22,9 @@ import java.util.List;
  */
 public class ProfileFieldExtractor {
   
-  public List<List<Object>> extractValues(ProfileAttribute data) {
+  public Map<String, String> extractValues(ProfileAttribute data) {
+    Map<String, String> map = new HashMap<>();
+
     ExternalID number = new IdentityService().lookupNumberById(data.getIdentityUUID());
     String phoneNumber = number ==  null ? "" : number.getExternalId();
     // Strip out the country code if any and add ' to make it a string literal
@@ -38,24 +41,20 @@ public class ProfileFieldExtractor {
 
     DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("MMM dd hh:mm a")
         .withZone(CountryTimeZoneLookup.getInstance().getTimeZone(country));
-    row.add("=ROW()");
-    row.add("Unsynced");
-    row.add(dateFormatter.print(timestamp));
+  
+    map.put(ProfileField.TIMESTAMP.name(), dateFormatter.print(timestamp));
+    map.put(ProfileField.PHONE.name(), phoneNumber);
     
     if (data.getIdentityUUID() != null) {
-      row.add(data.getIdentityUUID().getIdentifier());
+      map.put(ProfileField.UUID.name(), data.getIdentityUUID().getIdentifier());
     }
-    addString(row, ProfileField.SOURCE_TYPE, data.getSourceType().name());
-    addString(row, ProfileField.SOURCE, data.getSource());
-    addString(row, ProfileField.SOURCE_ID, data.getSourceId());
-    
-    addString(row, ProfileField.PHONE, phoneNumber);
-    return Collections.singletonList(row);
-  }
+    map.put(ProfileField.ROW_NUM.name(), "=ROW()");
+    map.put(ProfileField.SYNC_STATUS.name(), "Unsynced");
   
-  void addString(List<Object> row, ProfileField field, String value) {
-    if (value != null) {
-      row.add(value);
-    }
+    map.put(ProfileField.SOURCE_TYPE.name(), data.getSourceType().name());
+    map.put(ProfileField.SOURCE.name(), data.getSource());
+    map.put(ProfileField.SOURCE_ID.name(), data.getSourceId());
+  
+    return map;
   }
 }
