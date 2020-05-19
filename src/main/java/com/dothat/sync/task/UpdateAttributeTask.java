@@ -53,15 +53,15 @@ public class UpdateAttributeTask {
         attributes.size(), attribute.getSource(), attribute.getSourceId(), attribute.getSourceType());
 
     if (isEarliestAttribute(attribute, attributes)) {
-      // TODO(abhideep): Use a composer to include all Attributes you know about so far.
-      List<List<Object>> values = new ProfileFieldExtractor().extractValues(attribute);
-  
       SheetHeader profilesHeader = LookupSheetHeader.forProfiles(sheets, spreadsheetId).getHeader();
       LookupRowResult newRowResult = LookupRow.forProfiles(sheets).lookup(spreadsheetId, profilesHeader);
       Integer cellRowNumber = newRowResult.getRowForSource(attribute.getSourceType(), attribute.getSource(),
           attribute.getSourceId());
       // We add a row only if a row doesn't already exist for the Source Type, Source, and Source Id
       if (cellRowNumber == null) {
+        // TODO(abhideep): Use a composer to include all Attributes you know about so far.
+        List<List<Object>> values = new ProfileRowComposer(profilesHeader.getRowValues()).compose(attribute,
+            null);
         new AppendRowToSheet(sheets).appendRow(spreadsheetId, AppendRowConfig.forProfile(), values);
         logger.info("Added row to Profiles Sheet");
       }
