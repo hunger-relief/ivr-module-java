@@ -25,8 +25,9 @@ public class ProfileService {
     return store.find(attributeId);
   }
   
-  public List<ProfileAttribute> lookupAllBySourceId(ObfuscatedID obfuscatedId, String source, String sourceId) {
-    return store.findAllForSource(obfuscatedId.getIdentifier(), source, sourceId);
+  public List<ProfileAttribute> lookupAllBySourceId(ObfuscatedID obfuscatedId, SourceType sourceType,
+                                                    String source, String sourceId) {
+    return store.findAllForSource(obfuscatedId.getIdentifier(), sourceType, source, sourceId);
   }
   
   public List<ProfileAttribute> lookupAllByAttributeName(ObfuscatedID obfuscatedId, String attributeName) {
