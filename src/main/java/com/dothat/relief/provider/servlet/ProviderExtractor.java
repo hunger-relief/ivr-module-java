@@ -25,8 +25,7 @@ class ProviderExtractor {
     extractor.init(getFieldNameMap());
   
     data.setProviderCode(extractor.extract(json, ProviderField.CODE, true));
-    data.setProviderCode(extractor.extract(json, ProviderField.SHEET_ID, true));
-    
+
     return data;
   }
   
