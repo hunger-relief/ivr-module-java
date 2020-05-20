@@ -3,6 +3,7 @@ package com.dothat.relief.request;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.SourceType;
 import com.dothat.relief.request.store.ReliefRequestStore;
 import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
 import org.joda.time.DateTime;
@@ -32,5 +33,9 @@ public class ReliefRequestService {
   
   public List<ReliefRequest> lookupAllForIdentity(ObfuscatedID obfuscatedId, int limit) {
     return store.findAll(obfuscatedId.getIdentifier(), limit);
+  }
+  
+  public List<ReliefRequest> lookupBySource(ObfuscatedID identityUUID, SourceType sourceType, String source) {
+    return null;
   }
 }

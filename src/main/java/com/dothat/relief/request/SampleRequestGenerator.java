@@ -5,6 +5,7 @@ import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.Location;
 import com.dothat.location.impl.IndiaState;
+import com.dothat.relief.provider.ReliefProviderAssigner;
 import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.*;
@@ -26,7 +27,7 @@ public class SampleRequestGenerator {
     location.setLocation("Sarhol");
   
     ObfuscatedID id = new IdentityService().registerNumber(phoneNumber);
-    ReliefProvider provider = new ReliefProviderService().assignProvider(id, requestType, location);
+    ReliefProvider provider = new ReliefProviderAssigner().assignProvider(id, null, requestType, location);
     data.setProvider(provider);
     data.setRequesterID(id);
     data.setLocation(location);
