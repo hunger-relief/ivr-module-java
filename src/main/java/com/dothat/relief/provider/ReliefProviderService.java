@@ -1,13 +1,9 @@
 package com.dothat.relief.provider;
 
 import com.dothat.common.objectify.JodaUtils;
-import com.dothat.identity.data.ObfuscatedID;
-import com.dothat.location.data.Location;
-import com.dothat.relief.provider.data.ProviderConfig;
+import com.dothat.relief.provider.data.ProviderAssignment;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.provider.store.ProviderStore;
-import com.dothat.relief.request.data.RequestType;
-import com.google.common.base.Strings;
 import org.joda.time.DateTime;
 
 /**
@@ -26,22 +22,31 @@ public class ReliefProviderService {
   
   private final ProviderStore store = new ProviderStore();
   
-  public ReliefProvider assignProvider(ObfuscatedID requesterId, RequestType requestType, Location location) {
-    // TODO(abhideep): Add Provider lookup logic here
-    ReliefProvider data = new ReliefProvider();
-    data.setProviderCode(DEFAULT);
-    return data;
+  public ReliefProvider lookupByCode(String code) {
+    return store.find(code);
+  }
+
+  public ReliefProvider lookupById(Long providerId) {
+    return store.find(providerId);
+  }
+
+  public ProviderAssignment lookupAssociation(ProviderAssignment data) {
+    return store.findAssociation(data);
   }
   
-  public ProviderConfig getProviderConfig(String providerCode) {
-    if (Strings.isNullOrEmpty(providerCode)) {
-      return null;
+  public Long registerAssignment(ProviderAssignment data) {
+    ProviderAssignment currentData = lookupAssociation(data);
+    if (currentData != null) {
+      data.setAssignmentId(currentData.getAssignmentId());
+      data.setCreationTimestamp(currentData.getCreationTimestamp());
     }
-    ReliefProvider provider = store.find(providerCode);
-    if (provider != null) {
-      return provider.getConfig();
+  
+    DateTime now = DateTime.now();
+    if (data.getCreationTimestamp() == null) {
+      data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     }
-    return null;
+    data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
+    return store.storeAssignment(data);
   }
   
   public Long register(ReliefProvider data) {

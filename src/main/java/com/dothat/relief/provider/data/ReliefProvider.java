@@ -11,8 +11,6 @@ public class ReliefProvider {
   private Long providerId;
   private String providerCode;
 
-  private ProviderConfig config;
-  
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
   
@@ -30,14 +28,6 @@ public class ReliefProvider {
   
   public void setProviderCode(String providerCode) {
     this.providerCode = providerCode;
-  }
-  
-  public ProviderConfig getConfig() {
-    return config;
-  }
-  
-  public void setConfig(ProviderConfig config) {
-    this.config = config;
   }
   
   public DateAndTime getCreationTimestamp() {

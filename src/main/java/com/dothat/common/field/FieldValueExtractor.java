@@ -107,4 +107,12 @@ public class FieldValueExtractor {
     }
     return phoneNumber;
   }
+  
+  public <E extends Enum<E>> E extractEnum(JSONObject json, Field field, Class<E> enumClass, boolean isRequired) {
+    String value = extract(json, field, isRequired);
+    if (Strings.isNullOrEmpty(value)) {
+      return null;
+    }
+    return Enum.valueOf(enumClass, value);
+  }
 }
