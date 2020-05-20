@@ -4,7 +4,10 @@ import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ProviderConfig;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.sync.sheets.*;
+import com.dothat.sync.sheets.AppendRowConfig;
+import com.dothat.sync.sheets.AppendRowToSheet;
+import com.dothat.sync.sheets.GetHeaderFromSheet;
+import com.dothat.sync.sheets.SheetsProvider;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -64,7 +67,8 @@ public class BroadcastReliefRequest extends HttpServlet {
     String sheetName = "Requests";
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
         .getHeaders(config.getGoogleSheetId(), sheetName);
-    List<List<Object>> values = new RequestRowComposer(fieldNames).compose(request, null);
+    List<List<Object>> values = new RequestRowComposer(fieldNames)
+        .compose(request, new AttributeFieldExtractor(request.getRequesterID()));
     new AppendRowToSheet(sheets).appendRow(config.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
 
     resp.setContentType("text/plain");

@@ -4,7 +4,6 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.IdentityService;
 import com.dothat.identity.data.ExternalID;
 import com.dothat.identity.data.ObfuscatedID;
-import com.dothat.profile.ProfileFieldExtractor;
 import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.sync.sheets.*;
@@ -59,9 +58,8 @@ public class UpdateAttributeTask {
           attribute.getSourceId());
       // We add a row only if a row doesn't already exist for the Source Type, Source, and Source Id
       if (cellRowNumber == null) {
-        // TODO(abhideep): Use a composer to include all Attributes you know about so far.
         List<List<Object>> values = new ProfileRowComposer(profilesHeader.getRowValues()).compose(attribute,
-            null);
+            new AttributeFieldExtractor(attribute.getIdentityUUID()));
         new AppendRowToSheet(sheets).appendRow(spreadsheetId, AppendRowConfig.forProfile(), values);
         logger.info("Added row to Profiles Sheet");
       }
