@@ -6,8 +6,9 @@ import com.dothat.ivr.mapping.IVRMappingService;
 import com.dothat.ivr.mapping.data.IVRMapping;
 import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.location.data.Location;
-import com.dothat.relief.provider.ReliefProviderService;
+import com.dothat.relief.provider.ReliefProviderAssigner;
 import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.*;
 
 /**
@@ -18,7 +19,6 @@ import com.dothat.relief.request.data.*;
 public class ReliefRequestGenerator {
   private final IdentityService identityService = new IdentityService();
   private final IVRMappingService mappingService = new IVRMappingService();
-  private final ReliefProviderService providerService = new ReliefProviderService();
   
   ReliefRequest generate(IVRCall call) {
     ReliefRequest data = new ReliefRequest();
@@ -44,8 +44,12 @@ public class ReliefRequestGenerator {
     }
 
     // Now find a Provider for the Request
-    // TODO(abhideep): See if this can be moved out to different service.
-    ReliefProvider provider = providerService.assignProvider(obfId, requestType, location);
+    RequestSource source = new RequestSource();
+    source.setSourceType(data.getSourceType());
+    source.setSource(data.getSource());
+    source.setSourceId(data.getSourceId());
+    source.setDialedNumber(call.getDialedNumber());
+    ReliefProvider provider = new ReliefProviderAssigner().assignProvider(obfId, source, requestType, location);
     data.setProvider(provider);
 
     data.setClaimStatus(provider == null ? ClaimStatus.UNCLAIMED : ClaimStatus.CLAIMED);
