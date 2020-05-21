@@ -21,6 +21,7 @@ public class IVRMappingStore {
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(IVRMappingEntity.class);
+    PersistenceService.factory().register(IVRNodeMappingEntity.class);
   
     // Initialize Dependencies
     LocationStore.init();
@@ -85,9 +86,9 @@ public class IVRMappingStore {
     Query<IVRNodeMappingEntity> query = PersistenceService.service().load()
         .type(IVRNodeMappingEntity.class)
         .filter("provider", provider)
+        .filter("phoneNumber", phoneNumber)
         .filter("nodeId", nodeId)
-        .filter("response", keyPress)
-        .filter("phoneNumber", phoneNumber);
+        .filter("response", keyPress);
   
     List<IVRNodeMappingEntity> mappings = query.list();
     if (mappings == null || mappings.isEmpty()) {
@@ -96,7 +97,8 @@ public class IVRMappingStore {
     if (mappings.size() == 1) {
       return mappings.get(0).getData();
     }
-    throw new IllegalStateException("");
+    throw new IllegalStateException("More than one mapping found for " + provider + "  number "
+        + phoneNumber + " Node " + nodeId + " and key press " + keyPress);
   }
   
   public List<IVRNodeMapping> findAll(IVRProvider provider, String phoneNumber, String nodeId) {

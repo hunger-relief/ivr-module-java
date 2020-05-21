@@ -8,11 +8,34 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>RegisterLocationServlet</servlet-name>
-    <!--
-    Requests are received on URL on the format
-    /location/register/
-    -->
     <url-pattern>/location/register/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RegisterProviderServlet</servlet-name>
+    <servlet-class>com.dothat.relief.provider.servlet.RegisterProviderServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterProviderServlet</servlet-name>
+    <url-pattern>/provider/register/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RegisterAssignmentServlet</servlet-name>
+    <servlet-class>com.dothat.relief.provider.servlet.RegisterAssignmentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterAssignmentServlet</servlet-name>
+    <url-pattern>/provider/assignment/register/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>RegisterDestinationServlet</servlet-name>
+    <servlet-class>com.dothat.sync.destination.servlet.RegisterDestinationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterDestinationServlet</servlet-name>
+    <url-pattern>/destination/register/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -21,11 +44,16 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>IVRMappingServlet</servlet-name>
-    <!--
-    Requests are received on URL on the format
-    /ivr/location/map/
-    -->
     <url-pattern>/ivr/location/map/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>IVRNodeMappingServlet</servlet-name>
+    <servlet-class>com.dothat.ivr.mapping.servlet.IVRNodeMappingServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IVRNodeMappingServlet</servlet-name>
+    <url-pattern>/ivr/node/map/*</url-pattern>
   </servlet-mapping>
 
   <servlet>

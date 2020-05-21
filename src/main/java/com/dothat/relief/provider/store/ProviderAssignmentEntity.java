@@ -32,10 +32,15 @@ public class ProviderAssignmentEntity {
 
   @Index
   private RequestType requestType;
-  @Index @Load
+  @Index
+  private Long locationId;
+  @Load
   private Ref<LocationEntity> location;
   
-  @Index @Load
+  
+  @Index
+  private Long providerId;
+  @Load
   private Ref<ProviderEntity> provider;
   
   private DateTime creationTimestamp;
@@ -58,10 +63,12 @@ public class ProviderAssignmentEntity {
     requestType = data.getRequestType();
 
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
+      locationId = data.getLocation().getLocationId();
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
     }
   
     if (data.getProvider() != null && data.getProvider().getProviderId() != null) {
+      providerId = data.getProvider().getProviderId();
       provider = Ref.create(Key.create(ProviderEntity.class, data.getProvider().getProviderId()));
     }
   
@@ -85,11 +92,11 @@ public class ProviderAssignmentEntity {
     
     data.setRequestType(requestType);
     
-    if (location != null) {
+    if (locationId != null && location != null) {
       data.setLocation(location.get().getData());
     }
     
-    if (provider != null) {
+    if (providerId != null && provider != null) {
       data.setProvider(provider.get().getData());
     }
   

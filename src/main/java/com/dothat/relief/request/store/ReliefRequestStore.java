@@ -3,8 +3,8 @@ package com.dothat.relief.request.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.common.queue.TaskGenerator;
 import com.dothat.location.store.LocationStore;
-import com.dothat.profile.store.ProfileStore;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,6 +81,26 @@ public class ReliefRequestStore {
     List<ReliefRequestEntity> requestList = PersistenceService.service().load()
         .type(ReliefRequestEntity.class)
         .filter("requesterUUID", obfuscatedId)
+        .order("requestTimestamp")
+        .limit(limit)
+        .list();
+  
+    if (requestList == null) {
+      return null;
+    }
+    List<ReliefRequest> dataList = new ArrayList<>();
+    for (ReliefRequestEntity entity : requestList) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
+  }
+  
+  public List<ReliefRequest> findAll(String obfuscatedId, SourceType sourceType, String source, int limit) {
+    List<ReliefRequestEntity> requestList = PersistenceService.service().load()
+        .type(ReliefRequestEntity.class)
+        .filter("requesterUUID", obfuscatedId)
+        .filter("sourceType", sourceType)
+        .filter("source", source)
         .order("requestTimestamp")
         .limit(limit)
         .list();

@@ -1,5 +1,7 @@
 package com.dothat.relief.request.data;
 
+import com.dothat.location.data.Country;
+
 /**
  * Source for a Relief Request.
  *
@@ -10,8 +12,9 @@ public class RequestSource {
   private String source;
   private String sourceId;
 
-  // Details like Dialed Number and Spreadsheet Id
+  // Details like Dialed Number and country of Dialed Number
   private String dialedNumber;
+  private Country country;
   
   public SourceType getSourceType() {
     return sourceType;
@@ -43,5 +46,13 @@ public class RequestSource {
   
   public void setDialedNumber(String dialedNumber) {
     this.dialedNumber = dialedNumber;
+  }
+  
+  public Country getCountry() {
+    return country;
+  }
+  
+  public void setCountry(Country country) {
+    this.country = country;
   }
 }

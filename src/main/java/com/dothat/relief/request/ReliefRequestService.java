@@ -36,6 +36,6 @@ public class ReliefRequestService {
   }
   
   public List<ReliefRequest> lookupBySource(ObfuscatedID identityUUID, SourceType sourceType, String source) {
-    return null;
+    return store.findAll(identityUUID.getIdentifier(), sourceType, source, 5);
   }
 }
