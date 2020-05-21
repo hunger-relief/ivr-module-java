@@ -11,8 +11,9 @@ public enum ProviderAssignmentField implements Field {
   PROVIDER("provider"),
   SOURCE("source"),
   SOURCE_TYPE("source_type"),
-  DIALED("dialed"),
-  LOCATION("location"),
+  PHONE("phone"),
+  COUNTRY("country"),
+  LOCATION_ID("location_id"),
   REQUEST_TYPE("request_type"),
   ;
   private final String paramName;

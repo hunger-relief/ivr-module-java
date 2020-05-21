@@ -24,6 +24,7 @@ public class DestinationService {
     Destination destination = store.find(data.getProvider(), data.getRequestType(), data.getLocation());
     if (destination != null) {
       data.setDestinationId(destination.getDestinationId());
+      data.setCreationTimestamp(destination.getCreationTimestamp());
     }
     DateTime now = DateTime.now();
     if (data.getCreationTimestamp() == null) {

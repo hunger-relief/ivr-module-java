@@ -9,6 +9,7 @@ import com.dothat.common.field.Field;
  */
 public enum IVRMappingField implements Field {
   PROVIDER("provider"),
+  CIRCLE("circle"),
   NODE_ID("node_id"),
   RESPONSE("response"),
   ATTRIBUTE_NAME("attr_name"),

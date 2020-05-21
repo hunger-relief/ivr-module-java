@@ -2,14 +2,17 @@ package com.dothat.relief.provider.store;
 
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.location.data.Location;
+import com.dothat.location.store.LocationStore;
 import com.dothat.relief.provider.data.ProviderAssignment;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
+import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,9 @@ public class ProviderStore {
     // Register all Entities used by the Store
     PersistenceService.factory().register(ProviderEntity.class);
     PersistenceService.factory().register(ProviderAssignmentEntity.class);
+  
+    // Initialize the Dependencies
+    LocationStore.init();
   }
   
   public static void init() {
@@ -40,7 +46,7 @@ public class ProviderStore {
       // Extract the Provider Id
       Long providerId = key.getId();
     
-      // Set the Location Id on the Location Data for new Locations
+      // Set the Provider Id on new Providers.
       data.setProviderId(providerId);
       return providerId;
     });
@@ -106,12 +112,12 @@ public class ProviderStore {
 
     Query<ProviderAssignmentEntity> query = PersistenceService.service().load()
         .type(ProviderAssignmentEntity.class)
-        .filter("provider", data.getProvider().getProviderId())
+        .filter("providerId", data.getProvider().getProviderId())
         .filter("requestType", data.getRequestType())
         .filter("dialedNumber", dialedNumber)
         .filter("sourceType", sourceType)
         .filter("source", source)
-        .filter("location", locationId);
+        .filter("locationId", locationId);
   
     List<ProviderAssignmentEntity> providerList = query.list();
   
@@ -130,16 +136,16 @@ public class ProviderStore {
   }
     
     public List<ProviderAssignment> findAllAssociations(
-      RequestSource data, RequestType requestType, Location location) {
+      RequestSource source, RequestType requestType, Location location) {
     Query<ProviderAssignmentEntity> query = PersistenceService.service().load()
         .type(ProviderAssignmentEntity.class)
         .filter("requestType", requestType);
 
-    if (data != null) {
+    if (source != null) {
       query = query
-          .filter("dialedNumber", data.getDialedNumber())
-          .filter("sourceType", data.getSourceType())
-          .filter("source", data.getSource());
+          .filter("dialedNumber", source.getDialedNumber())
+          .filter("sourceType", source.getSourceType())
+          .filter("source", source.getSource());
     } else {
       query = query
           .filter("dialedNumber", null)
@@ -148,9 +154,9 @@ public class ProviderStore {
     }
     
     if (location == null) {
-      query = query.filter("location", null);
+      query = query.filter("locationId", null);
     } else {
-      query = query.filter("location", location.getLocationId());
+      query = query.filter("locationId", location.getLocationId());
     }
 
     List<ProviderAssignmentEntity> providerList = query.list();
