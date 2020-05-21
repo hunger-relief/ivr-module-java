@@ -1,5 +1,7 @@
 package com.dothat.sync.task;
 
+import com.dothat.relief.provider.ReliefProviderService;
+import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.sync.destination.DestinationService;
@@ -48,8 +50,14 @@ public class BroadcastReliefRequest extends HttpServlet {
 //        .generate("+91-9899975887", RequestType.RATION);
   
     // TODO(abhideep): Lookup all Providers who need to be sent this broadcast.
+
+    // Load the Provider if needed
+    ReliefProvider provider = request.getProvider();
+    if (provider != null && provider.getProviderId() == null && provider.getProviderCode() != null) {
+      provider = new ReliefProviderService().lookupByCode(provider.getProviderCode());
+    }
     Destination destination = new DestinationService()
-        .lookupDestination(request.getProvider(), request.getRequestType(), request.getLocation(),
+        .lookupDestination(provider, request.getRequestType(), request.getLocation(),
             DestinationType.GOOGLE_SHEETS);
     if (destination == null || Strings.isNullOrEmpty(destination.getGoogleSheetId())) {
       String providerCode = null;

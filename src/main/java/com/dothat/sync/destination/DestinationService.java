@@ -1,6 +1,7 @@
 package com.dothat.sync.destination;
 
 import com.dothat.common.objectify.JodaUtils;
+import com.dothat.location.LocationDisplayUtils;
 import com.dothat.location.data.Location;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.RequestType;
@@ -8,6 +9,8 @@ import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.destination.data.DestinationType;
 import com.dothat.sync.destination.store.DestinationStore;
 import org.joda.time.DateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -17,6 +20,8 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class DestinationService {
+  private static final Logger logger = LoggerFactory.getLogger(DestinationService.class);
+  
   private final DestinationStore store = new DestinationStore();
   
   public Long register(Destination data) {
@@ -37,43 +42,57 @@ public class DestinationService {
   
   public Destination lookupDestination(ReliefProvider provider, RequestType requestType,
                                        Location location, DestinationType destinationType) {
-    List<Destination> destinationList = store.findAll(provider, requestType, location);
-    if (destinationList == null || destinationList.isEmpty()) {
-      return null;
-    }
-    if (destinationList.size() == 1) {
-      Destination destination = destinationList.get(0);
-      if (destination.getDestinationType() == destinationType) {
-        return destination;
+    logger.info("Looking for Destinations for " + provider.getProviderCode()
+        + " [ID " + provider.getProviderId() + " ]" + " for " + requestType
+        + " in " + LocationDisplayUtils.forLog(location)
+        + " [ID " + LocationDisplayUtils.idForLog(location) + " ]");
+    if (location != null) {
+      // First, Lookup Location specific Destinations irrespective of Request Type
+      List<Destination> destinationList = store.findAll(provider, null, location,
+          true, true);
+      
+      Destination matchingDestination = null;
+      if (destinationList != null) {
+        logger.info("Found " + destinationList.size() + " Location specific Destinations for "
+            + provider.getProviderCode() + " [ID " + provider.getProviderId() + " ]"
+            + " for " + requestType
+            + " in " + LocationDisplayUtils.forLog(location)
+            + " [ID " + LocationDisplayUtils.idForLog(location) + " ]");
+        for (Destination destination : destinationList) {
+          if (destination.getDestinationType() == destinationType) {
+            if (destination.getRequestType() == null) {
+              matchingDestination = destination;
+            } else if (destination.getRequestType() == requestType) {
+              return destination;
+            }
+          }
+        }
       }
-      return null;
-    }
-
-    Destination defaultMatch = null;
-    Destination requestTypeMatch = null;
-    Destination locationMatch = null;
-    for (Destination destination : destinationList) {
-      if (destination.getDestinationType() != destinationType) {
-        continue;
-      }
-      if (destination.getRequestType() == null && destination.getLocation() == null) {
-        defaultMatch = destination;
-      } else if (destination.getRequestType() != null && destination.getLocation() != null) {
-        return destination;
-      } else if (destination.getRequestType() != null) {
-        requestTypeMatch = destination;
-      } else {
-        locationMatch = destination;
+      if (matchingDestination != null) {
+        return matchingDestination;
       }
     }
-    
-    if (locationMatch != null) {
-      return locationMatch;
+  
+    // Lookup all Destinations that don't have a location, but may or may not have a request Type
+    List<Destination> destinationList = store.findAll(provider, null, null,
+        true, false);
+    Destination matchingDestination = null;
+    if (destinationList != null) {
+      logger.info("Found " + destinationList.size() + " Non Location Destinations for "
+          + provider.getProviderCode() + " [ID " + provider.getProviderId() + " ]"
+          + " for " + requestType
+          + " in " + LocationDisplayUtils.forLog(location)
+          + " [ID " + LocationDisplayUtils.idForLog(location) + " ]");
+      for (Destination destination : destinationList) {
+        if (destination.getDestinationType() == destinationType) {
+          if (destination.getRequestType() == null) {
+            matchingDestination = destination;
+          } else if (destination.getRequestType() == requestType) {
+            return destination;
+          }
+        }
+      }
     }
-    if (requestTypeMatch != null) {
-      return requestTypeMatch;
-    }
-    
-    return defaultMatch;
+    return matchingDestination;
   }
 }

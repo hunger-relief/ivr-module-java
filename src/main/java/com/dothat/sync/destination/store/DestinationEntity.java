@@ -24,11 +24,17 @@ public class DestinationEntity {
   @Id
   private Long destinationId;
   
-  @Index @Load
+  @Index
+  private Long providerId;
+  @Load
   private Ref<ProviderEntity> provider;
+
   @Index
   private RequestType requestType;
-  @Index @Load
+
+  @Index
+  private Long locationId;
+  @Load
   private Ref<LocationEntity> location;
   
   private DestinationType destinationType;
@@ -45,9 +51,13 @@ public class DestinationEntity {
     this();
     destinationId = data.getDestinationId();
 
+    providerId = data.getProvider().getProviderId();
     provider = Ref.create(Key.create(ProviderEntity.class, data.getProvider().getProviderId()));
+
     requestType = data.getRequestType();
+
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
+      locationId = data.getLocation().getLocationId();
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
     }
     
@@ -62,12 +72,14 @@ public class DestinationEntity {
     Destination data = new Destination();
     data.setDestinationId(destinationId);
     
-    data.setProvider(provider.get().getData());
-    data.setRequestType(requestType);
-    if (location != null) {
-      data.setLocation(location.get().getData());
+    if (providerId != null && provider != null) {
+      data.setProvider(provider.get().getData());
     }
     data.setRequestType(requestType);
+
+    if (locationId != null && location != null) {
+      data.setLocation(location.get().getData());
+    }
     
     data.setDestinationType(destinationType);
     data.setGoogleSheetId(googleSheetId);
