@@ -2,7 +2,7 @@ package com.dothat.relief.provider.servlet;
 
 import com.dothat.common.request.RequestDataExtractor;
 import com.dothat.relief.provider.ReliefProviderService;
-import com.dothat.relief.provider.data.ProviderAssignment;
+import com.dothat.relief.provider.data.AssignInstruction;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +17,8 @@ import java.io.IOException;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class RegisterAssignmentServlet extends HttpServlet {
-  private static final Logger logger = LoggerFactory.getLogger(RegisterAssignmentServlet.class);
+public class RegisterInstructionServlet extends HttpServlet {
+  private static final Logger logger = LoggerFactory.getLogger(RegisterInstructionServlet.class);
   
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -39,8 +39,8 @@ public class RegisterAssignmentServlet extends HttpServlet {
     logger.info("Content received on URI " + uri + " : " + json.toString());
     String message = "Provider Assignment registered with Id ";
     try {
-      ProviderAssignment data = new ProviderAssignmentExtractor().extract(json);
-      Long assignmentId = new ReliefProviderService().registerAssignment(data);
+      AssignInstruction data = new AssignInstructionExtractor().extract(json);
+      Long assignmentId = new ReliefProviderService().registerAssignInstruction(data);
       message = message + assignmentId;
     } catch (IllegalArgumentException iae) {
       message = iae.getMessage();

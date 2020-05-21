@@ -2,11 +2,10 @@ package com.dothat.relief.provider;
 
 import com.dothat.common.validate.PhoneNumberSanitizer;
 import com.dothat.common.validate.PhoneNumberValidator;
-import com.dothat.location.LocationDisplayUtils;
 import com.dothat.location.LocationService;
 import com.dothat.location.data.Country;
 import com.dothat.location.data.Location;
-import com.dothat.relief.provider.data.ProviderAssignment;
+import com.dothat.relief.provider.data.AssignInstruction;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
@@ -17,9 +16,9 @@ import com.google.common.base.Strings;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class ProviderAssignmentValidator {
+public class AssignInstructionValidator {
   
-  void validate(ProviderAssignment data) {
+  void validate(AssignInstruction data) {
     if (data.getProvider() == null) {
       throw new IllegalArgumentException("Must specify the Provider that is being configured.");
     }
