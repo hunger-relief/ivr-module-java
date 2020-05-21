@@ -3,16 +3,14 @@ package com.dothat.relief.provider.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.location.data.Location;
 import com.dothat.location.store.LocationStore;
-import com.dothat.relief.provider.data.ProviderAssignment;
+import com.dothat.relief.provider.data.AssignInstruction;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
-import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +23,7 @@ public class ProviderStore {
   static {
     // Register all Entities used by the Store
     PersistenceService.factory().register(ProviderEntity.class);
-    PersistenceService.factory().register(ProviderAssignmentEntity.class);
+    PersistenceService.factory().register(AssignInstructionEntity.class);
   
     // Initialize the Dependencies
     LocationStore.init();
@@ -52,18 +50,18 @@ public class ProviderStore {
     });
   }
   
-  public Long storeAssignment(ProviderAssignment data) {
+  public Long storeInstruction(AssignInstruction data) {
     return PersistenceService.service().transact(() -> {
       
       // Save the data
-      ProviderAssignmentEntity association = new ProviderAssignmentEntity(data);
-      Key<ProviderAssignmentEntity> key = PersistenceService.service().save().entity(association).now();
+      AssignInstructionEntity association = new AssignInstructionEntity(data);
+      Key<AssignInstructionEntity> key = PersistenceService.service().save().entity(association).now();
       
       // Extract the Association Id
       Long associationId = key.getId();
       
       // Set the Association Id on the Association Data for new Associations
-      data.setAssignmentId(associationId);
+      data.setInstructionId(associationId);
       return associationId;
     });
   }
@@ -94,7 +92,7 @@ public class ProviderStore {
     return provider.getData();
   }
   
-  public ProviderAssignment findAssociation(ProviderAssignment data) {
+  public AssignInstruction findInstruction(AssignInstruction data) {
     SourceType sourceType = null;
     String source = null;
     String dialedNumber = null;
@@ -110,8 +108,8 @@ public class ProviderStore {
       locationId = data.getLocation().getLocationId();
     }
 
-    Query<ProviderAssignmentEntity> query = PersistenceService.service().load()
-        .type(ProviderAssignmentEntity.class)
+    Query<AssignInstructionEntity> query = PersistenceService.service().load()
+        .type(AssignInstructionEntity.class)
         .filter("providerId", data.getProvider().getProviderId())
         .filter("requestType", data.getRequestType())
         .filter("dialedNumber", dialedNumber)
@@ -119,7 +117,7 @@ public class ProviderStore {
         .filter("source", source)
         .filter("locationId", locationId);
   
-    List<ProviderAssignmentEntity> providerList = query.list();
+    List<AssignInstructionEntity> providerList = query.list();
   
     if (providerList == null || providerList.isEmpty()) {
       return null;
@@ -135,10 +133,10 @@ public class ProviderStore {
         + locationId);
   }
     
-    public List<ProviderAssignment> findAllAssociations(
+    public List<AssignInstruction> findAllInstructions(
       RequestSource source, RequestType requestType, Location location) {
-    Query<ProviderAssignmentEntity> query = PersistenceService.service().load()
-        .type(ProviderAssignmentEntity.class)
+    Query<AssignInstructionEntity> query = PersistenceService.service().load()
+        .type(AssignInstructionEntity.class)
         .filter("requestType", requestType);
 
     if (source != null) {
@@ -159,11 +157,11 @@ public class ProviderStore {
       query = query.filter("locationId", location.getLocationId());
     }
 
-    List<ProviderAssignmentEntity> providerList = query.list();
+    List<AssignInstructionEntity> providerList = query.list();
   
     if (providerList != null && !providerList.isEmpty()) {
-      List<ProviderAssignment> dataList = new ArrayList<>();
-      for (ProviderAssignmentEntity provider : providerList) {
+      List<AssignInstruction> dataList = new ArrayList<>();
+      for (AssignInstructionEntity provider : providerList) {
         dataList.add(provider.getData());
       }
       return dataList;

@@ -2,7 +2,7 @@ package com.dothat.relief.provider;
 
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.location.LocationDisplayUtils;
-import com.dothat.relief.provider.data.ProviderAssignment;
+import com.dothat.relief.provider.data.AssignInstruction;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.provider.store.ProviderStore;
 import com.dothat.relief.request.data.RequestSource;
@@ -17,14 +17,6 @@ import org.slf4j.LoggerFactory;
  */
 public class ReliefProviderService {
   private static final Logger logger = LoggerFactory.getLogger(ReliefProviderService.class);
-
-  private static final String GNEM = "GNEM";
-  private static final String GNEM_SHEET = "18DLnhZJ2r7fT9hxCSK2DEsQPp3X1lIvRfMFMgxpe_C0";
-  private static final String DEMO = "DEMO";
-  private static final String DEMO_SHEET = "1nYypj7tClNkDzmctfnpN1kKf9fiNN1236cvNrNPEeZI";
-  
-  public static final String DEFAULT = DEMO;
-  public static final String DEFAULT_SHEET = DEMO_SHEET;
   
   private final ProviderStore store = new ProviderStore();
   
@@ -36,7 +28,7 @@ public class ReliefProviderService {
     return store.find(providerId);
   }
 
-  public ProviderAssignment lookupAssociation(ProviderAssignment data) {
+  public AssignInstruction lookupAssignInstruction(AssignInstruction data) {
     ReliefProvider provider = data.getProvider();
     if (provider == null) {
       throw new IllegalArgumentException("Must specify the Provider that you are looking up the Instruction for");
@@ -54,14 +46,14 @@ public class ReliefProviderService {
           + " and Location " + LocationDisplayUtils.forLog(data.getLocation())
           + " [ID " + LocationDisplayUtils.idForLog(data.getLocation()) + " ]");
     }
-    return store.findAssociation(data);
+    return store.findInstruction(data);
   }
   
-  public Long registerAssignment(ProviderAssignment data) {
-    new ProviderAssignmentValidator().validate(data);
-    ProviderAssignment currentData = lookupAssociation(data);
+  public Long registerAssignInstruction(AssignInstruction data) {
+    new AssignInstructionValidator().validate(data);
+    AssignInstruction currentData = lookupAssignInstruction(data);
     if (currentData != null) {
-      data.setAssignmentId(currentData.getAssignmentId());
+      data.setInstructionId(currentData.getInstructionId());
       data.setCreationTimestamp(currentData.getCreationTimestamp());
     }
     ReliefProvider provider = data.getProvider();
@@ -87,7 +79,7 @@ public class ReliefProviderService {
       data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     }
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
-    return store.storeAssignment(data);
+    return store.storeInstruction(data);
   }
   
   public Long register(ReliefProvider data) {

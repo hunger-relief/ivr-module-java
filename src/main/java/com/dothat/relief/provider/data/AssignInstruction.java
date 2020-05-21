@@ -6,12 +6,13 @@ import com.dothat.relief.request.data.RequestType;
 import com.google.api.server.spi.types.DateAndTime;
 
 /**
- * Association between Location, IVR Number and the Relief Provider.
+ * Data / Instructions for how a Request is assigned to aProvider based on Location, IVR Number
+ * and the Request Source.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class ProviderAssignment {
-  private Long assignmentId;
+public class AssignInstruction {
+  private Long instructionId;
 
   private ReliefProvider provider;
 
@@ -22,12 +23,12 @@ public class ProviderAssignment {
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
   
-  public Long getAssignmentId() {
-    return assignmentId;
+  public Long getInstructionId() {
+    return instructionId;
   }
   
-  public void setAssignmentId(Long assignmentId) {
-    this.assignmentId = assignmentId;
+  public void setInstructionId(Long instructionId) {
+    this.instructionId = instructionId;
   }
   
   public ReliefProvider getProvider() {

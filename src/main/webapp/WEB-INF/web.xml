@@ -21,12 +21,12 @@
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>RegisterAssignmentServlet</servlet-name>
-    <servlet-class>com.dothat.relief.provider.servlet.RegisterAssignmentServlet</servlet-class>
+    <servlet-name>RegisterInstructionServlet</servlet-name>
+    <servlet-class>com.dothat.relief.provider.servlet.RegisterInstructionServlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>RegisterAssignmentServlet</servlet-name>
-    <url-pattern>/provider/assignment/register/*</url-pattern>
+    <servlet-name>RegisterInstructionServlet</servlet-name>
+    <url-pattern>/provider/assign/instruction/register/*</url-pattern>
   </servlet-mapping>
 
   <servlet>

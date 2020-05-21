@@ -7,7 +7,7 @@ import com.dothat.common.field.Field;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public enum ProviderAssignmentField implements Field {
+public enum AssignInstructionField implements Field {
   PROVIDER("provider"),
   SOURCE("source"),
   SOURCE_TYPE("source_type"),
@@ -18,7 +18,7 @@ public enum ProviderAssignmentField implements Field {
   ;
   private final String paramName;
   
-  ProviderAssignmentField(String paramName) {
+  AssignInstructionField(String paramName) {
     this.paramName = paramName;
   }
   

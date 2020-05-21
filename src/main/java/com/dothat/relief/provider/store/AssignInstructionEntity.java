@@ -2,7 +2,7 @@ package com.dothat.relief.provider.store;
 
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.location.store.LocationEntity;
-import com.dothat.relief.provider.data.ProviderAssignment;
+import com.dothat.relief.provider.data.AssignInstruction;
 import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
@@ -16,12 +16,14 @@ import com.googlecode.objectify.annotation.Load;
 import org.joda.time.DateTime;
 
 /**
+ * Entity object to store Provider Assignment Instructions using Objectify.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
 @Entity
-public class ProviderAssignmentEntity {
+public class AssignInstructionEntity {
   @Id
-  private Long associationId;
+  private Long instructionId;
 
   @Index
   private String dialedNumber;
@@ -46,13 +48,13 @@ public class ProviderAssignmentEntity {
   private DateTime creationTimestamp;
   private DateTime modificationTimestamp;
 
-  private ProviderAssignmentEntity() {
+  private AssignInstructionEntity() {
     // Empty Constructor for use by Objectify only
   }
   
-  public ProviderAssignmentEntity(ProviderAssignment data) {
+  public AssignInstructionEntity(AssignInstruction data) {
     this();
-    associationId = data.getAssignmentId();
+    instructionId = data.getInstructionId();
   
     if (data.getSource() != null) {
       dialedNumber = data.getSource().getDialedNumber();
@@ -76,10 +78,10 @@ public class ProviderAssignmentEntity {
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
   
-  public ProviderAssignment getData() {
-    ProviderAssignment data = new ProviderAssignment();
+  public AssignInstruction getData() {
+    AssignInstruction data = new AssignInstruction();
 
-    data.setAssignmentId(associationId);
+    data.setInstructionId(instructionId);
 
     if (!Strings.isNullOrEmpty(dialedNumber) && sourceType != null
         && !Strings.isNullOrEmpty(source)) {
