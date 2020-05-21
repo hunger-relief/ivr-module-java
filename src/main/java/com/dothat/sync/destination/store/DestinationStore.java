@@ -7,8 +7,8 @@ import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.provider.store.ProviderStore;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.sync.destination.data.Destination;
-import com.google.common.collect.Lists;
 import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,9 +56,9 @@ public class DestinationStore {
     
     List<DestinationEntity> destinationList = PersistenceService.service().load()
         .type(DestinationEntity.class)
-        .filter("provider", data.getProviderId())
+        .filter("providerId", data.getProviderId())
         .filter("requestType", requestType)
-        .filter("location", locationId)
+        .filter("locationId", locationId)
         .list();
     
     if (destinationList == null || destinationList.isEmpty()) {
@@ -71,28 +71,29 @@ public class DestinationStore {
         + data.getProviderId() + " for Request Type " + requestType + " and Location " + locationId);
   }
   
-  public List<Destination> findAll(ReliefProvider data, RequestType requestType, Location location) {
-    List<RequestType> requestTypes = Lists.newArrayList();
-    List<Long> locationIds = Lists.newArrayList();
-    requestTypes.add(null);
-    locationIds.add(null);
-    if (requestType != null) {
-      logger.info("Adding Destinations with Request Type {} for Provider with Code {}",
-          requestType, data.getProviderCode());
-      requestTypes.add(requestType);
-    }
-    if (location != null && location.getLocationId() != null) {
-      logger.info("Adding Destinations with Location Id {} for Provider with Code {}",
-          location.getLocationId(), data.getProviderCode());
-      locationIds.add(location.getLocationId());
-    }
-
-    List<DestinationEntity> destinationList = PersistenceService.service().load()
+  public List<Destination> findAll(ReliefProvider data, RequestType requestType, Location location,
+                                   boolean skipRequestTypeMatchIfNull, boolean skipLocationMatchIfNull) {
+    Query<DestinationEntity> destinationQuery = PersistenceService.service().load()
         .type(DestinationEntity.class)
-        .filter("provider", data.getProviderId())
-        .filter("requestType IN ", requestTypes)
-        .filter("location IN ", locationIds)
-        .list();
+        .filter("providerId", data.getProviderId());
+
+    if (requestType != null) {
+      destinationQuery = destinationQuery
+          .filter("requestType", requestType);
+    } else if (!skipRequestTypeMatchIfNull) {
+      destinationQuery = destinationQuery
+          .filter("requestType", null);
+    }
+    
+    if (location != null) {
+      destinationQuery = destinationQuery
+          .filter("locationId", location.getLocationId());
+    } else if (!skipLocationMatchIfNull){
+      destinationQuery = destinationQuery
+          .filter("locationId", null);
+    }
+    
+    List<DestinationEntity> destinationList = destinationQuery.list();
     
     if (destinationList == null || destinationList.isEmpty()) {
       return null;

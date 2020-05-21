@@ -4,6 +4,7 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.location.store.LocationEntity;
 import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.relief.provider.store.ProviderEntity;
 import com.dothat.relief.request.data.*;
 import com.google.common.base.Strings;
 import com.googlecode.objectify.Key;
@@ -45,8 +46,11 @@ public class ReliefRequestEntity {
   @Index
   private SourceType sourceType;
   
+  @Index
+  private Long providerId;
   private String providerCode;
-  // TODO(abhideep): Add Provider Ref here and an Index on it.
+  @Load
+  private Ref<ProviderEntity> provider;
   
   private DateTime creationTimestamp;
   private DateTime modificationTimestamp;
@@ -76,8 +80,10 @@ public class ReliefRequestEntity {
     sourceId = data.getSourceId();
     sourceType = data.getSourceType();
     
-    if (data.getProvider() != null) {
+    if (data.getProvider() != null && data.getProvider().getProviderId() != null) {
+      providerId = data.getProvider().getProviderId();
       providerCode = data.getProvider().getProviderCode();
+      provider = Ref.create(Key.create(ProviderEntity.class, data.getProvider().getProviderId()));
     }
   
     if (data.getCreationTimestamp() != null) {
@@ -109,8 +115,11 @@ public class ReliefRequestEntity {
     data.setSource(source);
     data.setSourceId(sourceId);
     data.setSourceType(sourceType);
-    
-    if (!Strings.isNullOrEmpty(providerCode)) {
+  
+    if (providerId != null && provider != null) {
+      data.setProvider(provider.get().getData());
+    } else if (!Strings.isNullOrEmpty(providerCode)) {
+      // This is for Legacy Requests that didn't have ref to the Provider
       ReliefProvider provider = new ReliefProvider();
       provider.setProviderCode(providerCode);
       data.setProvider(provider);
