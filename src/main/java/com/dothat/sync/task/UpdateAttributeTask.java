@@ -105,10 +105,11 @@ public class UpdateAttributeTask {
       LookupRowResult requestRow = LookupRow.forRequests(sheets).lookup(spreadsheetId, requestHeaders);
       Integer requestRowNumber = requestRow.getLastRowForPhone(phoneNumber, attribute.getTimestamp());
       if (requestRowNumber == null) {
-        logger.info("No Row found with Phone number {} while trying to update Attribute {} ",
+        logger.warn("No Row found with Phone number {} while trying to update Attribute {} ",
             phoneNumber, attributeName);
-        throw new IllegalStateException("No Row found with Phone number " + phoneNumber
-            + " while trying to update Attribute " + attributeName);
+        // Skip Changing the Value on the Requests Sheet. It may be missing for other reasons
+        // like changing the Destination.
+        return;
       }
   
       String requestCellRange = "Requests!" + requestHeaders.getColumnLabel(attributeName) + requestRowNumber;
