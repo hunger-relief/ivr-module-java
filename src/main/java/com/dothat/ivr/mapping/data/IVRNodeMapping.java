@@ -1,31 +1,47 @@
 package com.dothat.ivr.mapping.data;
 
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.data.Location;
 import com.dothat.relief.request.data.RequestType;
 import com.google.api.server.spi.types.DateAndTime;
 
 /**
- * Mapping between an IVR Number and the Location and Service (optional) that is number maps to.
+ * Maps the Response received by IVR System Node into Answers (Attribute Values).
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class IVRMapping {
-  private Long mappingId;
+public class IVRNodeMapping {
+  Long nodeMappingId;
+  
+  private IVRProvider provider;
   private String phoneNumber;
-  private String circle;
+  
+  private String nodeId;
+  private String response;
+  
+  private String attributeName;
 
+  private String attributeValue;
   private Location location;
   private RequestType requestType;
   
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
   
-  public Long getMappingId() {
-    return mappingId;
+  public Long getNodeMappingId() {
+    return nodeMappingId;
   }
   
-  public void setMappingId(Long mappingId) {
-    this.mappingId = mappingId;
+  public void setNodeMappingId(Long nodeMappingId) {
+    this.nodeMappingId = nodeMappingId;
+  }
+  
+  public IVRProvider getProvider() {
+    return provider;
+  }
+  
+  public void setProvider(IVRProvider provider) {
+    this.provider = provider;
   }
   
   public String getPhoneNumber() {
@@ -36,12 +52,36 @@ public class IVRMapping {
     this.phoneNumber = phoneNumber;
   }
   
-  public String getCircle() {
-    return circle;
+  public String getNodeId() {
+    return nodeId;
   }
   
-  public void setCircle(String circle) {
-    this.circle = circle;
+  public void setNodeId(String nodeId) {
+    this.nodeId = nodeId;
+  }
+  
+  public String getResponse() {
+    return response;
+  }
+  
+  public void setResponse(String response) {
+    this.response = response;
+  }
+  
+  public String getAttributeName() {
+    return attributeName;
+  }
+  
+  public void setAttributeName(String attributeName) {
+    this.attributeName = attributeName;
+  }
+  
+  public String getAttributeValue() {
+    return attributeValue;
+  }
+  
+  public void setAttributeValue(String attributeValue) {
+    this.attributeValue = attributeValue;
   }
   
   public Location getLocation() {
@@ -75,5 +115,4 @@ public class IVRMapping {
   public void setModificationTimestamp(DateAndTime modificationTimestamp) {
     this.modificationTimestamp = modificationTimestamp;
   }
-  
 }

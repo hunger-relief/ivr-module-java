@@ -1,9 +1,12 @@
 package com.dothat.sync.task;
 
 import com.dothat.relief.provider.ReliefProviderService;
-import com.dothat.relief.provider.data.ProviderConfig;
+import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.sync.destination.DestinationService;
+import com.dothat.sync.destination.data.DestinationType;
+import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.sheets.AppendRowConfig;
 import com.dothat.sync.sheets.AppendRowToSheet;
 import com.dothat.sync.sheets.GetHeaderFromSheet;
@@ -45,9 +48,18 @@ public class BroadcastReliefRequest extends HttpServlet {
     }
 //    ReliefRequest request = new SampleRequestGenerator()
 //        .generate("+91-9899975887", RequestType.RATION);
-    
-    ProviderConfig config = new ReliefProviderService().getProviderConfig(request.getProvider());
-    if (config == null || Strings.isNullOrEmpty(config.getGoogleSheetId())) {
+  
+    // TODO(abhideep): Lookup all Providers who need to be sent this broadcast.
+
+    // Load the Provider if needed
+    ReliefProvider provider = request.getProvider();
+    if (provider != null && provider.getProviderId() == null && provider.getProviderCode() != null) {
+      provider = new ReliefProviderService().lookupByCode(provider.getProviderCode());
+    }
+    Destination destination = new DestinationService()
+        .lookupDestination(provider, request.getRequestType(), request.getLocation(),
+            DestinationType.GOOGLE_SHEETS);
+    if (destination == null || Strings.isNullOrEmpty(destination.getGoogleSheetId())) {
       String providerCode = null;
       if (request.getProvider() != null) {
         providerCode = request.getProvider().getProviderCode();
@@ -66,10 +78,11 @@ public class BroadcastReliefRequest extends HttpServlet {
     // TODO(abhideep): Decide between Requests and Shared Requests
     String sheetName = "Requests";
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
-        .getHeaders(config.getGoogleSheetId(), sheetName);
+        .getHeaders(destination.getGoogleSheetId(), sheetName);
     List<List<Object>> values = new RequestRowComposer(fieldNames)
         .compose(request, new AttributeFieldExtractor(request.getRequesterID()));
-    new AppendRowToSheet(sheets).appendRow(config.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
+    new AppendRowToSheet(sheets)
+        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
 
     resp.setContentType("text/plain");
     resp.getWriter().println("Added 1 Row to the sheet " + sheetName);

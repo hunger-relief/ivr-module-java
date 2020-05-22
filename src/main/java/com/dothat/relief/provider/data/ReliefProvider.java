@@ -1,5 +1,7 @@
 package com.dothat.relief.provider.data;
 
+import com.google.api.server.spi.types.DateAndTime;
+
 /**
  * Data object for the organization that is providing the relief.
  *
@@ -8,6 +10,9 @@ package com.dothat.relief.provider.data;
 public class ReliefProvider {
   private Long providerId;
   private String providerCode;
+
+  private DateAndTime creationTimestamp;
+  private DateAndTime modificationTimestamp;
   
   public Long getProviderId() {
     return providerId;
@@ -23,5 +28,21 @@ public class ReliefProvider {
   
   public void setProviderCode(String providerCode) {
     this.providerCode = providerCode;
+  }
+  
+  public DateAndTime getCreationTimestamp() {
+    return creationTimestamp;
+  }
+  
+  public void setCreationTimestamp(DateAndTime creationTimestamp) {
+    this.creationTimestamp = creationTimestamp;
+  }
+  
+  public DateAndTime getModificationTimestamp() {
+    return modificationTimestamp;
+  }
+  
+  public void setModificationTimestamp(DateAndTime modificationTimestamp) {
+    this.modificationTimestamp = modificationTimestamp;
   }
 }

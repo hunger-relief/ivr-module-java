@@ -3,6 +3,33 @@ indexes:
     properties:
       - name: requesterUUID
       - name: requestTimestamp
+  - kind: ReliefRequestEntity
+    properties:
+      - name: sourceType
+      - name: source
+      - name: requestTimestamp
+        direction: desc
+
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: sourceType
+      - name: source
+      - name: requestTimestamp
+        direction: desc
+
+  - kind: DestinationEntity
+    properties:
+      - name: providerId
+      - name: locationId
+      - name: requestType
+
+  - kind: IVRNodeMappingEntity
+    properties:
+      - name: provider
+      - name: phoneNumber
+      - name: nodeId
+      - name: response
 
   - kind: ProfileAttributeEntity
     properties:

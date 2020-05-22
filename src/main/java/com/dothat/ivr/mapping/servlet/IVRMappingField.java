@@ -8,11 +8,16 @@ import com.dothat.common.field.Field;
  * @author abhideep@ (Abhideep Singh)
  */
 public enum IVRMappingField implements Field {
+  PROVIDER("provider"),
+  CIRCLE("circle"),
+  NODE_ID("node_id"),
+  RESPONSE("response"),
+  ATTRIBUTE_NAME("attr_name"),
+  ATTRIBUTE_VALUE("attr_value"),
+  REQUEST_TYPE("request_type"),
+  LOCATION_ID("location_id"),
   COUNTRY("country"),
   PHONE("phone"),
-  CIRCLE("circle"),
-  LOCATION_ID("location_id"),
-  REQUEST_TYPE("request_type"),
   ;
   private final String paramName;
   

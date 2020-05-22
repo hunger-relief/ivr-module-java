@@ -2,9 +2,11 @@ package com.dothat.sync.task;
 
 import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
-import com.dothat.relief.provider.ReliefProviderService;
-import com.dothat.relief.provider.data.ProviderConfig;
-import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.relief.request.ReliefRequestService;
+import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.sync.destination.DestinationService;
+import com.dothat.sync.destination.data.Destination;
+import com.dothat.sync.destination.data.DestinationType;
 import com.dothat.sync.sheets.SheetsProvider;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.common.base.Strings;
@@ -44,14 +46,29 @@ public class BroadcastProfileUpdate extends HttpServlet {
       return;
     }
 
-    // TODO(abhideep): Lookup all Providers who need to be send this broadcast or take that as an attribute.
-    ReliefProvider provider = new ReliefProvider();
-    provider.setProviderCode(ReliefProviderService.DEFAULT);
+    // Lookup the list of Requests that this is relevant for
+    // TODO(abhideep): Add List of Profile Collection Request Initiator .
+    ReliefRequest request = new ReliefRequestService().lookupLastRequest(
+        attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource());
+    if (request == null) {
+      logger.warn("No Request found for {} from {} {} ",
+          attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource());
+      resp.sendError(500,"No Request found for "
+          + attribute.getIdentityUUID().getIdentifier()
+          + " from " + attribute.getSourceType() + " " + attribute.getSource());
+    }
+    // TODO(abhideep): Lookup all Providers who need to be sent this broadcast.
+    // TODO(abhideep): Add Support for Multiple Requests and Destinations
+    Destination destination = new DestinationService()
+        .lookupDestination(request.getProvider(), request.getRequestType(), request.getLocation(),
+            DestinationType.GOOGLE_SHEETS);
     
-    ProviderConfig config = new ReliefProviderService().getProviderConfig(provider);
-    if (config == null || Strings.isNullOrEmpty(config.getGoogleSheetId())) {
-      String providerCode = provider.getProviderCode();
-      resp.sendError(500,"No Spreadsheet found for provider " + providerCode);
+    if (destination == null || Strings.isNullOrEmpty(destination.getGoogleSheetId())) {
+      logger.warn("No Destination found for request for {} from {} {} ",
+          attribute.getIdentityUUID().getIdentifier(), request.getSourceType(), request.getSource());
+      resp.sendError(500,"No Destination found for request for "
+          + attribute.getIdentityUUID().getIdentifier()
+          + " from " + request.getSourceType() + " " + request.getSource());
       return;
     }
     Sheets sheets;
@@ -63,7 +80,7 @@ public class BroadcastProfileUpdate extends HttpServlet {
     }
 
     // Update the Cell for
-    new UpdateAttributeTask(sheets, config.getGoogleSheetId()).update(attribute);
+    new UpdateAttributeTask(sheets, destination.getGoogleSheetId()).update(attribute);
 
     resp.setContentType("text/plain");
     resp.getWriter().println("Added 1 Row to the sheet Profiles");

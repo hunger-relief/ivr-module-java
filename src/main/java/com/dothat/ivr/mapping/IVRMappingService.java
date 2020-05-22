@@ -1,13 +1,17 @@
 package com.dothat.ivr.mapping;
 
+import com.dothat.common.objectify.JodaUtils;
 import com.dothat.ivr.mapping.data.IVRMapping;
+import com.dothat.ivr.mapping.data.IVRNodeMapping;
 import com.dothat.ivr.mapping.store.IVRMappingStore;
 import com.dothat.location.LocationService;
 import com.dothat.location.data.Location;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service Layer to manage mapping betweeb IVR Number and Location / Service Type.
@@ -24,13 +28,15 @@ public class IVRMappingService {
     if (data.getCircle() == null) {
       logger.info("Creating Mapping for phone number " + data.getPhoneNumber());
     } else {
-      logger.info("Creating Mapping for phone number " + data.getPhoneNumber() + " and circle " + data.getCircle());
+      logger.info("Creating Mapping for phone number " + data.getPhoneNumber()
+          + " and circle " + data.getCircle());
     }
 
     // Looking up the existing mapping by phone number and circle.
-    IVRMapping currentMapping = lookup(data.getPhoneNumber(), data.getCircle());
+    IVRMapping currentMapping = lookup(data.getPhoneNumber(), data.getCircle(), true);
     if (currentMapping != null) {
       data.setMappingId(currentMapping.getMappingId());
+      data.setCreationTimestamp(data.getCreationTimestamp());
     }
 
     // Lookup the location
@@ -42,38 +48,48 @@ public class IVRMappingService {
       throw new IllegalArgumentException("No location found with Id " + data.getLocation().getLocationId());
     }
     data.setLocation(location);
-
+  
+    DateTime now = DateTime.now();
+    if (data.getCreationTimestamp() == null) {
+      data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
+    }
+    data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
+    
     // Save the mapping
     return store.store(data);
   }
   
-    public IVRMapping lookup(String phoneNumber, String circle) {
-      return lookup(phoneNumber, circle, true);
+  public IVRMapping lookup(String phoneNumber, String circle, boolean exactMatch) {
+    IVRMapping phoneOnlyMatch = null;
+    
+    if (circle == null) {
+      logger.info("Finding IVR Mapping for phone number {}", phoneNumber);
+    } else {
+      logger.info("Finding IVR Mapping for phone number {} and circle {}", phoneNumber, circle);
     }
     
-    public IVRMapping lookup(String phoneNumber, String circle, boolean exactMatch) {
-      IVRMapping phoneOnlyMatch = null;
-    
-      IVRMapping data = new IVRMapping();
-      data.setPhoneNumber(phoneNumber);
-      data.setCircle(circle);
-      if (circle == null) {
-        logger.info("Finding IVR Mapping for phone number {}", phoneNumber);
-      } else {
-        logger.info("Finding IVR Mapping for phone number {} and circle {}", phoneNumber, circle);
-      }
-  
-      List<IVRMapping> currentMappings = store.find(phoneNumber, exactMatch ? circle : null);
-      if (currentMappings != null) {
-        for (IVRMapping mapping : currentMappings) {
-          if (mapping.isKeyIdentical(data)) {
-            return mapping;
-          }
-          if (mapping.getCircle() == null && !exactMatch) {
-            phoneOnlyMatch = mapping;
-          }
+    List<IVRMapping> currentMappings = store.find(phoneNumber, exactMatch ? circle : null);
+    if (currentMappings != null) {
+      for (IVRMapping mapping : currentMappings) {
+        if (isKeyIdentical(phoneNumber, circle, mapping.getPhoneNumber(), mapping.getCircle())) {
+          return mapping;
+        }
+        if (mapping.getCircle() == null && !exactMatch) {
+          phoneOnlyMatch = mapping;
         }
       }
-      return phoneOnlyMatch;
     }
+    return phoneOnlyMatch;
+  }
+  
+  static boolean isKeyIdentical(String lhsPhone, String lhsCircle, String rhsPhone, String rhsCircle) {
+    if (lhsCircle != null) {
+      lhsCircle = lhsCircle.toUpperCase();
+    }
+    if (rhsCircle != null) {
+      rhsCircle = rhsCircle.toUpperCase();
+    }
+    return Objects.equals(lhsPhone, rhsPhone)
+        && Objects.equals(lhsCircle, rhsCircle);
+  }
 }

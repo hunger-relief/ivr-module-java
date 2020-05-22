@@ -1,55 +1,50 @@
-package com.dothat.ivr.mapping.data;
+package com.dothat.relief.provider.data;
 
 import com.dothat.location.data.Location;
+import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.RequestType;
 import com.google.api.server.spi.types.DateAndTime;
 
 /**
- * Mapping between an IVR Number and the Location and Service (optional) that is number maps to.
+ * Data / Instructions for how a Request is assigned to aProvider based on Location, IVR Number
+ * and the Request Source.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class IVRMapping {
-  private Long mappingId;
-  private String phoneNumber;
-  private String circle;
+public class AssignInstruction {
+  private Long instructionId;
 
-  private Location location;
+  private ReliefProvider provider;
+
+  private RequestSource source;
   private RequestType requestType;
+  private Location location;
   
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
   
-  public Long getMappingId() {
-    return mappingId;
+  public Long getInstructionId() {
+    return instructionId;
   }
   
-  public void setMappingId(Long mappingId) {
-    this.mappingId = mappingId;
+  public void setInstructionId(Long instructionId) {
+    this.instructionId = instructionId;
   }
   
-  public String getPhoneNumber() {
-    return phoneNumber;
+  public ReliefProvider getProvider() {
+    return provider;
   }
   
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
+  public void setProvider(ReliefProvider provider) {
+    this.provider = provider;
   }
   
-  public String getCircle() {
-    return circle;
+  public RequestSource getSource() {
+    return source;
   }
   
-  public void setCircle(String circle) {
-    this.circle = circle;
-  }
-  
-  public Location getLocation() {
-    return location;
-  }
-  
-  public void setLocation(Location location) {
-    this.location = location;
+  public void setSource(RequestSource source) {
+    this.source = source;
   }
   
   public RequestType getRequestType() {
@@ -58,6 +53,14 @@ public class IVRMapping {
   
   public void setRequestType(RequestType requestType) {
     this.requestType = requestType;
+  }
+  
+  public Location getLocation() {
+    return location;
+  }
+  
+  public void setLocation(Location location) {
+    this.location = location;
   }
   
   public DateAndTime getCreationTimestamp() {
@@ -75,5 +78,4 @@ public class IVRMapping {
   public void setModificationTimestamp(DateAndTime modificationTimestamp) {
     this.modificationTimestamp = modificationTimestamp;
   }
-  
 }

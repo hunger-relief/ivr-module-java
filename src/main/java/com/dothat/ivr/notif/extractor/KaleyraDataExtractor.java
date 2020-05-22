@@ -71,6 +71,7 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
     LocalDate today = LocalDate.now();
     // TODO(abhideep): Get this from the Web Hook / API data itself.
     data.setCallDate(JodaUtils.toSimpleDate(today));
+    data.setCallTimestamp(JodaUtils.toDateAndTime(now));
 
     data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
