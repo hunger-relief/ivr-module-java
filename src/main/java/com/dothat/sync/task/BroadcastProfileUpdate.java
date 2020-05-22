@@ -5,8 +5,8 @@ import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.sync.destination.DestinationService;
-import com.dothat.sync.destination.data.DestinationType;
 import com.dothat.sync.destination.data.Destination;
+import com.dothat.sync.destination.data.DestinationType;
 import com.dothat.sync.sheets.SheetsProvider;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.common.base.Strings;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.List;
 
 /**
  * Syncs the Profile Update to the Sheet for the Relief Provider.
@@ -49,16 +48,24 @@ public class BroadcastProfileUpdate extends HttpServlet {
 
     // Lookup the list of Requests that this is relevant for
     // TODO(abhideep): Add List of Profile Collection Request Initiator .
-    List<ReliefRequest> requestList = new ReliefRequestService().lookupBySource(
+    ReliefRequest request = new ReliefRequestService().lookupLastRequest(
         attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource());
+    if (request == null) {
+      logger.warn("No Request found for {} from {} {} ",
+          attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource());
+      resp.sendError(500,"No Request found for "
+          + attribute.getIdentityUUID().getIdentifier()
+          + " from " + attribute.getSourceType() + " " + attribute.getSource());
+    }
     // TODO(abhideep): Lookup all Providers who need to be sent this broadcast.
-    ReliefRequest request = requestList.get(0);
     // TODO(abhideep): Add Support for Multiple Requests and Destinations
     Destination destination = new DestinationService()
         .lookupDestination(request.getProvider(), request.getRequestType(), request.getLocation(),
             DestinationType.GOOGLE_SHEETS);
     
     if (destination == null || Strings.isNullOrEmpty(destination.getGoogleSheetId())) {
+      logger.warn("No Destination found for request for {} from {} {} ",
+          attribute.getIdentityUUID().getIdentifier(), request.getSourceType(), request.getSource());
       resp.sendError(500,"No Destination found for request for "
           + attribute.getIdentityUUID().getIdentifier()
           + " from " + request.getSourceType() + " " + request.getSource());
