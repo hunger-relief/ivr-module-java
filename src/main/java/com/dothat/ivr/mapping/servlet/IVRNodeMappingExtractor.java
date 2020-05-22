@@ -66,7 +66,7 @@ class IVRNodeMappingExtractor {
     }
     data.setAttributeName(attributeName);
   
-    String attributeValue = extractor.extract(json, IVRMappingField.ATTRIBUTE_NAME, false);
+    String attributeValue = extractor.extract(json, IVRMappingField.ATTRIBUTE_VALUE, false);
     String location = extractor.extract(json, IVRMappingField.LOCATION_ID, false);
     String requestType = extractor.extract(json, IVRMappingField.REQUEST_TYPE, false);
     int numValues = 0;

@@ -59,28 +59,24 @@ public class IVRNodeMappingService {
   }
   
   public IVRNodeMapping findMatch(IVRProvider provider, String phone, String nodeId, String keyPress) {
-    // First search a Phone Number and Circle specific mapping.
+    // Find the Phone Number specific mapping for the Node Id and KeyPress.
     IVRNodeMapping mapping = store.findNode(provider, phone, nodeId, keyPress);
     if (mapping != null) {
       return mapping;
     }
+    logger.warn("No Node mapping found for {} number {} and node {} for key press {}",
+        provider, phone, nodeId, keyPress);
 
-    // Find the common Mapping for the KeyPress for all numbers of the IVRProvider
-    List<IVRNodeMapping> mappingList = store.findAll(provider, null, nodeId);
-    IVRNodeMapping defaultMapping = null;
+    // Find the Mapping for the Node for any key press
+    // and see if there is a default value node.
+    List<IVRNodeMapping> mappingList = store.findAll(provider, phone, nodeId);
     if (mappingList != null) {
       for (IVRNodeMapping nodeMapping : mappingList) {
         if (Strings.isNullOrEmpty(nodeMapping.getResponse())) {
-          defaultMapping = nodeMapping;
-        } else if ((nodeMapping.getResponse().equals(keyPress))) {
-          if (nodeMapping.getAttributeValue() == null && nodeMapping.getLocation() == null
-              && nodeMapping.getRequestType() == null) {
-            nodeMapping.setAttributeValue(keyPress);
-          }
           return nodeMapping;
         }
       }
     }
-    return defaultMapping;
+    return null;
   }
 }

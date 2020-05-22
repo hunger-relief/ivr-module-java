@@ -104,11 +104,8 @@ public class IVRMappingStore {
   public List<IVRNodeMapping> findAll(IVRProvider provider, String phoneNumber, String nodeId) {
     Query<IVRNodeMappingEntity> query = PersistenceService.service().load().type(IVRNodeMappingEntity.class)
         .filter("provider", provider)
+        .filter("phoneNumber", phoneNumber)
         .filter("nodeId", nodeId);
-  
-    if (!Strings.isNullOrEmpty(phoneNumber)) {
-        query = query.filter("phoneNumber", phoneNumber);
-    }
   
     List<IVRNodeMappingEntity> mappings = query.list();
     if (mappings != null) {
