@@ -3,6 +3,7 @@ package com.dothat.sync.destination;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.location.LocationDisplayUtils;
 import com.dothat.location.data.Location;
+import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.sync.destination.data.Destination;
@@ -40,8 +41,17 @@ public class DestinationService {
     return store.store(data);
   }
   
-  public Destination lookupDestination(ReliefProvider provider, RequestType requestType,
+  public Destination lookupDestination(ReliefProvider reliefProvider, RequestType requestType,
                                        Location location, DestinationType destinationType) {
+    ReliefProvider provider = reliefProvider;
+    // For Legacy Requests, load the Provider
+    if (provider != null && provider.getProviderId() == null && provider.getProviderCode() != null) {
+      logger.warn("Looking for Destinations for " + provider.getProviderCode()
+          + " [ID " + provider.getProviderId() + " ]" + " for Legacy Request" + requestType
+          + " in " + LocationDisplayUtils.forLog(location)
+          + " [ID " + LocationDisplayUtils.idForLog(location) + " ]");
+      provider = new ReliefProviderService().lookupByCode(reliefProvider.getProviderCode());
+    }
     logger.info("Looking for Destinations for " + provider.getProviderCode()
         + " [ID " + provider.getProviderId() + " ]" + " for " + requestType
         + " in " + LocationDisplayUtils.forLog(location)
