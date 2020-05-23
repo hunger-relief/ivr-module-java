@@ -28,11 +28,12 @@ public class ProfileAttributeGenerator {
       data.setAttributeName(node.getProviderNodeId());
       data.setAttributeValue(node.getKeyPress());
     } else {
-      // If there is a mapping but it has no value, the keyPress is the value.
+      // If there is a mapping but it has no value,
+      // then it is an invalid value and should be skipped.
       data.setAttributeName(mapping.getAttributeName());
       if (Strings.isNullOrEmpty(mapping.getAttributeValue()) && mapping.getLocation() == null
           && mapping.getRequestType() == null) {
-        data.setAttributeValue(node.getKeyPress());
+        return null;
       } else {
         data.setAttributeValue(mapping.getAttributeValue());
       }
