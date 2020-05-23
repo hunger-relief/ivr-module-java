@@ -55,7 +55,7 @@ public class ReliefRequestService {
 
     if (requests == null || requests.isEmpty()) {
       logger.warn("No Request found for {}" , identityUUID.getIdentifier());
-      throw new IllegalStateException("No Request found for " + identityUUID.getIdentifier());
+      return null;
     }
 
     requests.sort(new RequestSorter());
