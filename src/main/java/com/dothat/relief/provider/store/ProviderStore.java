@@ -27,6 +27,7 @@ public class ProviderStore {
   
     // Initialize the Dependencies
     LocationStore.init();
+    ProviderStore.init();
   }
   
   public static void init() {
