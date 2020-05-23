@@ -8,16 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generates a Task that in added to the Call Processing Queue.
+ * Generates a Task that in added to the Queue that Broadcasts the Attribute Changes.
  *
  * @author abhideep@ (Abhideep Singh)
  */
 public class AttributeBroadcastTaskGenerator extends QueueTaskGenerator<ProfileAttribute> {
   
-  public static final String PROCESSOR_QUEUE_NAME = "queue-attribute-processor";
-  public static final String PROCESSOR_URI = "/task/attribute/broadcast";
-  public static final String PROCESSOR_MODULE_NAME = "default";
-  public static final Long PROCESSOR_DELAY_MILLIS = 10000L;
+  private static final String PROCESSOR_QUEUE_NAME = "queue-attribute-processor";
+  private static final String PROCESSOR_URI = "/task/attribute/broadcast";
+  private static final String PROCESSOR_MODULE_NAME = "default";
+  private static final Long PROCESSOR_DELAY_MILLIS = 10000L;
 
   
   public AttributeBroadcastTaskGenerator() {

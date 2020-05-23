@@ -33,21 +33,22 @@ public class BroadcastProfileUpdate extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    String attributeIdParam = req.getParameter(ATTRIBUTE_ID_PARAM_NAME);
-    if (Strings.isNullOrEmpty(attributeIdParam)) {
+    String attributeIdValue = req.getParameter(ATTRIBUTE_ID_PARAM_NAME);
+    if (Strings.isNullOrEmpty(attributeIdValue)) {
       logger.error("Attribute Id not specified");
       resp.sendError(400, "Attribute Id not specified");
       return;
     }
     ProfileService service = new ProfileService();
-    Long attributeId = Long.valueOf(attributeIdParam);
+    Long attributeId = Long.valueOf(attributeIdValue);
     ProfileAttribute attribute = service.lookupById(attributeId);
     if (attribute == null) {
       String attributeUUID = req.getParameter(ATTRIBUTE_UUID_PARAM_NAME);
       String attributeSourceId = req.getParameter(ATTRIBUTE_SOURCE_ID_PARAM_NAME);
-      logger.error("No Attribute found for Id {} from {} with Source ID {} ", attributeId,
+      logger.error("No Attribute found with Id {} from {} with Source ID {} ", attributeIdValue,
           attributeUUID, attributeSourceId);
-      resp.sendError(404, "No Attribute found for Id " + attributeId);
+      resp.sendError(404, "No Attribute found with Id " + attributeIdValue
+          + " from " + attributeUUID + " with Source ID " + attributeSourceId);
       return;
     }
 

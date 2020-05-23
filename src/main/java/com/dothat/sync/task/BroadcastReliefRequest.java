@@ -30,20 +30,26 @@ public class BroadcastReliefRequest extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(BroadcastReliefRequest.class);
   
   public static final String REQUEST_ID_PARAM_NAME = "requestId";
+  public static final String REQUEST_UUID_PARAM_NAME = "requestUUID";
+  public static final String REQUEST_SOURCE_ID_PARAM_NAME = "requestSourceId";
   
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    String requestIdParam = req.getParameter(REQUEST_ID_PARAM_NAME);
-    if (Strings.isNullOrEmpty(requestIdParam)) {
+    String requestIdValue = req.getParameter(REQUEST_ID_PARAM_NAME);
+    if (Strings.isNullOrEmpty(requestIdValue)) {
       logger.error("Relief Request Id not specified");
       resp.sendError(400, "Relief Request Id not specified");
       return;
     }
-    Long requestId = Long.valueOf(requestIdParam);
+    Long requestId = Long.valueOf(requestIdValue);
     ReliefRequest request = new ReliefRequestService().lookupRequestById(requestId);
     if (request == null) {
-      logger.error("No Request found for Id {} ", requestId);
-      resp.sendError(404, "No Request found for Id " + requestId);
+      String requestUUID = req.getParameter(REQUEST_UUID_PARAM_NAME);
+      String requestSourceId = req.getParameter(REQUEST_SOURCE_ID_PARAM_NAME);
+      logger.error("No Request found with Id {} from {} with Source ID {} ",
+          requestIdValue, requestUUID, requestSourceId);
+      resp.sendError(404, "No Request found with Id " + requestIdValue
+          + " from " + requestUUID + " with Source ID " + requestSourceId);
       return;
     }
 //    ReliefRequest request = new SampleRequestGenerator()
