@@ -1,9 +1,5 @@
 package com.dothat.common.queue;
 
-/**
- * @author abhideep@ (Abhideep Singh)
- */
-
 import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -21,11 +17,17 @@ public abstract class QueueTaskGenerator<T> implements TaskGenerator<T> {
   private final String queueName;
   private final String processorUri;
   private final String moduleName;
+  private final Long delayMillis;
   
-  public QueueTaskGenerator(String queueName, String processorUri, String moduleName) {
+  public QueueTaskGenerator(String queueName, String processorUri, String moduleName, Long delayMillis) {
     this.queueName = queueName;
     this.processorUri = processorUri;
     this.moduleName = moduleName;
+    this.delayMillis = delayMillis;
+  }
+  
+  public QueueTaskGenerator(String queueName, String processorUri, String moduleName) {
+    this(queueName, processorUri, moduleName, null);
   }
   
   @Override
@@ -35,6 +37,11 @@ public abstract class QueueTaskGenerator<T> implements TaskGenerator<T> {
         .method(TaskOptions.Method.GET)
         .header("Host", ModulesServiceFactory.getModulesService()
             .getVersionHostname(moduleName, null));
+    
+    if (delayMillis != null && delayMillis > 0) {
+      options.countdownMillis(delayMillis);
+    }
+
     List<String> params = getParameterNames();
     if (params != null) {
       for (String paramName : params) {
