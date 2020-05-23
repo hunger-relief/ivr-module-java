@@ -3,6 +3,13 @@ indexes:
     properties:
       - name: requesterUUID
       - name: requestTimestamp
+
+  - kind: ReliefRequestEntity
+    properties:
+      - name: sourceType
+      - name: source
+      - name: requestTimestamp
+
   - kind: ReliefRequestEntity
     properties:
       - name: sourceType
