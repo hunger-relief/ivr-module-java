@@ -42,7 +42,9 @@ public class IVRCallNodeProcessor extends HttpServlet {
         return;
       }
       ProfileAttribute data = new ProfileAttributeGenerator().generate(node);
-      attributeId = new ProfileService().save(data);
+      if (data != null) {
+        attributeId = new ProfileService().save(data);
+      }
     } catch (Throwable t) {
       logger.error("Error while processing Call Node with Id {}", callNodeIdParam, t);
       resp.sendError(500, "Error while processing Call Node with Id " + callNodeIdParam);

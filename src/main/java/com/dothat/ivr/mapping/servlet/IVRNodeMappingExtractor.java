@@ -53,9 +53,8 @@ class IVRNodeMappingExtractor {
   
     String nodeId = extractor.extract(json, IVRMappingField.NODE_ID, true);
     String response = extractor.extract(json, IVRMappingField.RESPONSE, true);
-    if (Strings.isNullOrEmpty(nodeId) || Strings.isNullOrEmpty(response)) {
-      throw new IllegalArgumentException("Both Node Id and response on the node " +
-          "have to be specified for the mapping");
+    if (Strings.isNullOrEmpty(nodeId)) {
+      throw new IllegalArgumentException("Node Id is required to specify the node that is being mapped");
     }
     data.setNodeId(nodeId);
     data.setResponse(response);

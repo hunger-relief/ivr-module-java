@@ -3,6 +3,7 @@ package com.dothat.relief.request.store;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.common.queue.TaskGenerator;
 import com.dothat.location.store.LocationStore;
+import com.dothat.relief.provider.store.ProviderStore;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
@@ -27,6 +28,7 @@ public class ReliefRequestStore {
   
     // Initialize Dependencies
     LocationStore.init();
+    ProviderStore.init();
   }
   
   public static void init() {
