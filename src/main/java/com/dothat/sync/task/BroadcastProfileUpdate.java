@@ -28,6 +28,8 @@ public class BroadcastProfileUpdate extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(BroadcastProfileUpdate.class);
   
   public static final String ATTRIBUTE_ID_PARAM_NAME = "attributeId";
+  public static final String ATTRIBUTE_UUID_PARAM_NAME = "attributeUUID";
+  public static final String ATTRIBUTE_SOURCE_ID_PARAM_NAME = "attributeSourceId";
   
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -41,11 +43,11 @@ public class BroadcastProfileUpdate extends HttpServlet {
     Long attributeId = Long.valueOf(attributeIdParam);
     ProfileAttribute attribute = service.lookupById(attributeId);
     if (attribute == null) {
-      logger.error("No Attribute found for Id {} ", attributeId);
-      // resp.sendError(404, "No Attribute found for Id " + attributeId);
-      resp.setContentType("text/plain");
-      resp.getWriter().println("Skipping 1 Attribute with Id {} since Attribute could not be found");
-      resp.flushBuffer();
+      String attributeUUID = req.getParameter(ATTRIBUTE_UUID_PARAM_NAME);
+      String attributeSourceId = req.getParameter(ATTRIBUTE_SOURCE_ID_PARAM_NAME);
+      logger.error("No Attribute found for Id {} from {} with Source ID {} ", attributeId,
+          attributeUUID, attributeSourceId);
+      resp.sendError(404, "No Attribute found for Id " + attributeId);
       return;
     }
 
