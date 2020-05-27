@@ -17,7 +17,7 @@ public class AttributeBroadcastTaskGenerator extends QueueTaskGenerator<ProfileA
   private static final String PROCESSOR_QUEUE_NAME = "queue-attribute-processor";
   private static final String PROCESSOR_URI = "/task/attribute/broadcast";
   private static final String PROCESSOR_MODULE_NAME = "default";
-  private static final Long PROCESSOR_DELAY_MILLIS = 10000L;
+  private static final Long PROCESSOR_DELAY_MILLIS = 300000L; // 5 Min Delay
 
   
   public AttributeBroadcastTaskGenerator() {

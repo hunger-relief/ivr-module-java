@@ -35,23 +35,25 @@ public class UpdateAttributeTask {
   }
   
   public void update(ProfileAttribute attribute) throws IOException {
-    String attributeName = attribute.getAttributeName();
-    // TODO(abhideep): Copy previous Attribute value if needed.
-  
-    
-    // Add a Row to Profile Sheet if needed. Only done for the Profile Attributes tha was created earliest.
+    // Add a Row to Profile Sheet if needed. Only done for the Profile Attributes tha was created last for a
+    // given call (Source).
     ProfileService service = new ProfileService();
     List<ProfileAttribute> attributes = service.lookupAllBySourceId(
         attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource(), attribute.getSourceId());
 
     // Not sure how this is even possible, but just a fail-safe to make it easier to write code ahead.
-    if (attributes == null) {
-      attributes = new ArrayList<>();
+    if (attributes == null || attributes.isEmpty()) {
+      throw new IllegalStateException("No Attributes found for ID " + attribute.getSourceId() + " from "
+          + attribute.getSourceType() + " " + attribute.getSource());
     }
     logger.info("Found {} attributes with source {} and source Id {} for source type {}",
         attributes.size(), attribute.getSource(), attribute.getSourceId(), attribute.getSourceType());
 
-    if (isEarliestAttribute(attribute, attributes)) {
+    if (isLatestAttribute(attribute, attributes)) {
+      logger.info("Processing Last Attribute for {} from {} {} with Source Id {}",
+          attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource(),
+          attribute.getSourceId());
+
       SheetHeader profilesHeader = LookupSheetHeader.forProfiles(sheets, spreadsheetId).getHeader();
       LookupRowResult newRowResult = LookupRow.forProfiles(sheets).lookup(spreadsheetId, profilesHeader);
       Integer cellRowNumber = newRowResult.getRowForSource(attribute.getSourceType(), attribute.getSource(),
@@ -62,38 +64,20 @@ public class UpdateAttributeTask {
             new AttributeFieldExtractor(attribute.getIdentityUUID()));
         new AppendRowToSheet(sheets).appendRow(spreadsheetId, AppendRowConfig.forProfile(), values);
         logger.info("Added row to Profiles Sheet");
+      } else {
+        throw new IllegalStateException("Row already exists for " + attribute.getIdentityUUID().getIdentifier()
+            + " from " + attribute.getSourceType() + " " + attribute.getSource()
+            + " with Id " + attribute.getSourceId());
       }
     }
-  
-    // Load the the first Row of the Profiles Sheet - This will tell you which column
-    // has the data for
-    SheetHeader header = LookupSheetHeader.forProfiles(sheets, spreadsheetId).getHeader();
-    String cellColumnLabel = header.getColumnLabel(attributeName);
-    if (cellColumnLabel == null) {
-      logger.info("No column found for Attribute {} in the Profiles Sheet", attributeName);
-      throw new IllegalStateException("No column found for Attribute " + attributeName + " in the Profiles Sheet");
-    }
-    // Load Columns that have the unique key for the Profiles
-    LookupRowResult rowResult = LookupRow.forProfiles(sheets).lookup(spreadsheetId, header);
-    Integer cellRowNumber = rowResult.getRowForSource(attribute.getSourceType(), attribute.getSource(),
-        attribute.getSourceId());
-    
-    if (cellRowNumber == null) {
-      logger.info("No Row found with Source Type {} source {} and source Id {} while trying to update Attribute {} " +
-          "in the Profiles Sheet", attribute.getSourceType(), attribute.getSource(), attribute.getSourceId(),
-          attributeName);
-      throw new IllegalStateException("No Row found with Source Type " + attribute.getSourceType() + " source "
-          + attribute.getSource() + " and source Id " + attribute.getSourceId() + " while trying to update Attribute "
-          + attributeName + " in the Profiles Sheet");
-    }
-    
-    // Update the Cell which has the Attribute Value
-    String cellRange = "Profiles!" + cellColumnLabel + cellRowNumber;
+    // See if the Request Sheet also has the same attribute, in which case update it.
+    updateRequestSheet(attribute);
+  }
+
+  private void updateRequestSheet(ProfileAttribute attribute) throws IOException {
+    String attributeName = attribute.getAttributeName();
     String cellValue = getCellValue(attribute);
-    logger.info("Updating Cell {} with Value {} for Attribute {} in the Profiles Sheet",
-        cellRange, cellValue, attributeName);
-    updateCellValue(cellValue, cellRange);
-  
+
     // If the Request Sheet has a column with the same name, update that as well
     SheetHeader requestHeaders = LookupSheetHeader.forRequests(sheets, spreadsheetId).getHeader();
     if (requestHeaders.getColumnNumber(attributeName) != null) {
@@ -101,7 +85,7 @@ public class UpdateAttributeTask {
       if (phoneNumber.startsWith("'")) {
         phoneNumber = phoneNumber.substring(1);
       }
-
+    
       LookupRowResult requestRow = LookupRow.forRequests(sheets).lookup(spreadsheetId, requestHeaders);
       Integer requestRowNumber = requestRow.getLastRowForPhone(phoneNumber, attribute.getTimestamp());
       if (requestRowNumber == null) {
@@ -111,14 +95,14 @@ public class UpdateAttributeTask {
         // like changing the Destination.
         return;
       }
-  
+    
       String requestCellRange = "Requests!" + requestHeaders.getColumnLabel(attributeName) + requestRowNumber;
       logger.info("Updating Cell {} with Value {} for Attribute {} in the Profiles Sheet",
           requestCellRange, phoneNumber, attributeName);
       updateCellValue(cellValue, requestCellRange);
     }
   }
-  
+
   private String getPhoneNumber(ProfileAttribute attribute) {
     ObfuscatedID obfuscatedId = attribute.getIdentityUUID();
     ExternalID number = new IdentityService().lookupNumberById(obfuscatedId);
@@ -148,7 +132,7 @@ public class UpdateAttributeTask {
         .execute();
   }
   
-  private boolean isEarliestAttribute(ProfileAttribute attribute, List<ProfileAttribute> attrList) {
+  private boolean isLatestAttribute(ProfileAttribute attribute, List<ProfileAttribute> attrList) {
     if (attrList == null || attrList.isEmpty()) {
       return true;
     }
@@ -156,7 +140,7 @@ public class UpdateAttributeTask {
     for (ProfileAttribute attr : attrList) {
       DateTime attrTimestamp = JodaUtils.toDateTime(attr.getTimestamp());
       if (!attr.getAttributeId().equals(attribute.getAttributeId())
-          && attrTimestamp.isBefore(attributeTimestamp)) {
+          && attrTimestamp.isAfter(attributeTimestamp)) {
         return false;
       }
     }
