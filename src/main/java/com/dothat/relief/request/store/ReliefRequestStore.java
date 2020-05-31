@@ -5,8 +5,10 @@ import com.dothat.common.queue.TaskGenerator;
 import com.dothat.location.store.LocationStore;
 import com.dothat.relief.provider.store.ProviderStore;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,11 +81,31 @@ public class ReliefRequestStore {
     return request.getData();
   }
   
+  public List<ReliefRequest> findAll(String obfuscatedId, Long providerId, RequestType requestType, int limit) {
+    List<ReliefRequestEntity> requestList = PersistenceService.service().load()
+        .type(ReliefRequestEntity.class)
+        .filter("requesterUUID", obfuscatedId)
+        .filter("providerId ", providerId)
+        .filter("requestType ", requestType)
+        .order("-requestTimestamp")
+        .limit(limit)
+        .list();
+    
+    if (requestList == null) {
+      return null;
+    }
+    List<ReliefRequest> dataList = new ArrayList<>();
+    for (ReliefRequestEntity entity : requestList) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
+  }
+  
   public List<ReliefRequest> findAll(String obfuscatedId, int limit) {
     List<ReliefRequestEntity> requestList = PersistenceService.service().load()
         .type(ReliefRequestEntity.class)
         .filter("requesterUUID", obfuscatedId)
-        .order("requestTimestamp")
+        .order("-requestTimestamp")
         .limit(limit)
         .list();
   

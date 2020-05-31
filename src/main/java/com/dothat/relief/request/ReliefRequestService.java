@@ -2,7 +2,9 @@ package com.dothat.relief.request;
 
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.data.ObfuscatedID;
+import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
 import com.dothat.relief.request.store.ReliefRequestStore;
 import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
@@ -38,6 +40,11 @@ public class ReliefRequestService {
   
   public List<ReliefRequest> lookupAllForIdentity(ObfuscatedID obfuscatedId, int limit) {
     return store.findAll(obfuscatedId.getIdentifier(), limit);
+  }
+  
+  public List<ReliefRequest> lookupAllAssigned(
+      ObfuscatedID obfuscatedId, ReliefProvider provider, RequestType requestType, int limit) {
+    return store.findAll(obfuscatedId.getIdentifier(), provider.getProviderId(), requestType, limit);
   }
   
   public List<ReliefRequest> lookupBySource(ObfuscatedID identityUUID, SourceType sourceType, String source) {

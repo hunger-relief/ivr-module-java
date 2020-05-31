@@ -6,6 +6,20 @@ indexes:
 
   - kind: ReliefRequestEntity
     properties:
+      - name: requesterUUID
+      - name: requestTimestamp
+        direction: desc
+
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: providerId
+      - name: requestType
+      - name: requestTimestamp
+        direction: desc
+
+  - kind: ReliefRequestEntity
+    properties:
       - name: sourceType
       - name: source
       - name: requestTimestamp
