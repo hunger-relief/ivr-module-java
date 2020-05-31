@@ -20,6 +20,10 @@ public class RequestRowComposer {
   }
   
   public List<List<Object>> compose(ReliefRequest data, AttributeFieldExtractor attributeExtractor) {
+    return Collections.singletonList(composeRow(data, attributeExtractor));
+  }
+
+  public List<Object> composeRow(ReliefRequest data, AttributeFieldExtractor attributeExtractor) {
     ExternalID number = new IdentityService().lookupNumberById(data.getRequesterID());
     String phoneNUmber = number ==  null ? "" : number.getExternalId();
     // Strip out the country code if any and add ' to make it a string literal
@@ -43,6 +47,6 @@ public class RequestRowComposer {
         row.add("");
       }
     }
-    return Collections.singletonList(row);
+    return row;
   }
 }
