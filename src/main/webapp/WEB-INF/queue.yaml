@@ -31,3 +31,21 @@ queue:
       task_age_limit: 1d
       min_backoff_seconds: 120
       max_backoff_seconds: 1200
+  - name: queue-request-sync
+    rate: 1/s
+    bucket_size: 20
+    max_concurrent_requests: 20
+    retry_parameters:
+      task_retry_limit: 10
+      task_age_limit: 1d
+      min_backoff_seconds: 120
+      max_backoff_seconds: 1200
+  - name: queue-request-broadcast
+    rate: 500/s
+    bucket_size: 100
+    max_concurrent_requests: 1000
+    retry_parameters:
+      task_retry_limit: 10
+      task_age_limit: 1d
+      min_backoff_seconds: 120
+      max_backoff_seconds: 1200
