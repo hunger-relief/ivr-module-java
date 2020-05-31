@@ -68,7 +68,7 @@ public class DestinationEntity {
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
   
-  Destination getData() {
+  public Destination getData() {
     Destination data = new Destination();
     data.setDestinationId(destinationId);
     
