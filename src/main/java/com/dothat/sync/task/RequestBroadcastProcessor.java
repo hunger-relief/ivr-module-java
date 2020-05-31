@@ -43,7 +43,7 @@ public class RequestBroadcastProcessor extends HttpServlet {
       return;
     }
     
-    Long taskId = new SyncService().createSyncTask(request);
+    Long taskId = new SyncService().createRequestSyncTask(request);
 
     resp.setContentType("text/plain");
     resp.getWriter().println("Created Sync Task " + taskId

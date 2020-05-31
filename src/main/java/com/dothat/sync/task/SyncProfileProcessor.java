@@ -1,9 +1,10 @@
 package com.dothat.sync.task;
 
-import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.profile.ProfileService;
+import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.sync.SyncService;
-import com.dothat.sync.data.SyncRequestTask;
+import com.dothat.sync.data.SyncProfileTask;
 import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.sheets.AppendRowConfig;
 import com.dothat.sync.sheets.AppendRowToSheet;
@@ -27,7 +28,7 @@ import java.util.List;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class SyncRequestProcessor extends HttpServlet {
+public class SyncProfileProcessor extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(BroadcastReliefRequest.class);
   
   public static final String PROVIDER_CODE_PARAM_NAME = "providerCode";
@@ -58,7 +59,7 @@ public class SyncRequestProcessor extends HttpServlet {
     }
     String taskName = req.getParameter(PROCESS_TASK_PARAM_NAME);
   
-    List<SyncRequestTask> taskList = new SyncService().getRequestTasks(taskName);
+    List<SyncProfileTask> taskList = new SyncService().getProfileTasks(taskName);
     if (taskList == null || taskList.isEmpty()) {
       resp.setContentType("text/plain");
       resp.getWriter().println("No rows to process for Sheet for " + requestType
@@ -78,18 +79,23 @@ public class SyncRequestProcessor extends HttpServlet {
       throw new IOException(gse);
     }
 
-    String sheetName = "Requests";
+    String sheetName = "Profiles";
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
         .getHeaders(destination.getGoogleSheetId(), sheetName);
     List<List<Object>> values = new ArrayList<>();
-    RequestRowComposer composer = new RequestRowComposer(fieldNames);
-    for (SyncRequestTask task : taskList) {
-      ReliefRequest request = task.getReliefRequest();
-      values.add(composer.composeRow(request, new AttributeFieldExtractor(request.getRequesterID())));
+    ProfileRowComposer composer = new ProfileRowComposer(fieldNames);
+    ProfileService service = new ProfileService();
+    for (SyncProfileTask task : taskList) {
+      ProfileAttribute attribute = task.getProfileAttribute();
+      List<ProfileAttribute> attributes = service.lookupAllBySourceId(attribute.getIdentityUUID(),
+          attribute.getSourceType(), attribute.getSource(), attribute.getSourceId());
+      AttributeFieldExtractor extractor = new AttributeFieldExtractor(
+          attribute.getIdentityUUID(), attributes);
+      values.add(composer.composeRow(attribute, extractor));
     }
     
     new AppendRowToSheet(sheets)
-        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
+        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forProfile(), values);
   
     int numRows = values.size();
     
