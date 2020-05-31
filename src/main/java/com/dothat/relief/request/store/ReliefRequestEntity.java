@@ -92,7 +92,7 @@ public class ReliefRequestEntity {
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
   
-  ReliefRequest getData() {
+  public ReliefRequest getData() {
     ReliefRequest data = new ReliefRequest();
     data.setRequestId(requestId);
     if (requesterUUID != null) {
