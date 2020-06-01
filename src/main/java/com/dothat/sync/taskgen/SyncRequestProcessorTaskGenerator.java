@@ -17,7 +17,7 @@ public class SyncRequestProcessorTaskGenerator extends QueueTaskGenerator<SyncRe
   private static final String PROCESSOR_QUEUE_NAME = "queue-request-sync";
   private static final String PROCESSOR_URI = "/task/request/sync";
   private static final String PROCESSOR_MODULE_NAME = "default";
-  private static final Long PROCESSOR_DELAY_MILLIS = 600000L; // 5 minute delay
+  private static final Long PROCESSOR_DELAY_MILLIS = 300000L; // 5 minute delay
   
   public SyncRequestProcessorTaskGenerator(String taskName) {
     super(PROCESSOR_QUEUE_NAME, taskName, PROCESSOR_URI, PROCESSOR_MODULE_NAME, PROCESSOR_DELAY_MILLIS);

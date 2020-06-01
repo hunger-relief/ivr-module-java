@@ -33,6 +33,8 @@ import java.util.List;
 public class SyncService {
   private static final Logger logger = LoggerFactory.getLogger(SyncService.class);
   
+  private static final String TASK_NAME_SEPARATOR = "-";
+  
   private final SyncRequestStore store = new SyncRequestStore();
   
   public Long createRequestSyncTask(ReliefRequest request) {
@@ -80,8 +82,10 @@ public class SyncService {
   
   private String getProcessTaskName(SyncProcessType processType, ReliefProvider provider,
                                     RequestType requestType, Destination destination) {
-    return provider.getProviderCode() + "|" + processType.name()
-        + "|" + requestType + "|" + destination.getGoogleSheetId();
+    return provider.getProviderCode()
+        + TASK_NAME_SEPARATOR + processType.name()
+        + TASK_NAME_SEPARATOR + requestType
+        + TASK_NAME_SEPARATOR + destination.getGoogleSheetId();
   }
   
   private boolean hasPreviousRequestForDate(ReliefRequest current, List<ReliefRequest> requestList) {
@@ -94,6 +98,9 @@ public class SyncService {
       }
       DateTime currentTimestamp = JodaUtils.toDateTime(current.getRequestTimestamp());
       DateTime requestTimestamp = JodaUtils.toDateTime(request.getRequestTimestamp());
+      if (requestTimestamp == null) {
+        requestTimestamp = JodaUtils.toDateTime(request.getCreationTimestamp());
+      }
       if (currentTimestamp.toDate().equals(requestTimestamp.toDate())
           && requestTimestamp.isBefore(currentTimestamp)) {
         return true;
@@ -108,6 +115,10 @@ public class SyncService {
       return null;
     }
     return tasks;
+  }
+  
+  public void deleteRequestTasks(List<SyncRequestTask> taskList) {
+    store.deleteRequestTasks(taskList);
   }
   
   public Long createSyncProfileTask(ProfileAttribute attribute) {
@@ -189,5 +200,9 @@ public class SyncService {
       return null;
     }
     return tasks;
+  }
+  
+  public void deleteProfileTasks(List<SyncProfileTask> taskList) {
+    store.deleteProfileTasks(taskList);
   }
 }

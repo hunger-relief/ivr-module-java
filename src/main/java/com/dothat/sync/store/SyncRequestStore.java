@@ -9,6 +9,7 @@ import com.dothat.relief.request.store.ReliefRequestStore;
 import com.dothat.sync.data.SyncProfileTask;
 import com.dothat.sync.data.SyncRequestTask;
 import com.dothat.sync.destination.store.DestinationStore;
+import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
 import com.googlecode.objectify.Key;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 public class SyncRequestStore {
   private static final Logger logger = LoggerFactory.getLogger(SyncRequestStore.class);
+  private static final int DELETE_BATCH_SIZE = 50;
 
   static {
     // Register all Entities used by the Store
@@ -55,8 +57,12 @@ public class SyncRequestStore {
     
       // If there is a task generator, then generate the task.
       if (taskGenerator != null) {
-        logger.info("Add a Task to Sync Request to a Google Sheet");
-        taskGenerator.generateTask(data);
+        logger.info("Adding a Task to Sync Request to a Google Sheet");
+        try {
+          taskGenerator.generateTask(data);
+        } catch (TaskAlreadyExistsException e) {
+          logger.warn("A Task already exists to Sync Request to a Google Sheet");
+        }
       }
       return taskId;
     });
@@ -76,8 +82,12 @@ public class SyncRequestStore {
       
       // If there is a task generator, then generate the task.
       if (taskGenerator != null) {
-        logger.info("Add a Task to Sync Profile to a Google Sheet");
-        taskGenerator.generateTask(data);
+        logger.info("Adding a Task to Sync Profile to a Google Sheet");
+        try {
+          taskGenerator.generateTask(data);
+        } catch (TaskAlreadyExistsException e) {
+          logger.warn("A Task already exists to Sync Profiles to a Google Sheet");
+        }
       }
       return taskId;
     });
@@ -99,6 +109,24 @@ public class SyncRequestStore {
     return dataList;
   }
   
+  public void deleteRequestTasks(List<SyncRequestTask> taskList) {
+    if (taskList == null || taskList.isEmpty()) {
+      return;
+    }
+    List<SyncRequestTask> deleteList = getBatch(taskList, 0, DELETE_BATCH_SIZE);
+    int startIndex = 0;
+    while (!deleteList.isEmpty()) {
+      List<SyncRequestTaskEntity> entityList = new ArrayList<>();
+      for (SyncRequestTask task : deleteList) {
+        entityList.add(new SyncRequestTaskEntity(task));
+      }
+      PersistenceService.service().delete().entities(entityList).now();
+      // Move to the next Bacth
+      startIndex = startIndex + DELETE_BATCH_SIZE;
+      deleteList = getBatch(taskList, startIndex, DELETE_BATCH_SIZE);
+    }
+  }
+  
   public List<SyncProfileTask> findProfileTasks(String taskName) {
     List<SyncProfileTaskEntity> requestList = PersistenceService.service().load()
         .type(SyncProfileTaskEntity.class)
@@ -114,5 +142,34 @@ public class SyncRequestStore {
     }
     return dataList;
   }
-
+  
+  public void deleteProfileTasks(List<SyncProfileTask> taskList) {
+    if (taskList == null || taskList.isEmpty()) {
+      return;
+    }
+    List<SyncProfileTask> deleteList = getBatch(taskList, 0, DELETE_BATCH_SIZE);
+    int startIndex = 0;
+    while (!deleteList.isEmpty()) {
+      List<SyncProfileTaskEntity> entityList = new ArrayList<>();
+      for (SyncProfileTask task : deleteList) {
+        entityList.add(new SyncProfileTaskEntity(task));
+      }
+      PersistenceService.service().delete().entities(entityList).now();
+      // Move to the next Bact
+      startIndex = startIndex + DELETE_BATCH_SIZE;
+      deleteList = getBatch(taskList, startIndex, DELETE_BATCH_SIZE);
+    }
+  }
+  
+  private <T> List<T> getBatch(List<T> taskList, int startIndex, int maxSize) {
+    List<T> list = new ArrayList<>();
+    int ctr = 0;
+    int index = startIndex + ctr;
+    while (ctr < maxSize && index < taskList.size()) {
+      list.add(taskList.get(index));
+      ctr++;
+      index = startIndex + ctr;
+    }
+    return list;
+  }
 }

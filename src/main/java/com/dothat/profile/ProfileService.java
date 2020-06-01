@@ -3,11 +3,14 @@ package com.dothat.profile;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.profile.data.ProfileAttribute;
 import com.dothat.profile.store.ProfileStore;
+import com.dothat.profile.task.ProfileBroadcastTaskGenerator;
 import com.dothat.relief.request.data.SourceType;
 
 import java.util.List;
 
 /**
+ * Service Layer to manage Profiles of users.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
 public class ProfileService {
@@ -18,7 +21,7 @@ public class ProfileService {
   }
   
   public Long save(ProfileAttribute data) {
-    return store.store(data, new AttributeBroadcastTaskGenerator());
+    return store.store(data, new ProfileBroadcastTaskGenerator());
   }
   
   public ProfileAttribute lookupById(Long attributeId) {

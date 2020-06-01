@@ -59,7 +59,8 @@ public class SyncProfileProcessor extends HttpServlet {
     }
     String taskName = req.getParameter(PROCESS_TASK_PARAM_NAME);
   
-    List<SyncProfileTask> taskList = new SyncService().getProfileTasks(taskName);
+    SyncService syncService = new SyncService();
+    List<SyncProfileTask> taskList = syncService.getProfileTasks(taskName);
     if (taskList == null || taskList.isEmpty()) {
       resp.setContentType("text/plain");
       resp.getWriter().println("No rows to process for Sheet for " + requestType
@@ -96,6 +97,9 @@ public class SyncProfileProcessor extends HttpServlet {
     
     new AppendRowToSheet(sheets)
         .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forProfile(), values);
+
+    // Delete the Tasks from the Data store
+    syncService.deleteProfileTasks(taskList);
   
     int numRows = values.size();
     
