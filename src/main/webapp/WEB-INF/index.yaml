@@ -1,8 +1,32 @@
 indexes:
+  - kind: IVRCallNodeEntity
+    properties:
+      - name: provider
+      - name: providerCallId
+
+  - kind: IVRCallEntity
+    properties:
+      - name: provider
+      - name: providerCallId
+
   - kind: ReliefRequestEntity
     properties:
       - name: requesterUUID
       - name: requestTimestamp
+
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: requestTimestamp
+        direction: desc
+
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: providerId
+      - name: requestType
+      - name: requestTimestamp
+        direction: desc
 
   - kind: ReliefRequestEntity
     properties:

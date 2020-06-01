@@ -32,6 +32,10 @@ public class DestinationStore {
     ProviderStore.init();
   }
   
+  public static void init() {
+    // Empty initialization used to trigger the static block
+  }
+
   public Long store(Destination data) {
     return PersistenceService.service().transact(() -> {
       

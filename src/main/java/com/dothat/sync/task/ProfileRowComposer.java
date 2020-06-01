@@ -21,6 +21,10 @@ public class ProfileRowComposer {
   }
   
   public List<List<Object>> compose(ProfileAttribute data, AttributeFieldExtractor attributeExtractor) {
+    return Collections.singletonList(composeRow(data, attributeExtractor));
+  }
+  
+  public List<Object> composeRow(ProfileAttribute data, AttributeFieldExtractor attributeExtractor) {
     Map<String, String> fieldMap = new ProfileFieldExtractor().extractValues(data);
 
     Map<String, String> attributeMap = attributeExtractor.getAttributeDataMap();
@@ -37,6 +41,6 @@ public class ProfileRowComposer {
         row.add("");
       }
     }
-    return Collections.singletonList(row);
+    return row;
   }
 }

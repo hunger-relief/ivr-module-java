@@ -23,9 +23,15 @@ public class AttributeFieldExtractor {
   private static final Logger logger = LoggerFactory.getLogger(AttributeFieldExtractor.class);
   
   private final ObfuscatedID obfuscatedID;
+  private final List<ProfileAttribute> attributes;
+  
+  public AttributeFieldExtractor(ObfuscatedID obfuscatedID, List<ProfileAttribute> attributes) {
+    this.obfuscatedID = obfuscatedID;
+    this.attributes = attributes;
+  }
   
   public AttributeFieldExtractor(ObfuscatedID obfuscatedID) {
-    this.obfuscatedID = obfuscatedID;
+    this(obfuscatedID, null);
   }
   
   Map<String, String> getAttributeDataMap() {
@@ -40,12 +46,21 @@ public class AttributeFieldExtractor {
     attributeList.sort(new AttributeSorter());
   
     // Sort all Attributes and then add them as fields as well.
+    populateAttributeMap(attributeMap, attributeList);
+    
+    if (attributes != null) {
+      populateAttributeMap(attributeMap, attributes);
+    }
+
+    return attributeMap;
+  }
+  
+  private void populateAttributeMap(Map<String, String> attributeMap, List<ProfileAttribute> attributeList) {
     for (ProfileAttribute attribute : attributeList) {
       if (!Strings.isNullOrEmpty(attribute.getAttributeValue())) {
         attributeMap.put(attribute.getAttributeName(), attribute.getAttributeValue());
       }
     }
-    return attributeMap;
   }
   
   /**
