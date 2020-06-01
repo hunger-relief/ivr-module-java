@@ -210,11 +210,17 @@ public class SyncService {
         String providerCode = attribute.getSource();
         provider = new ReliefProviderService().lookupByCode(providerCode);
       }
-      if (provider == null) {
-        throw new IllegalStateException("No Provider found for "
-            + attribute.getIdentityUUID().getIdentifier()
-            + " from " + attribute.getSourceType() + " " + attribute.getSource());
-      }
+    }
+
+    if (provider == null) {
+      throw new IllegalStateException("No Provider found for "
+          + attribute.getIdentityUUID().getIdentifier()
+          + " from " + attribute.getSourceType() + " " + attribute.getSource());
+    }
+  
+    if (provider.getProviderId() == null
+        && !Strings.isNullOrEmpty(provider.getProviderCode())) {
+      provider = new ReliefProviderService().lookupByCode(provider.getProviderCode());
     }
   
     Destination destination = new DestinationService()
