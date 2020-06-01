@@ -5,6 +5,7 @@ import com.dothat.ivr.notif.data.IVRCall;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.objectify.PersistenceService;
 import com.dothat.ivr.notif.data.IVRCallNode;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.googlecode.objectify.Key;
 import org.joda.time.DateTime;
 
@@ -115,6 +116,20 @@ public class IVRCallStore {
     }
     // Just return the fist entry
     return calls.get(0).getData();
+  }
+  
+  public IVRCallNode findNode(IVRProvider provider, String providerCallId) {
+    List<IVRCallNodeEntity> callNodes = PersistenceService.service().load()
+        .type(IVRCallNodeEntity.class)
+        .filter("provider", provider)
+        .filter("providerCallId", providerCallId)
+        .list();
+    
+    if (callNodes == null || callNodes.isEmpty()) {
+      return null;
+    }
+    // Just return the fist entry
+    return callNodes.get(0).getData();
   }
   
 }

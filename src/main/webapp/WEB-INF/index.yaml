@@ -1,4 +1,14 @@
 indexes:
+  - kind: IVRCallNodeEntity
+    properties:
+      - name: provider
+      - name: providerCallId
+
+  - kind: IVRCallEntity
+    properties:
+      - name: provider
+      - name: providerCallId
+
   - kind: ReliefRequestEntity
     properties:
       - name: requesterUUID
