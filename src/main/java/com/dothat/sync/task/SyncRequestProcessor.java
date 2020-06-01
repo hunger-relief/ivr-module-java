@@ -2,8 +2,8 @@ package com.dothat.sync.task;
 
 import com.dothat.relief.request.RequestSorter;
 import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.relief.request.data.RequestType;
 import com.dothat.sync.SyncService;
+import com.dothat.sync.data.SyncProcessType;
 import com.dothat.sync.data.SyncRequestTask;
 import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.sheets.AppendRowConfig;
@@ -32,7 +32,7 @@ public class SyncRequestProcessor extends HttpServlet {
   private static final Logger logger = LoggerFactory.getLogger(BroadcastReliefRequest.class);
   
   public static final String PROVIDER_CODE_PARAM_NAME = "providerCode";
-  public static final String REQUEST_TYPE_PARAM_NAME = "requestType";
+  public static final String SYNC_TYPE_PARAM_NAME = "syncType";
   public static final String PROCESS_TASK_PARAM_NAME = "processTaskName";
   
   @Override
@@ -43,18 +43,18 @@ public class SyncRequestProcessor extends HttpServlet {
       resp.sendError(400, "Relief Provider code not specified");
       return;
     }
-    String requestTypeValue = req.getParameter(REQUEST_TYPE_PARAM_NAME);
-    if (Strings.isNullOrEmpty(requestTypeValue)) {
+    String syncTypeValue = req.getParameter(SYNC_TYPE_PARAM_NAME);
+    if (Strings.isNullOrEmpty(syncTypeValue)) {
       logger.error("Relief Request type not specified");
       resp.sendError(400, "Relief Request type not specified");
       return;
     }
-    RequestType requestType;
+    SyncProcessType syncType;
     try {
-      requestType = RequestType.valueOf(requestTypeValue);
+      syncType = SyncProcessType.valueOf(syncTypeValue);
     } catch (Throwable t) {
-      logger.error("Invalid Relief Request type specified {}", requestTypeValue);
-      resp.sendError(400, "Invalid Relief Request type specified " + requestTypeValue);
+      logger.error("Invalid Sync type specified {}", syncTypeValue);
+      resp.sendError(400, "Invalid Sync type specified " + syncTypeValue);
       return;
     }
     String taskName = req.getParameter(PROCESS_TASK_PARAM_NAME);
@@ -63,7 +63,7 @@ public class SyncRequestProcessor extends HttpServlet {
     List<SyncRequestTask> taskList = syncService.getRequestTasks(taskName);
     if (taskList == null || taskList.isEmpty()) {
       resp.setContentType("text/plain");
-      resp.getWriter().println("No rows to process for Sheet for " + requestType
+      resp.getWriter().println("No rows to process for Sheet for " + syncType
           + " requests for " + providerCode + " for Task " + taskName);
       resp.flushBuffer();
       return;
