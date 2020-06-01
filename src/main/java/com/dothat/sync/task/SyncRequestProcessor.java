@@ -1,5 +1,6 @@
 package com.dothat.sync.task;
 
+import com.dothat.relief.request.RequestSorter;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.sync.SyncService;
@@ -58,7 +59,8 @@ public class SyncRequestProcessor extends HttpServlet {
     }
     String taskName = req.getParameter(PROCESS_TASK_PARAM_NAME);
   
-    List<SyncRequestTask> taskList = new SyncService().getRequestTasks(taskName);
+    SyncService syncService = new SyncService();
+    List<SyncRequestTask> taskList = syncService.getRequestTasks(taskName);
     if (taskList == null || taskList.isEmpty()) {
       resp.setContentType("text/plain");
       resp.getWriter().println("No rows to process for Sheet for " + requestType
@@ -83,13 +85,20 @@ public class SyncRequestProcessor extends HttpServlet {
         .getHeaders(destination.getGoogleSheetId(), sheetName);
     List<List<Object>> values = new ArrayList<>();
     RequestRowComposer composer = new RequestRowComposer(fieldNames);
+    List<ReliefRequest> requestList = new ArrayList<>();
     for (SyncRequestTask task : taskList) {
-      ReliefRequest request = task.getReliefRequest();
+      requestList.add(task.getReliefRequest());
+    }
+    requestList.sort(new RequestSorter(true));
+    for (ReliefRequest request : requestList) {
       values.add(composer.composeRow(request, new AttributeFieldExtractor(request.getRequesterID())));
     }
     
+    // Append the Rows to the Google Sheet
     new AppendRowToSheet(sheets)
         .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
+    // Delete the Tasks from the Data store
+    syncService.deleteRequestTasks(taskList);
   
     int numRows = values.size();
     

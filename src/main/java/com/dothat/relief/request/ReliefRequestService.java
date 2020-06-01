@@ -7,12 +7,11 @@ import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
 import com.dothat.relief.request.store.ReliefRequestStore;
-import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
+import com.dothat.relief.request.task.RequestBroadcastProcessorTaskGenerator;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -31,7 +30,7 @@ public class ReliefRequestService {
       data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     }
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
-    return store.store(data, new RequestBroadcastTaskGenerator());
+    return store.store(data, new RequestBroadcastProcessorTaskGenerator());
   }
   
   public ReliefRequest lookupRequestById(Long requestId) {
@@ -67,24 +66,5 @@ public class ReliefRequestService {
 
     requests.sort(new RequestSorter());
     return requests.get(0);
-  }
-  
-  private static class RequestSorter implements Comparator<ReliefRequest> {
-  
-    @Override
-    public int compare(ReliefRequest lhsRequest, ReliefRequest rhsRequest) {
-      DateTime lhs = JodaUtils.toDateTime(lhsRequest.getRequestTimestamp());
-      DateTime rhs = JodaUtils.toDateTime(rhsRequest.getRequestTimestamp());
-      
-      if (lhs != null && rhs != null) {
-        return lhs.compareTo(rhs);
-      } else if (lhs == null && rhs == null) {
-        return JodaUtils.toDateTime(lhsRequest.getCreationTimestamp())
-            .compareTo(JodaUtils.toDateTime(rhsRequest.getCreationTimestamp()));
-      } else if (lhs != null) {
-        return 1;
-      }
-      return -1;
-    }
   }
 }
