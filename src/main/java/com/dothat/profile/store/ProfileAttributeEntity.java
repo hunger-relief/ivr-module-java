@@ -64,7 +64,7 @@ public class ProfileAttributeEntity {
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
   
-  ProfileAttribute getData() {
+  public ProfileAttribute getData() {
     ProfileAttribute data = new ProfileAttribute();
     data.setAttributeId(attributeId);
     if (identityUUID != null) {

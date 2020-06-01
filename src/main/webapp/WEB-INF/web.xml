@@ -117,6 +117,42 @@
     <url-pattern>/task/attribute/broadcast/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>RequestBroadcastProcessor</servlet-name>
+    <servlet-class>com.dothat.sync.task.RequestBroadcastProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RequestBroadcastProcessor</servlet-name>
+    <url-pattern>/task/request/broadcast/processor/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SyncRequestProcessor</servlet-name>
+    <servlet-class>com.dothat.sync.task.SyncRequestProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SyncRequestProcessor</servlet-name>
+    <url-pattern>/task/request/sync/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>ProfileBroadcastProcessor</servlet-name>
+    <servlet-class>com.dothat.sync.task.ProfileBroadcastProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileBroadcastProcessor</servlet-name>
+    <url-pattern>/task/profile/broadcast/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SyncProfileProcessor</servlet-name>
+    <servlet-class>com.dothat.sync.task.SyncProfileProcessor</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>SyncProfileProcessor</servlet-name>
+    <url-pattern>/task/profile/sync/*</url-pattern>
+  </servlet-mapping>
+
   <!-- Static File Definitions -->
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>

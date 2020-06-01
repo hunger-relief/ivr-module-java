@@ -36,4 +36,28 @@
         <bucket-size>40</bucket-size>
         <max-concurrent-requests>10</max-concurrent-requests>
     </queue>
+    <queue>
+        <name>queue-request-broadcast</name>
+        <rate>20/s</rate>
+        <bucket-size>40</bucket-size>
+        <max-concurrent-requests>10</max-concurrent-requests>
+    </queue>
+    <queue>
+        <name>queue-request-sync</name>
+        <rate>20/s</rate>
+        <bucket-size>40</bucket-size>
+        <max-concurrent-requests>10</max-concurrent-requests>
+    </queue>
+    <queue>
+        <name>queue-profile-broadcast</name>
+        <rate>20/s</rate>
+        <bucket-size>40</bucket-size>
+        <max-concurrent-requests>10</max-concurrent-requests>
+    </queue>
+    <queue>
+        <name>queue-profile-sync</name>
+        <rate>20/s</rate>
+        <bucket-size>40</bucket-size>
+        <max-concurrent-requests>10</max-concurrent-requests>
+    </queue>
 </queue-entries>
