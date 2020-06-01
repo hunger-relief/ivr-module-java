@@ -30,6 +30,8 @@ import com.dothat.sync.taskgen.SyncProfileProcessorTaskGenerator;
 import com.dothat.sync.taskgen.SyncRequestProcessorTaskGenerator;
 import com.google.common.base.Strings;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +46,7 @@ public class SyncService {
   private static final Logger logger = LoggerFactory.getLogger(SyncService.class);
   
   private static final String TASK_NAME_SEPARATOR = "-";
+  private static final DateTimeFormatter DATE_TIME_FORMATTER =  DateTimeFormat.forPattern("yyyyMMddHHmm");
   
   private final SyncRequestStore store = new SyncRequestStore();
   
@@ -76,26 +79,38 @@ public class SyncService {
           + " for location " + LocationDisplayUtils.forLog(request.getLocation())
           + "[ID " + LocationDisplayUtils.idForLog(request.getLocation()) + "]");
     }
+    DateTime now = DateTime.now();
+    DateTime processTime = getProcessTime(now, provider);
     
     SyncRequestTask data = new SyncRequestTask();
     data.setProcessType(SyncProcessType.REQUEST);
-    data.setProcessTaskName(getProcessTaskName(SyncProcessType.REQUEST, provider,
-        request.getRequestType(), destination));
+    data.setProcessTaskName(getProcessTaskName(SyncProcessType.REQUEST, provider, destination, processTime));
     data.setProvider(provider);
     data.setRequestType(request.getRequestType());
     data.setDestination(destination);
     data.setReliefRequest(request);
   
     // Otherwise queue the Request for Sync
-    return store.storeRequestTask(data, new SyncRequestProcessorTaskGenerator(data.getProcessTaskName()));
+    return store.storeRequestTask(data, new SyncRequestProcessorTaskGenerator(data.getProcessTaskName(),
+        processTime.getMillis() - now.getMillis()));
   }
   
   private String getProcessTaskName(SyncProcessType processType, ReliefProvider provider,
-                                    RequestType requestType, Destination destination) {
+                                    Destination destination, DateTime processTime) {
     return provider.getProviderCode()
         + TASK_NAME_SEPARATOR + processType.name()
-        + TASK_NAME_SEPARATOR + requestType
-        + TASK_NAME_SEPARATOR + destination.getGoogleSheetId();
+        + TASK_NAME_SEPARATOR + destination.getGoogleSheetId()
+        + TASK_NAME_SEPARATOR + DATE_TIME_FORMATTER.print(processTime);
+  }
+  
+  private DateTime getProcessTime( DateTime now, ReliefProvider provider) {
+    DateTime processTime = now.plusMinutes(5);
+    int minuteOffset = processTime.getMinuteOfHour() % 5;
+    int providerOffset = new Long(provider.getProviderId() % 5).intValue();
+    processTime = processTime
+        .minusMinutes(minuteOffset)
+        .plusMinutes(providerOffset);
+    return processTime;
   }
   
   private boolean hasPreviousRequestForDate(ReliefRequest current, List<ReliefRequest> requestList) {
@@ -211,17 +226,20 @@ public class SyncService {
           + "[ID " + LocationDisplayUtils.idForLog(location) + "]");
     }
   
+    DateTime now = DateTime.now();
+    DateTime processTime = getProcessTime(now, provider);
+    
     SyncProfileTask data = new SyncProfileTask();
     data.setProcessType(SyncProcessType.PROFILE);
-    data.setProcessTaskName(getProcessTaskName(SyncProcessType.PROFILE, provider,
-        requestType, destination));
+    data.setProcessTaskName(getProcessTaskName(SyncProcessType.PROFILE, provider, destination, processTime));
     data.setProvider(provider);
     data.setRequestType(requestType);
     data.setDestination(destination);
     data.setProfileAttribute(attribute);
   
     // Otherwise queue the Request for Sync
-    return store.storeProfileTask(data, new SyncProfileProcessorTaskGenerator(data.getProcessTaskName()));
+    return store.storeProfileTask(data, new SyncProfileProcessorTaskGenerator(data.getProcessTaskName(),
+        processTime.getMillis() - now.getMillis()));
   }
   
   private boolean isLatestAttribute(ProfileAttribute attribute, List<ProfileAttribute> attrList) {
