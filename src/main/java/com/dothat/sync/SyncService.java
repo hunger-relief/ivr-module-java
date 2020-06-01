@@ -1,14 +1,24 @@
 package com.dothat.sync;
 
 import com.dothat.common.objectify.JodaUtils;
+import com.dothat.identity.data.ObfuscatedID;
+import com.dothat.ivr.mapping.IVRMappingService;
+import com.dothat.ivr.mapping.data.IVRMapping;
+import com.dothat.ivr.notif.IVRNotificationService;
+import com.dothat.ivr.notif.data.IVRCallNode;
+import com.dothat.ivr.notif.data.IVRProvider;
 import com.dothat.location.LocationDisplayUtils;
+import com.dothat.location.data.Location;
 import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
+import com.dothat.relief.provider.ReliefProviderAssigner;
 import com.dothat.relief.provider.ReliefProviderService;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.request.ReliefRequestService;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestSource;
 import com.dothat.relief.request.data.RequestType;
+import com.dothat.relief.request.data.SourceType;
 import com.dothat.sync.data.SyncProcessType;
 import com.dothat.sync.data.SyncProfileTask;
 import com.dothat.sync.data.SyncRequestTask;
@@ -147,31 +157,66 @@ public class SyncService {
     // TODO(abhideep): Add support for Multiple Requests
     ReliefRequest request = new ReliefRequestService().lookupLastRequest(
         attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource());
-
-    if (request == null) {
+  
+    RequestType requestType = RequestType.UNKNOWN;
+    Location location = null;
+    ReliefProvider provider = null;
+    if (request != null) {
+      requestType = request.getRequestType();
+      location = request.getLocation();
+      provider = request.getProvider();
+    } else {
       logger.error("No Request found for {} from {} {} ",
           attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource());
-      throw new IllegalStateException("No Request found for "
-          +  attribute.getIdentityUUID().getIdentifier()
-          + " from " + attribute.getSourceType() + " " + attribute.getSource());
+  
+      if (attribute.getSourceType() == SourceType.IVR) {
+        IVRProvider ivrProvider =IVRProvider.valueOf(attribute.getSource());
+        IVRCallNode call = new IVRNotificationService()
+            .lookupNodeByProviderId(ivrProvider, attribute.getSourceId());
+        IVRMappingService mappingService = new IVRMappingService();
+        IVRMapping mapping = mappingService.lookup(call.getDialedNumber(), null, false);
+        if (mapping != null) {
+          requestType = mapping.getRequestType();
+          location = mapping.getLocation();
+        }
+        // Assign it to a Provider based on the Phone Number
+        ObfuscatedID obfId = attribute.getIdentityUUID();
+        RequestSource source = new RequestSource();
+        source.setSourceType(attribute.getSourceType());
+        source.setSource(attribute.getSource());
+        source.setSourceId(attribute.getSourceId());
+  
+        source.setDialedNumber(call.getDialedNumber());
+        source.setCountry(call.getCountry());
+  
+        provider = new ReliefProviderAssigner().assignProvider(
+            obfId, source, requestType, location);
+      } else if (attribute.getSourceType() == SourceType.PROVIDER) {
+        String providerCode = attribute.getSource();
+        provider = new ReliefProviderService().lookupByCode(providerCode);
+      }
+      if (provider == null) {
+        throw new IllegalStateException("No Provider found for "
+            + attribute.getIdentityUUID().getIdentifier()
+            + " from " + attribute.getSourceType() + " " + attribute.getSource());
+      }
     }
   
     Destination destination = new DestinationService()
-        .lookupDestination(request.getProvider(), request.getRequestType(), request.getLocation(),
-            DestinationType.GOOGLE_SHEETS);
+        .lookupDestination(provider, requestType, location, DestinationType.GOOGLE_SHEETS);
     if (destination == null || Strings.isNullOrEmpty(destination.getGoogleSheetId())) {
-      throw new IllegalStateException("No destination defined for " + request.getRequestType() + " Request "
-          + " assigned to " + request.getProvider().getProviderCode()
-          + " for location " + LocationDisplayUtils.forLog(request.getLocation())
-          + "[ID " + LocationDisplayUtils.idForLog(request.getLocation()) + "]");
+      throw new IllegalStateException("No destination defined for " + requestType + " Request "
+          + " assigned to " + provider.getProviderCode()
+          + " for location " + LocationDisplayUtils.forLog(location)
+          + "[ID " + LocationDisplayUtils.idForLog(location) + "]");
     }
   
     SyncProfileTask data = new SyncProfileTask();
     data.setProcessType(SyncProcessType.PROFILE);
-    data.setProcessTaskName(getProcessTaskName(SyncProcessType.PROFILE, request.getProvider(),
-        request.getRequestType(), destination));
-    data.setProvider(request.getProvider());
-    data.setRequestType(request.getRequestType());
+    data.setProcessTaskName(getProcessTaskName(SyncProcessType.PROFILE, provider,
+        requestType, destination));
+    data.setProvider(provider);
+    data.setRequestType(requestType);
     data.setDestination(destination);
     data.setProfileAttribute(attribute);
   
