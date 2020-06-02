@@ -181,19 +181,25 @@ public class SyncService {
       location = request.getLocation();
       provider = request.getProvider();
     } else {
-      logger.error("No Request found for {} from {} {} ",
+      logger.warn("No Request found for {} from {} {} ",
           attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource());
   
       if (attribute.getSourceType() == SourceType.IVR) {
         IVRProvider ivrProvider =IVRProvider.valueOf(attribute.getSource());
         IVRCallNode call = new IVRNotificationService()
             .lookupNodeByProviderId(ivrProvider, attribute.getSourceId());
+
         IVRMappingService mappingService = new IVRMappingService();
         IVRMapping mapping = mappingService.lookup(call.getDialedNumber(), null, false);
         if (mapping != null) {
           requestType = mapping.getRequestType();
           location = mapping.getLocation();
         }
+  
+        logger.warn("Using the Dialed Number {} and IVRNumber {} Found IVR Mapping "
+                + "for Request Type {} and Location {}", call.getDialedNumber(), call.getIvrNumber(),
+            requestType, LocationDisplayUtils.forLog(location));
+  
         // Assign it to a Provider based on the Phone Number
         ObfuscatedID obfId = attribute.getIdentityUUID();
         RequestSource source = new RequestSource();
