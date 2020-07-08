@@ -7,10 +7,11 @@ package com.dothat.relief.request.data;
  */
 public enum RequestType {
   COOKED_FOOD("Cooked Food"),
-  RATION("Ration"),
+  JOBS("Jobs"),
   MEDICINE("Medicines"),
   MIGRATION("Migration"),
   MONEY("Financial Help"),
+  RATION("Ration"),
   UNKNOWN("Not Sure"),
   ;
   
