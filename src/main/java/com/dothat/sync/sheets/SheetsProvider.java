@@ -16,14 +16,16 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 
 /**
+ * Provides the Sheets API Client to write to Google Sheets
+ *
  * @author abhideep@ (Abhideep Singh)
  */
 public class SheetsProvider {
   private static final List<String> SCOPES =
     Lists.newArrayList(SheetsScopes.SPREADSHEETS, SheetsScopes.DRIVE_READONLY);
 
-  private static final String CREDENTIALS_FILE_PATH_DEV = "/sync-sheet-hunger-relief-dev.json";
-  private static final String CREDENTIALS_FILE_PATH_PROD = "/sync-to-sheet-credentials-hunger-relief-coop.json";
+  private static final String CREDENTIALS_FILE_PATH_DEV = "/credentials-sync-sheet-hunger-relief-dev.json";
+  private static final String CREDENTIALS_FILE_PATH_PROD = "/credentials-sync-to-sheet-hunger-relief-prod.json";
   
   private static final String CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH_DEV;
   public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
