@@ -20,6 +20,7 @@ public enum IndiaState implements State<IndiaState> {
   RAJASTHAN,
   TAMIL_NADU,
   TELENGANA,
+  UTTAR_PRADESH,
   WEST_BENGAL,
   ;
   
@@ -37,7 +38,10 @@ public enum IndiaState implements State<IndiaState> {
   public String getCode() {
     return name();
   }
-  
+
+  /**
+   * Resolves the Enum given the State Code
+   */
   public static class Resolver implements StateResolver {
   
     @Override
