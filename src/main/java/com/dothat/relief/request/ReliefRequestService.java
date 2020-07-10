@@ -46,14 +46,18 @@ public class ReliefRequestService {
     return store.findAll(obfuscatedId.getIdentifier(), provider.getProviderId(), requestType, limit);
   }
   
-  public List<ReliefRequest> lookupBySource(ObfuscatedID identityUUID, SourceType sourceType, String source) {
-    return store.findAll(identityUUID.getIdentifier(), sourceType, source, 5);
-  }
-  
-  public ReliefRequest lookupLastRequest(ObfuscatedID identityUUID, SourceType sourceType, String source) {
-    // TODO(abhideep): Eventually, just use this call.
-    List<ReliefRequest> requests = lookupBySource(identityUUID, sourceType, source);
-    
+  public ReliefRequest lookupLastRequest(ObfuscatedID identityUUID, SourceType sourceType, String source,
+                                         String sourceId) {
+    // First see if a request was created on the same call. If so use that.
+    List<ReliefRequest> requests = store.findAll(identityUUID.getIdentifier(), sourceType, source, sourceId, 5);
+
+    // Otherwise find the last request that was created from the same source
+    if (requests == null || requests.isEmpty()) {
+      // Otherwise find the latest request.
+      requests = store.findAll(identityUUID.getIdentifier(), sourceType, source, 5);
+    }
+
+    // TODO(abhideep): Eventually, remove the legacy lookup.
     // For Legacy reasons, lookup all Requests for Identity and then sort them.
     if (requests == null || requests.isEmpty()) {
       requests = lookupAllForIdentity(identityUUID, 50);

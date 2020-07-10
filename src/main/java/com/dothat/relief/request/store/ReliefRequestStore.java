@@ -125,7 +125,7 @@ public class ReliefRequestStore {
         .filter("requesterUUID", obfuscatedId)
         .filter("sourceType", sourceType)
         .filter("source", source)
-        .order("requestTimestamp")
+        .order("-requestTimestamp")
         .limit(limit)
         .list();
   
@@ -138,4 +138,27 @@ public class ReliefRequestStore {
     }
     return dataList;
   }
+
+  public List<ReliefRequest> findAll(String obfuscatedId, SourceType sourceType, String source,
+                                     String sourceId, int limit) {
+    List<ReliefRequestEntity> requestList = PersistenceService.service().load()
+        .type(ReliefRequestEntity.class)
+        .filter("requesterUUID", obfuscatedId)
+        .filter("sourceType", sourceType)
+        .filter("source", source)
+        .filter("sourceId", sourceId)
+        .order("-requestTimestamp")
+        .limit(limit)
+        .list();
+
+    if (requestList == null) {
+      return null;
+    }
+    List<ReliefRequest> dataList = new ArrayList<>();
+    for (ReliefRequestEntity entity : requestList) {
+      dataList.add(entity.getData());
+    }
+    return dataList;
+  }
+
 }

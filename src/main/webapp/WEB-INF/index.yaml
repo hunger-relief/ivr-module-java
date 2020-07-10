@@ -49,6 +49,15 @@ indexes:
       - name: requestTimestamp
         direction: desc
 
+  - kind: ReliefRequestEntity
+    properties:
+      - name: requesterUUID
+      - name: sourceType
+      - name: source
+      - name: sourceId
+      - name: requestTimestamp
+        direction: desc
+
   - kind: DestinationEntity
     properties:
       - name: providerId
