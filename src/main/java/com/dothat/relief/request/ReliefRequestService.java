@@ -37,30 +37,32 @@ public class ReliefRequestService {
     return store.find(requestId);
   }
   
-  public List<ReliefRequest> lookupAllForIdentity(ObfuscatedID obfuscatedId, int limit) {
-    return store.findAll(obfuscatedId.getIdentifier(), limit);
-  }
-  
   public List<ReliefRequest> lookupAllAssigned(
       ObfuscatedID obfuscatedId, ReliefProvider provider, RequestType requestType, int limit) {
     return store.findAll(obfuscatedId.getIdentifier(), provider.getProviderId(), requestType, limit);
   }
   
   public ReliefRequest lookupLastRequest(ObfuscatedID identityUUID, SourceType sourceType, String source,
-                                         String sourceId) {
+                                         String rootId, String sourceId) {
     // First see if a request was created on the same call. If so use that.
-    List<ReliefRequest> requests = store.findAll(identityUUID.getIdentifier(), sourceType, source, sourceId, 5);
+    List<ReliefRequest> requests = store.findAllForSourceId(identityUUID.getIdentifier(), sourceType, source,
+        sourceId, 5);
+
+    // Otherwise find the last request that was created from the same root Id
+    if (requests == null || requests.isEmpty()) {
+      requests = store.findAllForRootId(identityUUID.getIdentifier(), sourceType, source, rootId, 5);
+    }
 
     // Otherwise find the last request that was created from the same source
     if (requests == null || requests.isEmpty()) {
       // Otherwise find the latest request.
-      requests = store.findAll(identityUUID.getIdentifier(), sourceType, source, 5);
+      requests = store.findAllForSource(identityUUID.getIdentifier(), sourceType, source, 5);
     }
 
     // TODO(abhideep): Eventually, remove the legacy lookup.
     // For Legacy reasons, lookup all Requests for Identity and then sort them.
     if (requests == null || requests.isEmpty()) {
-      requests = lookupAllForIdentity(identityUUID, 50);
+      store.findAllForIdentity(identityUUID.getIdentifier(), 50);
     }
 
     if (requests == null || requests.isEmpty()) {
