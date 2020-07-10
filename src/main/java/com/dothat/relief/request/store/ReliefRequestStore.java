@@ -8,7 +8,7 @@ import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
 import com.googlecode.objectify.Key;
-import org.joda.time.DateTime;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,36 +90,22 @@ public class ReliefRequestStore {
         .order("-requestTimestamp")
         .limit(limit)
         .list();
-    
-    if (requestList == null) {
-      return null;
-    }
-    List<ReliefRequest> dataList = new ArrayList<>();
-    for (ReliefRequestEntity entity : requestList) {
-      dataList.add(entity.getData());
-    }
-    return dataList;
+
+    return toDataList(requestList);
   }
   
-  public List<ReliefRequest> findAll(String obfuscatedId, int limit) {
+  public List<ReliefRequest> findAllForIdentity(String obfuscatedId, int limit) {
     List<ReliefRequestEntity> requestList = PersistenceService.service().load()
         .type(ReliefRequestEntity.class)
         .filter("requesterUUID", obfuscatedId)
         .order("-requestTimestamp")
         .limit(limit)
         .list();
-  
-    if (requestList == null) {
-      return null;
-    }
-    List<ReliefRequest> dataList = new ArrayList<>();
-    for (ReliefRequestEntity entity : requestList) {
-      dataList.add(entity.getData());
-    }
-    return dataList;
+
+    return toDataList(requestList);
   }
   
-  public List<ReliefRequest> findAll(String obfuscatedId, SourceType sourceType, String source, int limit) {
+  public List<ReliefRequest> findAllForSource(String obfuscatedId, SourceType sourceType, String source, int limit) {
     List<ReliefRequestEntity> requestList = PersistenceService.service().load()
         .type(ReliefRequestEntity.class)
         .filter("requesterUUID", obfuscatedId)
@@ -128,19 +114,27 @@ public class ReliefRequestStore {
         .order("-requestTimestamp")
         .limit(limit)
         .list();
-  
-    if (requestList == null) {
-      return null;
-    }
-    List<ReliefRequest> dataList = new ArrayList<>();
-    for (ReliefRequestEntity entity : requestList) {
-      dataList.add(entity.getData());
-    }
-    return dataList;
+
+    return toDataList(requestList);
   }
 
-  public List<ReliefRequest> findAll(String obfuscatedId, SourceType sourceType, String source,
-                                     String sourceId, int limit) {
+  public List<ReliefRequest> findAllForRootId(String obfuscatedId, SourceType sourceType, String source,
+                                              String sourceRootId, int limit) {
+    List<ReliefRequestEntity> requestList = PersistenceService.service().load()
+        .type(ReliefRequestEntity.class)
+        .filter("requesterUUID", obfuscatedId)
+        .filter("sourceType", sourceType)
+        .filter("source", source)
+        .filter("sourceRootId", sourceRootId)
+        .order("-requestTimestamp")
+        .limit(limit)
+        .list();
+
+    return toDataList(requestList);
+  }
+
+  public List<ReliefRequest> findAllForSourceId(String obfuscatedId, SourceType sourceType, String source,
+                                                String sourceId, int limit) {
     List<ReliefRequestEntity> requestList = PersistenceService.service().load()
         .type(ReliefRequestEntity.class)
         .filter("requesterUUID", obfuscatedId)
@@ -151,6 +145,10 @@ public class ReliefRequestStore {
         .limit(limit)
         .list();
 
+    return toDataList(requestList);
+  }
+
+  private List<ReliefRequest> toDataList(List<ReliefRequestEntity> requestList) {
     if (requestList == null) {
       return null;
     }
@@ -160,5 +158,4 @@ public class ReliefRequestStore {
     }
     return dataList;
   }
-
 }
