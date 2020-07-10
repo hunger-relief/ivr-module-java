@@ -38,14 +38,16 @@ public class ReliefRequestEntity {
   
   @Load
   private Ref<LocationEntity> location;
-  
+
+  @Index
+  private SourceType sourceType;
   @Index
   private String source;
   @Index
-  private String sourceId;
+  private String sourceRootId;
   @Index
-  private SourceType sourceType;
-  
+  private String sourceId;
+
   @Index
   private Long providerId;
   private String providerCode;
@@ -76,10 +78,11 @@ public class ReliefRequestEntity {
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
     }
 
-    source = data.getSource();
-    sourceId = data.getSourceId();
     sourceType = data.getSourceType();
-    
+    source = data.getSource();
+    sourceRootId = data.getSourceRootId();
+    sourceId = data.getSourceId();
+
     if (data.getProvider() != null && data.getProvider().getProviderId() != null) {
       providerId = data.getProvider().getProviderId();
       providerCode = data.getProvider().getProviderCode();
@@ -111,11 +114,12 @@ public class ReliefRequestEntity {
     if (location != null) {
       data.setLocation(location.get().getData());
     }
-    
-    data.setSource(source);
-    data.setSourceId(sourceId);
+
     data.setSourceType(sourceType);
-  
+    data.setSource(source);
+    data.setSourceRootId(sourceRootId);
+    data.setSourceId(sourceId);
+
     if (providerId != null && provider != null) {
       data.setProvider(provider.get().getData());
     } else if (!Strings.isNullOrEmpty(providerCode)) {

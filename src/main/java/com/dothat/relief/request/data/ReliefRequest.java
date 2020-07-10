@@ -24,10 +24,11 @@ public class ReliefRequest {
 
   private Location location;
 
-  private String source;
-  private String sourceId;
   private SourceType sourceType;
-  
+  private String source;
+  private String sourceRootId;
+  private String sourceId;
+
   private ReliefProvider provider;
 
   private DateAndTime creationTimestamp;
@@ -96,7 +97,15 @@ public class ReliefRequest {
   public void setLocation(Location location) {
     this.location = location;
   }
-  
+
+  public SourceType getSourceType() {
+    return sourceType;
+  }
+
+  public void setSourceType(SourceType sourceType) {
+    this.sourceType = sourceType;
+  }
+
   public String getSource() {
     return source;
   }
@@ -104,11 +113,15 @@ public class ReliefRequest {
   public void setSource(String source) {
     this.source = source;
   }
-  
-  public SourceType getSourceType() {
-    return sourceType;
+
+  public String getSourceRootId() {
+    return sourceRootId;
   }
-  
+
+  public void setSourceRootId(String sourceRootId) {
+    this.sourceRootId = sourceRootId;
+  }
+
   public String getSourceId() {
     return sourceId;
   }
@@ -117,10 +130,7 @@ public class ReliefRequest {
     this.sourceId = sourceId;
   }
   
-  public void setSourceType(SourceType sourceType) {
-    this.sourceType = sourceType;
-  }
-  
+
   public ReliefProvider getProvider() {
     return provider;
   }
