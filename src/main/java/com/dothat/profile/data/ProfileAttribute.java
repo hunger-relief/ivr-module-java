@@ -3,7 +3,6 @@ package com.dothat.profile.data;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.relief.request.data.SourceType;
 import com.google.api.server.spi.types.DateAndTime;
-import org.joda.time.DateTime;
 
 /**
  * Data for An Attribute of the Profile.
@@ -17,10 +16,11 @@ public class ProfileAttribute {
   private String attributeName;
   private String attributeValue;
 
-  private String source;
-  private String sourceId;
   private SourceType sourceType;
-  
+  private String source;
+  private String sourceRootId;
+  private String sourceId;
+
   private DateAndTime timestamp;
 
   private DateAndTime creationTimestamp;
@@ -41,7 +41,15 @@ public class ProfileAttribute {
   public void setIdentityUUID(ObfuscatedID identityUUID) {
     this.identityUUID = identityUUID;
   }
-  
+
+  public SourceType getSourceType() {
+    return sourceType;
+  }
+
+  public void setSourceType(SourceType sourceType) {
+    this.sourceType = sourceType;
+  }
+
   public String getSource() {
     return source;
   }
@@ -49,21 +57,21 @@ public class ProfileAttribute {
   public void setSource(String source) {
     this.source = source;
   }
-  
+
+  public String getSourceRootId() {
+    return sourceRootId;
+  }
+
+  public void setSourceRootId(String sourceRootId) {
+    this.sourceRootId = sourceRootId;
+  }
+
   public String getSourceId() {
     return sourceId;
   }
   
   public void setSourceId(String sourceId) {
     this.sourceId = sourceId;
-  }
-  
-  public SourceType getSourceType() {
-    return sourceType;
-  }
-  
-  public void setSourceType(SourceType sourceType) {
-    this.sourceType = sourceType;
   }
   
   public String getAttributeName() {

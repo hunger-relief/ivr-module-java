@@ -42,6 +42,7 @@ public class ProfileAttributeGenerator {
     if (node.getProvider() != null) {
       data.setSource(node.getProvider().name());
     }
+    data.setSourceRootId(node.getIvrNumber());
     data.setSourceId(node.getProviderCallId());
 
     // First get the UUID
