@@ -171,7 +171,8 @@ public class SyncService {
 
     // TODO(abhideep): Add support for Multiple Requests
     ReliefRequest request = new ReliefRequestService().lookupLastRequest(
-        attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource(), attribute.getSourceId());
+        attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource(), attribute.getSourceRootId(),
+        attribute.getSourceId());
   
     RequestType requestType = RequestType.UNKNOWN;
     Location location = null;

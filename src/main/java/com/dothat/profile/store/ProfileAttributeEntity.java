@@ -25,14 +25,16 @@ public class ProfileAttributeEntity {
   @Index
   private String attributeName;
   private String attributeValue;
-  
+
+  @Index
+  private SourceType sourceType;
   @Index
   private String source;
   @Index
-  private String sourceId;
+  private String sourceRootId;
   @Index
-  private SourceType sourceType;
-  
+  private String sourceId;
+
   @Index
   private DateTime timestamp;
   
@@ -51,11 +53,12 @@ public class ProfileAttributeEntity {
     }
     attributeName = data.getAttributeName();
     attributeValue = data.getAttributeValue();
-    
-    source = data.getSource();
-    sourceId = data.getSourceId();
+
     sourceType = data.getSourceType();
-    
+    source = data.getSource();
+    sourceRootId = data.getSourceRootId();
+    sourceId = data.getSourceId();
+
     timestamp = JodaUtils.toDateTime(data.getTimestamp());
     
     if (data.getCreationTimestamp() != null) {
@@ -75,11 +78,12 @@ public class ProfileAttributeEntity {
     
     data.setAttributeName(attributeName);
     data.setAttributeValue(attributeValue);
-    
-    data.setSource(source);
-    data.setSourceId(sourceId);
+
     data.setSourceType(sourceType);
-  
+    data.setSource(source);
+    data.setSourceRootId(sourceRootId);
+    data.setSourceId(sourceId);
+
     data.setTimestamp(JodaUtils.toDateAndTime(timestamp));
 
     data.setCreationTimestamp(JodaUtils.toDateAndTime(creationTimestamp));

@@ -55,7 +55,8 @@ public class BroadcastProfileUpdate extends HttpServlet {
     // Lookup the list of Requests that this is relevant for the Profile
     // TODO(abhideep): Add List of Profile Collection Request Initiator.
     ReliefRequest request = new ReliefRequestService().lookupLastRequest(
-        attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource(), attribute.getSourceId());
+        attribute.getIdentityUUID(), attribute.getSourceType(), attribute.getSource(), attribute.getSourceRootId(),
+        attribute.getSourceId());
     if (request == null) {
       logger.error("No Request found for {} from {} {} ",
           attribute.getIdentityUUID().getIdentifier(), attribute.getSourceType(), attribute.getSource());
