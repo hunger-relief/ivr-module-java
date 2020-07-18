@@ -52,9 +52,7 @@ public class BroadcastReliefRequest extends HttpServlet {
           + " from " + requestUUID + " with Source ID " + requestSourceId);
       return;
     }
-//    ReliefRequest request = new SampleRequestGenerator()
-//        .generate("+91-9899975887", RequestType.RATION);
-  
+
     // TODO(abhideep): Lookup all Providers who need to be sent this broadcast.
 
     // Load the Provider if needed
@@ -75,13 +73,12 @@ public class BroadcastReliefRequest extends HttpServlet {
     }
     Sheets sheets;
     try {
-      sheets = SheetsProvider.createSheetsService();
+      sheets = SheetsProvider.createRealtimeSheetsService();
     } catch (GeneralSecurityException gse) {
       logger.error("Error Reading Spreadsheet ", gse);
       throw new IOException(gse);
     }
 
-    // TODO(abhideep): Decide between Requests and Shared Requests
     String sheetName = "Requests";
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
         .getHeaders(destination.getGoogleSheetId(), sheetName);
