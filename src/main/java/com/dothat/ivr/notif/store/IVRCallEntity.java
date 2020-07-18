@@ -50,7 +50,7 @@ public class IVRCallEntity {
   private DateTime startTimestamp;
   private DateTime endTimestamp;
 
-  private String urgency;
+  private String relayMode;
   private String notificationUri;
   private String notificationContent;
   
@@ -88,7 +88,7 @@ public class IVRCallEntity {
     startTimestamp = JodaUtils.toDateTime(data.getStartTimestamp());
     endTimestamp = JodaUtils.toDateTime(data.getEndTimestamp());
 
-    urgency = data.getUrgency();
+    relayMode = data.getRelayMode();
     notificationUri = data.getNotificationUri();
     notificationContent = data.getNotificationContent();
 
@@ -129,7 +129,7 @@ public class IVRCallEntity {
     data.setStartTimestamp(JodaUtils.toDateAndTime(startTimestamp));
     data.setEndTimestamp(JodaUtils.toDateAndTime(endTimestamp));
 
-    data.getUrgency();
+    data.setRelayMode(relayMode);
     data.setNotificationUri(notificationUri);
     data.setNotificationContent(notificationContent);
     

@@ -15,7 +15,7 @@ public enum IVRDataField implements Field {
   DIALED_NUMBER, // The number that was dialed by the caller
   RECEIVER_NUMBER, // The number of the agent who received the call
 
-  URGENCY,
+  RELAY_MODE,
   KEY_PRESS,
   
   CALL_TIMESTAMP,
