@@ -99,15 +99,17 @@
     <url-pattern>/task/node/processor/*</url-pattern>
   </servlet-mapping>
 
+  <!-- Broadcasts the Relief Request Immediately -->
   <servlet>
     <servlet-name>BroadcastReliefRequest</servlet-name>
     <servlet-class>com.dothat.sync.task.BroadcastReliefRequest</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>BroadcastReliefRequest</servlet-name>
-    <url-pattern>/task/request/broadcast/*</url-pattern>
+    <url-pattern>/task/request/broadcast/realtime/*</url-pattern>
   </servlet-mapping>
 
+  <!-- Broadcasts the Profile Immediately -->
   <servlet>
     <servlet-name>BroadcastProfileUpdate</servlet-name>
     <servlet-class>com.dothat.sync.task.BroadcastProfileUpdate</servlet-class>
@@ -117,6 +119,7 @@
     <url-pattern>/task/attribute/broadcast/*</url-pattern>
   </servlet-mapping>
 
+  <!-- Relief Request are Batched together for Sync  -->
   <servlet>
     <servlet-name>RequestBroadcastProcessor</servlet-name>
     <servlet-class>com.dothat.sync.task.RequestBroadcastProcessor</servlet-class>
