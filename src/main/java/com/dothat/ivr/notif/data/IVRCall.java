@@ -14,18 +14,20 @@ public class IVRCall {
   private String callerNumber;
   private String ivrNumber;
   private String dialedNumber;
-  
+  private String receiverNumber;
+
   private Country country;
   private String countryValue;
   private String state;
   private String circle;
   private String locationHint;
-  
+
   private SimpleDate callDate;
   private DateAndTime callTimestamp;
   private DateAndTime startTimestamp;
   private DateAndTime endTimestamp;
-  
+
+  private String urgency;
   private String notificationUri;
   private String notificationContent;
   
@@ -82,7 +84,15 @@ public class IVRCall {
   public void setDialedNumber(String dialedNumber) {
     this.dialedNumber = dialedNumber;
   }
-  
+
+  public String getReceiverNumber() {
+    return receiverNumber;
+  }
+
+  public void setReceiverNumber(String receiverNumber) {
+    this.receiverNumber = receiverNumber;
+  }
+
   public Country getCountry() {
     return country;
   }
@@ -170,7 +180,15 @@ public class IVRCall {
   public void setErrorList(List<ParseError> errorList) {
     this.errorList = errorList;
   }
-  
+
+  public String getUrgency() {
+    return urgency;
+  }
+
+  public void setUrgency(String urgency) {
+    this.urgency = urgency;
+  }
+
   public String getNotificationUri() {
     return notificationUri;
   }

@@ -33,6 +33,8 @@ public class KaleyraDataExtractor extends GenericIVRDataExtractor {
     fieldNameMap.put(IVRDataField.CALLER_NUMBER, "caller");
     fieldNameMap.put(IVRDataField.DIALED_NUMBER, "called");
     fieldNameMap.put(IVRDataField.IVR_NUMBER, "number");
+    fieldNameMap.put(IVRDataField.RECEIVER_NUMBER, "dialed");
+    fieldNameMap.put(IVRDataField.URGENCY, "urgency");
     fieldNameMap.put(IVRDataField.CALL_ID, "id");
     fieldNameMap.put(IVRDataField.COUNTRY, "isocode");
     fieldNameMap.put(IVRDataField.CIRCLE, "circle");
