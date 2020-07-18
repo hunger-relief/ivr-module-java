@@ -18,6 +18,7 @@ public class ReliefRequest {
   
   private DateAndTime requestTimestamp;
 
+  private String requestReceiver;
   private RequestStatus requestStatus;
   private ClaimStatus claimStatus;
   private VerificationStatus verificationStatus;
@@ -57,7 +58,15 @@ public class ReliefRequest {
   public void setRequestType(RequestType requestType) {
     this.requestType = requestType;
   }
-  
+
+  public String getRequestReceiver() {
+    return requestReceiver;
+  }
+
+  public void setRequestReceiver(String requestReceiver) {
+    this.requestReceiver = requestReceiver;
+  }
+
   public DateAndTime getRequestTimestamp() {
     return requestTimestamp;
   }
