@@ -4,14 +4,13 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.time.CountryTimeZoneLookup;
 import com.dothat.location.data.Country;
 import com.dothat.relief.request.data.ReliefRequest;
-import com.dothat.relief.request.data.RequestType;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * Extract all the fields fromm a Relief Request.
@@ -45,6 +44,7 @@ public class ReliefRequestFieldExtractor {
     if (data.getRequestType() != null) {
       addString(map, RequestField.REQUEST_TYPE, data.getRequestType().getDisplayValue());
     }
+    addString(map, RequestField.RECEIVER_PHONE, data.getRequestReceiver());
 
     if (data.getLocation() != null) {
       addString(map, RequestField.LOCATION, data.getLocation().getLocation());

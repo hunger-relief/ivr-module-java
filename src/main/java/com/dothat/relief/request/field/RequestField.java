@@ -12,6 +12,7 @@ public enum RequestField {
   UUID,
   PHONE,
   REQUEST_TYPE,
+  RECEIVER_PHONE,
   GROUP_SIZE,
   PERSON_NAME,
   ADDRESS,
