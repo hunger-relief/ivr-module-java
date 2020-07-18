@@ -9,7 +9,14 @@ import com.dothat.location.LocationDisplayUtils;
 import com.dothat.location.data.Location;
 import com.dothat.relief.provider.ReliefProviderAssigner;
 import com.dothat.relief.provider.data.ReliefProvider;
-import com.dothat.relief.request.data.*;
+import com.dothat.relief.request.data.ClaimStatus;
+import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestSource;
+import com.dothat.relief.request.data.RequestStatus;
+import com.dothat.relief.request.data.RequestType;
+import com.dothat.relief.request.data.SourceType;
+import com.dothat.relief.request.data.VerificationStatus;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,6 +84,7 @@ public class ReliefRequestGenerator {
 
     data.setClaimStatus(provider == null ? ClaimStatus.UNCLAIMED : ClaimStatus.CLAIMED);
     data.setRequestStatus(RequestStatus.RECEIVED);
+    data.setRequestReceiver(call.getReceiverNumber());
     data.setVerificationStatus(VerificationStatus.UNVERIFIED);
     return data;
   }
