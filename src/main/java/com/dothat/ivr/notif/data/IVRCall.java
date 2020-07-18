@@ -27,7 +27,7 @@ public class IVRCall {
   private DateAndTime startTimestamp;
   private DateAndTime endTimestamp;
 
-  private String urgency;
+  private String relayMode;
   private String notificationUri;
   private String notificationContent;
   
@@ -181,12 +181,12 @@ public class IVRCall {
     this.errorList = errorList;
   }
 
-  public String getUrgency() {
-    return urgency;
+  public String getRelayMode() {
+    return relayMode;
   }
 
-  public void setUrgency(String urgency) {
-    this.urgency = urgency;
+  public void setRelayMode(String relayMode) {
+    this.relayMode = relayMode;
   }
 
   public String getNotificationUri() {

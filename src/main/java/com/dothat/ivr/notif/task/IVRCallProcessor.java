@@ -43,7 +43,7 @@ public class IVRCallProcessor extends HttpServlet {
         return;
       }
       ReliefRequest data = new ReliefRequestGenerator().generate(call);
-      requestId = new ReliefRequestService().save(data, toRelayMode(call.getUrgency()));
+      requestId = new ReliefRequestService().save(data, toRelayMode(call.getRelayMode()));
     } catch (Throwable t) {
       logger.error("Error while processing Call with Call Id {}", callIdParam, t);
       resp.sendError(500, "Error while processing Call with Call Id " + callIdParam);
@@ -54,15 +54,14 @@ public class IVRCallProcessor extends HttpServlet {
     resp.flushBuffer();
   }
 
-  RelayMode toRelayMode(String urgency) {
-    if (Strings.isNullOrEmpty(urgency)) {
+  RelayMode toRelayMode(String mode) {
+    if (Strings.isNullOrEmpty(mode)) {
       return null;
     }
     try {
-      return RelayMode.valueOf(urgency.toUpperCase());
+      return RelayMode.valueOf(mode.toUpperCase());
     } catch (Throwable t) {
       return null;
     }
   }
-
 }
