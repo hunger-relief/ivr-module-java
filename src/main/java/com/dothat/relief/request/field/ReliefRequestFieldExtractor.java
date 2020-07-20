@@ -4,6 +4,7 @@ import com.dothat.common.objectify.JodaUtils;
 import com.dothat.common.time.CountryTimeZoneLookup;
 import com.dothat.location.data.Country;
 import com.dothat.relief.request.data.ReliefRequest;
+import com.google.common.base.Strings;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -40,11 +41,11 @@ public class ReliefRequestFieldExtractor {
       map.put(RequestField.UUID.name(), data.getRequesterID().getIdentifier());
     }
     
-    addString(map, RequestField.PHONE, phone);
+    addPhone(map, RequestField.PHONE, phone);
     if (data.getRequestType() != null) {
       addString(map, RequestField.REQUEST_TYPE, data.getRequestType().getDisplayValue());
     }
-    addString(map, RequestField.RECEIVER_PHONE, data.getRequestReceiver());
+    addPhone(map, RequestField.RECEIVER_PHONE, data.getRequestReceiver());
 
     if (data.getLocation() != null) {
       addString(map, RequestField.LOCATION, data.getLocation().getLocation());
@@ -85,5 +86,16 @@ public class ReliefRequestFieldExtractor {
     if (value != null) {
       map.put(field.name(), value.name());
     }
+  }
+
+  void addPhone(Map<String, String> map, RequestField field, String value) {
+    if (Strings.isNullOrEmpty(value)) {
+      return;
+    }
+    String phoneNUmber = value;
+    // Strip out the country code if any and add ' to make it a string literal
+    int index = phoneNUmber.indexOf("-");
+    phoneNUmber = "'" + phoneNUmber.substring(index + 1);
+    addString(map, field, phoneNUmber);
   }
 }
