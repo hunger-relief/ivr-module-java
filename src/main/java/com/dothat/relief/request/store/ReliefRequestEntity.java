@@ -5,7 +5,12 @@ import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.location.store.LocationEntity;
 import com.dothat.relief.provider.data.ReliefProvider;
 import com.dothat.relief.provider.store.ProviderEntity;
-import com.dothat.relief.request.data.*;
+import com.dothat.relief.request.data.ClaimStatus;
+import com.dothat.relief.request.data.ReliefRequest;
+import com.dothat.relief.request.data.RequestStatus;
+import com.dothat.relief.request.data.RequestType;
+import com.dothat.relief.request.data.SourceType;
+import com.dothat.relief.request.data.VerificationStatus;
 import com.google.common.base.Strings;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
@@ -13,6 +18,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
+
 import org.joda.time.DateTime;
 
 /**
@@ -31,11 +37,12 @@ public class ReliefRequestEntity {
   private RequestType requestType;
   @Index
   private DateTime requestTimestamp;
-  
+  private String requestReceiver;
+
   private RequestStatus requestStatus;
   private ClaimStatus claimStatus;
   private VerificationStatus verificationStatus;
-  
+
   @Load
   private Ref<LocationEntity> location;
 
@@ -69,11 +76,12 @@ public class ReliefRequestEntity {
     }
     requestType = data.getRequestType();
     requestTimestamp = JodaUtils.toDateTime(data.getRequestTimestamp());
+    requestReceiver = data.getRequestReceiver();
 
     requestStatus = data.getRequestStatus();
     claimStatus = data.getClaimStatus();
     verificationStatus = data.getVerificationStatus();
-  
+
     if (data.getLocation() != null && data.getLocation().getLocationId() != null) {
       location = Ref.create(Key.create(LocationEntity.class, data.getLocation().getLocationId()));
     }
@@ -106,6 +114,7 @@ public class ReliefRequestEntity {
     
     data.setRequestType(requestType);
     data.setRequestTimestamp(JodaUtils.toDateAndTime(requestTimestamp));
+    data.setRequestReceiver(requestReceiver);
 
     data.setRequestStatus(requestStatus);
     data.setClaimStatus(claimStatus);

@@ -73,7 +73,9 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     data.setCallerNumber(extractor.extractPhone(country, json, IVRDataField.CALLER_NUMBER, true));
     data.setDialedNumber(extractor.extractPhone(country, json, IVRDataField.DIALED_NUMBER, true));
     data.setIvrNumber(extractor.extractPhone(country, json, IVRDataField.IVR_NUMBER, false));
+    data.setReceiverNumber(extractor.extractPhone(country, json, IVRDataField.RECEIVER_NUMBER, false));
 
+    data.setRelayMode(extractor.extract(json, IVRDataField.RELAY_MODE, false));
     if (errorList.isEmpty()) {
       data.setParseStatus(ParseStatus.SUCCESS);
     } else {

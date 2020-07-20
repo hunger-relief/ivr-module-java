@@ -24,18 +24,33 @@ public class SheetsProvider {
   private static final List<String> SCOPES =
     Lists.newArrayList(SheetsScopes.SPREADSHEETS, SheetsScopes.DRIVE_READONLY);
 
-  private static final String CREDENTIALS_FILE_PATH_DEV = "/credentials-sync-sheet-hunger-relief-dev.json";
-  private static final String CREDENTIALS_FILE_PATH_PROD = "/credentials-sync-to-sheet-hunger-relief-prod.json";
-  
+  private static final String CREDENTIALS_FILE_PATH_DEV
+      = "/credentials-sync-sheet-hunger-relief-dev.json";
+  private static final String CREDENTIALS_FILE_PATH_DEV_REALTIME
+      = "/credentials-sync-sheet-hunger-relief-dev.json";
+  private static final String CREDENTIALS_FILE_PATH_PROD
+      = "/credentials-sync-to-sheet-hunger-relief-prod.json";
+  private static final String CREDENTIALS_FILE_PATH_PROD_REALTIME
+      = "/credentials-sync-to-sheet-hunger-relief-prod.json";
+
   private static final String CREDENTIALS_FILE_PATH = CREDENTIALS_FILE_PATH_PROD;
+  private static final String CREDENTIALS_FILE_PATH_REALTIME = CREDENTIALS_FILE_PATH_PROD_REALTIME;
   public static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
   
   public static Sheets createSheetsService() throws IOException, GeneralSecurityException {
+    return createSheetsService(CREDENTIALS_FILE_PATH);
+  }
+
+  public static Sheets createRealtimeSheetsService() throws IOException, GeneralSecurityException {
+    return createSheetsService(CREDENTIALS_FILE_PATH_REALTIME);
+  }
+
+  private static Sheets createSheetsService(String credentialFilePath) throws IOException, GeneralSecurityException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     
-    InputStream credentialsFile = SheetsProvider.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+    InputStream credentialsFile = SheetsProvider.class.getResourceAsStream(credentialFilePath);
     if (credentialsFile == null) {
-      throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+      throw new FileNotFoundException("Resource not found: " + credentialFilePath);
     }
   
     GoogleCredential credential = GoogleCredential

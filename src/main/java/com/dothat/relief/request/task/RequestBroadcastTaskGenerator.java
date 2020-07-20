@@ -15,9 +15,9 @@ import java.util.List;
 public class RequestBroadcastTaskGenerator extends QueueTaskGenerator<ReliefRequest> {
   
   private static final String PROCESSOR_QUEUE_NAME = "queue-request-processor";
-  private static final String PROCESSOR_URI = "/task/request/broadcast";
+  private static final String PROCESSOR_URI = "/task/request/broadcast/realtime";
   private static final String PROCESSOR_MODULE_NAME = "default";
-  private static final Long PROCESSOR_DELAY_MILLIS = 10000L;
+  private static final Long PROCESSOR_DELAY_MILLIS = 1000L;
 
   
   public RequestBroadcastTaskGenerator() {

@@ -34,7 +34,8 @@ public class IVRCallEntity {
   @Index
   private String dialedNumber;
   private String ivrNumber;
-  
+  private String receiverNumber;
+
   @Index
   private Country country;
   @Index
@@ -48,7 +49,8 @@ public class IVRCallEntity {
   private DateTime callTimestamp;
   private DateTime startTimestamp;
   private DateTime endTimestamp;
-  
+
+  private String relayMode;
   private String notificationUri;
   private String notificationContent;
   
@@ -73,6 +75,7 @@ public class IVRCallEntity {
     callerNumber = data.getCallerNumber();
     dialedNumber = data.getDialedNumber();
     ivrNumber = data.getIvrNumber();
+    receiverNumber = data.getReceiverNumber();
 
     country = data.getCountry();
     countryValue = data.getCountryValue();
@@ -85,6 +88,7 @@ public class IVRCallEntity {
     startTimestamp = JodaUtils.toDateTime(data.getStartTimestamp());
     endTimestamp = JodaUtils.toDateTime(data.getEndTimestamp());
 
+    relayMode = data.getRelayMode();
     notificationUri = data.getNotificationUri();
     notificationContent = data.getNotificationContent();
 
@@ -112,7 +116,8 @@ public class IVRCallEntity {
     data.setCallerNumber(callerNumber);
     data.setIvrNumber(ivrNumber);
     data.setDialedNumber(dialedNumber);
-    
+    data.setReceiverNumber(receiverNumber);
+
     data.setCountry(country);
     data.setCountryValue(countryValue);
     data.setState(state);
@@ -123,7 +128,8 @@ public class IVRCallEntity {
     data.setCallTimestamp(JodaUtils.toDateAndTime(callTimestamp));
     data.setStartTimestamp(JodaUtils.toDateAndTime(startTimestamp));
     data.setEndTimestamp(JodaUtils.toDateAndTime(endTimestamp));
-    
+
+    data.setRelayMode(relayMode);
     data.setNotificationUri(notificationUri);
     data.setNotificationContent(notificationContent);
     

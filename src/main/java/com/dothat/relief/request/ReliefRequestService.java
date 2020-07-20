@@ -3,11 +3,14 @@ package com.dothat.relief.request;
 import com.dothat.common.objectify.JodaUtils;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.relief.provider.data.ReliefProvider;
+import com.dothat.relief.request.data.RelayMode;
 import com.dothat.relief.request.data.ReliefRequest;
 import com.dothat.relief.request.data.RequestType;
 import com.dothat.relief.request.data.SourceType;
 import com.dothat.relief.request.store.ReliefRequestStore;
 import com.dothat.relief.request.task.RequestBroadcastProcessorTaskGenerator;
+import com.dothat.relief.request.task.RequestBroadcastTaskGenerator;
+
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +27,17 @@ public class ReliefRequestService {
   
   private final ReliefRequestStore store = new ReliefRequestStore();
   
-  public Long save(ReliefRequest data) {
+  public Long save(ReliefRequest data, RelayMode relayMode) {
     DateTime now = DateTime.now();
     if (data.getCreationTimestamp() == null) {
       data.setCreationTimestamp(JodaUtils.toDateAndTime(now));
     }
     data.setModificationTimestamp(JodaUtils.toDateAndTime(now));
-    return store.store(data, new RequestBroadcastProcessorTaskGenerator());
+    if (relayMode == RelayMode.REALTIME) {
+      return store.store(data, new RequestBroadcastTaskGenerator());
+    } else {
+      return store.store(data, new RequestBroadcastProcessorTaskGenerator());
+    }
   }
   
   public ReliefRequest lookupRequestById(Long requestId) {
