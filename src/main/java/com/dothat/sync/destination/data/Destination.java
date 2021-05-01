@@ -19,7 +19,9 @@ public class Destination {
   // TODO(abhideep): SpreadSheet Id is enough for Google sheets
   //  but we may need more details for other types of destinations.
   private String googleSheetId;
-  
+  private String googleSheetName;
+  private Integer syncFrequencyInSeconds;
+
   private DateAndTime creationTimestamp;
   private DateAndTime modificationTimestamp;
   
@@ -70,7 +72,23 @@ public class Destination {
   public void setGoogleSheetId(String googleSheetId) {
     this.googleSheetId = googleSheetId;
   }
-  
+
+  public String getGoogleSheetName() {
+    return googleSheetName;
+  }
+
+  public void setGoogleSheetName(String googleSheetName) {
+    this.googleSheetName = googleSheetName;
+  }
+
+  public Integer getSyncFrequencyInSeconds() {
+    return syncFrequencyInSeconds;
+  }
+
+  public void setSyncFrequencyInSeconds(Integer syncFrequencyInSeconds) {
+    this.syncFrequencyInSeconds = syncFrequencyInSeconds;
+  }
+
   public DateAndTime getCreationTimestamp() {
     return creationTimestamp;
   }

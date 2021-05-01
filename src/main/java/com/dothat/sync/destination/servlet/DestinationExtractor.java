@@ -10,6 +10,8 @@ import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.destination.data.DestinationType;
 import com.google.common.base.Strings;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,8 @@ import java.util.Map;
  * @author abhideep@ (Abhideep Singh)
  */
 class DestinationExtractor {
-  
+  private static final Logger logger = LoggerFactory.getLogger(DestinationExtractor.class);
+
   Destination extract(JSONObject json) {
     Destination data = new Destination();
     List<FieldError> errorList = new ArrayList<>();
@@ -45,6 +48,18 @@ class DestinationExtractor {
       throw new IllegalArgumentException("Invalid Destination Type");
     }
     data.setGoogleSheetId(extractor.extract(json, DestinationField.GOOGLE_SHEET_ID, true));
+    data.setGoogleSheetName(extractor.extract(json, DestinationField.GOOGLE_SHEET_NAME, false));
+    String syncFrequency = extractor.extract(json, DestinationField.SYNC_FREQ_SECS, false);
+    logger.warn("Sync Frequency in the Request is {}", syncFrequency);
+    if (syncFrequency != null) {
+      try {
+        data.setSyncFrequencyInSeconds(Integer.valueOf(syncFrequency));
+        logger.warn("Saving Sync Frequency is {}", data.getSyncFrequencyInSeconds());
+      } catch (Throwable t) {
+        throw new IllegalArgumentException("Invalid Sync Frequency");
+      }
+    }
+
     String locationId = extractor.extract(json, DestinationField.LOCATION, false);
     if (!Strings.isNullOrEmpty(locationId)) {
       Location location = new Location();
