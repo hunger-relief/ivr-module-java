@@ -14,8 +14,9 @@ public class AppendRowConfig {
     this.lookupSheetRange = lookupSheetRange;
   }
   
-  public static AppendRowConfig forRequest() {
-    return new AppendRowConfig("Requests!", "A1:Z");
+  public static AppendRowConfig forRequest(String sheetName) {
+    String sanitizedName = sheetName + "!";
+    return new AppendRowConfig(sanitizedName, "A1:Z");
   }
 
   public static AppendRowConfig forProfile() {

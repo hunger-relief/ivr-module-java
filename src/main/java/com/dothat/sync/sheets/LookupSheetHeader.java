@@ -27,8 +27,9 @@ public class LookupSheetHeader {
     return new LookupSheetHeader(service, spreadsheetId, "Profiles!A1:AZ1");
   }
 
-  public static LookupSheetHeader forRequests(Sheets service, String spreadsheetId) {
-    return new LookupSheetHeader(service, spreadsheetId, "Requests!A1:AZ1");
+  public static LookupSheetHeader forRequests(Sheets service, String spreadsheetId, String sheetName) {
+    String sheetRange = sheetName + "!A1:AZ1";
+    return new LookupSheetHeader(service, spreadsheetId, sheetRange);
   }
   
   public SheetHeader getHeader() throws IOException {
