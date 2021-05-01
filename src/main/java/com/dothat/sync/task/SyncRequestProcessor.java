@@ -80,7 +80,10 @@ public class SyncRequestProcessor extends HttpServlet {
       throw new IOException(gse);
     }
 
-    String sheetName = "Requests";
+    String sheetName = destination.getGoogleSheetName();
+    if (destination.getGoogleSheetName() == null || destination.getGoogleSheetName().isEmpty()) {
+      sheetName = "Requests";
+    }
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
         .getHeaders(destination.getGoogleSheetId(), sheetName);
     List<List<Object>> values = new ArrayList<>();
@@ -96,7 +99,7 @@ public class SyncRequestProcessor extends HttpServlet {
     
     // Append the Rows to the Google Sheet
     new AppendRowToSheet(sheets)
-        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
+        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(sheetName), values);
     // Delete the Tasks from the Data store
     syncService.deleteRequestTasks(taskList);
   

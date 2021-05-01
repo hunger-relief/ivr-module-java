@@ -22,7 +22,7 @@ public class SyncRequestProcessorTaskGenerator extends QueueTaskGenerator<SyncRe
   
   public SyncRequestProcessorTaskGenerator(String taskName, Long delayMillis) {
     super(PROCESSOR_QUEUE_NAME, taskName, PROCESSOR_URI, PROCESSOR_MODULE_NAME,
-        delayMillis == null? PROCESSOR_DELAY_MILLIS : delayMillis);
+        delayMillis == null ? PROCESSOR_DELAY_MILLIS : delayMillis);
   }
   
   @Override
