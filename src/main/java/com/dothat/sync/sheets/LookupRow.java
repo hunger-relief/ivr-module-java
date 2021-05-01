@@ -31,8 +31,9 @@ public class LookupRow {
     this.fieldNames = fieldNames;
   }
   
-  public static LookupRow forRequests(Sheets service) {
-    return new LookupRow(service, "Requests!",
+  public static LookupRow forRequests(Sheets service, String sheetName) {
+    String sanitizedSheetName = sheetName + "!";
+    return new LookupRow(service, sanitizedSheetName,
         Lists.newArrayList(RequestField.PHONE.name(), RequestField.REQUEST_DATE.name()));
   }
   

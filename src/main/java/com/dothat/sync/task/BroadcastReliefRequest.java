@@ -79,13 +79,17 @@ public class BroadcastReliefRequest extends HttpServlet {
       throw new IOException(gse);
     }
 
-    String sheetName = "Requests";
+    String sheetName = destination.getGoogleSheetName();
+    if (destination.getGoogleSheetName() == null || destination.getGoogleSheetName().isEmpty()) {
+      sheetName = "Requests";
+    }
+
     List<String> fieldNames = new GetHeaderFromSheet(sheets)
         .getHeaders(destination.getGoogleSheetId(), sheetName);
     List<List<Object>> values = new RequestRowComposer(fieldNames)
         .compose(request, new AttributeFieldExtractor(request.getRequesterID()));
     new AppendRowToSheet(sheets)
-        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(), values);
+        .appendRow(destination.getGoogleSheetId(), AppendRowConfig.forRequest(sheetName), values);
 
     resp.setContentType("text/plain");
     resp.getWriter().println("Added 1 Row to the sheet " + sheetName);

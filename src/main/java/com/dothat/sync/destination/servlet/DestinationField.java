@@ -13,6 +13,8 @@ public enum DestinationField implements Field {
   REQUEST_TYPE("request_type"),
   DESTINATION_TYPE("destination_type"),
   GOOGLE_SHEET_ID("sheet_id"),
+  GOOGLE_SHEET_NAME("sheet_name"),
+  SYNC_FREQ_SECS("sync_freq"),
   ;
   private final String paramName;
   

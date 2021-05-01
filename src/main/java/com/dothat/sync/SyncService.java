@@ -47,7 +47,8 @@ public class SyncService {
   
   private static final String TASK_NAME_SEPARATOR = "-";
   private static final DateTimeFormatter DATE_TIME_FORMATTER =  DateTimeFormat.forPattern("yyyyMMddHHmm");
-  
+  private static final int DEFAULT_SYNC_FREQ_MINUTES = 5;
+
   private final SyncRequestStore store = new SyncRequestStore();
   
   public Long createRequestSyncTask(ReliefRequest request) {
@@ -80,8 +81,13 @@ public class SyncService {
           + "[ID " + LocationDisplayUtils.idForLog(request.getLocation()) + "]");
     }
     DateTime now = DateTime.now();
-    DateTime processTime = getProcessTime(now, provider);
-    
+    Integer syncFrequency = destination.getSyncFrequencyInSeconds();
+    DateTime processTime;
+    if (syncFrequency != null && syncFrequency > 1) {
+      processTime = getProcessTime(now, provider, syncFrequency);
+    } else {
+      processTime = getDefaultProcessTime(now, provider);
+    }
     SyncRequestTask data = new SyncRequestTask();
     data.setProcessType(SyncProcessType.REQUEST);
     data.setProcessTaskName(getProcessTaskName(SyncProcessType.REQUEST, provider, destination, processTime));
@@ -103,16 +109,27 @@ public class SyncService {
         + TASK_NAME_SEPARATOR + DATE_TIME_FORMATTER.print(processTime);
   }
   
-  private DateTime getProcessTime( DateTime now, ReliefProvider provider) {
-    DateTime processTime = now.plusMinutes(5);
-    int minuteOffset = processTime.getMinuteOfHour() % 5;
-    int providerOffset = new Long(provider.getProviderId() % 5).intValue();
+  private DateTime getDefaultProcessTime(DateTime now, ReliefProvider provider) {
+    int numMinutes = DEFAULT_SYNC_FREQ_MINUTES;
+    DateTime processTime = now.plusMinutes(numMinutes);
+    int minuteOffset = processTime.getMinuteOfHour() % numMinutes;
+    int providerOffset = new Long(provider.getProviderId() % numMinutes).intValue();
     processTime = processTime
         .minusMinutes(minuteOffset)
         .plusMinutes(providerOffset);
     return processTime;
   }
-  
+
+  private DateTime getProcessTime(DateTime now, ReliefProvider provider, int numSeconds) {
+    DateTime processTime = now.plusSeconds(numSeconds);
+    int timeOffset = processTime.getSecondOfMinute() % numSeconds;
+    int providerOffset = new Long(provider.getProviderId() % numSeconds).intValue();
+    processTime = processTime
+            .minusSeconds(timeOffset)
+            .plusSeconds(providerOffset);
+    return processTime;
+  }
+
   private boolean hasPreviousRequestForDate(ReliefRequest current, List<ReliefRequest> requestList) {
     if (requestList == null || requestList.isEmpty()) {
       return false;
@@ -240,7 +257,7 @@ public class SyncService {
     }
   
     DateTime now = DateTime.now();
-    DateTime processTime = getProcessTime(now, provider);
+    DateTime processTime = getProcessTime(now, provider, DEFAULT_SYNC_FREQ_MINUTES);
     
     SyncProfileTask data = new SyncProfileTask();
     data.setProcessType(SyncProcessType.PROFILE);

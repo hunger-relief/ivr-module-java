@@ -6,6 +6,7 @@ import com.dothat.identity.data.ExternalID;
 import com.dothat.identity.data.ObfuscatedID;
 import com.dothat.profile.ProfileService;
 import com.dothat.profile.data.ProfileAttribute;
+import com.dothat.sync.destination.data.Destination;
 import com.dothat.sync.sheets.*;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.model.ValueRange;
@@ -71,22 +72,22 @@ public class UpdateAttributeTask {
       }
     }
     // See if the Request Sheet also has the same attribute, in which case update it.
-    updateRequestSheet(attribute);
+    updateRequestSheet(attribute, "Requests");
   }
 
-  private void updateRequestSheet(ProfileAttribute attribute) throws IOException {
+  private void updateRequestSheet(ProfileAttribute attribute, String sheetName) throws IOException {
     String attributeName = attribute.getAttributeName();
     String cellValue = getCellValue(attribute);
 
     // If the Request Sheet has a column with the same name, update that as well
-    SheetHeader requestHeaders = LookupSheetHeader.forRequests(sheets, spreadsheetId).getHeader();
+    SheetHeader requestHeaders = LookupSheetHeader.forRequests(sheets, spreadsheetId, sheetName).getHeader();
     if (requestHeaders.getColumnNumber(attributeName) != null) {
       String phoneNumber = SheetDataSanitizer.sanitizePhoneNumber(getPhoneNumber(attribute));
       if (phoneNumber.startsWith("'")) {
         phoneNumber = phoneNumber.substring(1);
       }
     
-      LookupRowResult requestRow = LookupRow.forRequests(sheets).lookup(spreadsheetId, requestHeaders);
+      LookupRowResult requestRow = LookupRow.forRequests(sheets, sheetName).lookup(spreadsheetId, requestHeaders);
       Integer requestRowNumber = requestRow.getLastRowForPhone(phoneNumber, attribute.getTimestamp());
       if (requestRowNumber == null) {
         logger.warn("No Row found with Phone number {} while trying to update Attribute {} ",

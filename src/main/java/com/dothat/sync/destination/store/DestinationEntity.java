@@ -39,7 +39,9 @@ public class DestinationEntity {
   
   private DestinationType destinationType;
   private String googleSheetId;
-  
+  private String googleSheetName;
+  private Integer syncFrequencyInSeconds;
+
   private DateTime creationTimestamp;
   private DateTime modificationTimestamp;
 
@@ -63,7 +65,9 @@ public class DestinationEntity {
     
     destinationType = data.getDestinationType();
     googleSheetId = data.getGoogleSheetId();
-  
+    googleSheetName = data.getGoogleSheetName();
+    syncFrequencyInSeconds = data.getSyncFrequencyInSeconds();
+
     creationTimestamp = JodaUtils.toDateTime(data.getCreationTimestamp());
     modificationTimestamp = JodaUtils.toDateTime(data.getModificationTimestamp());
   }
@@ -83,7 +87,9 @@ public class DestinationEntity {
     
     data.setDestinationType(destinationType);
     data.setGoogleSheetId(googleSheetId);
-  
+    data.setGoogleSheetName(googleSheetName);
+    data.setSyncFrequencyInSeconds(syncFrequencyInSeconds);
+
     data.setCreationTimestamp(JodaUtils.toDateAndTime(creationTimestamp));
     data.setModificationTimestamp(JodaUtils.toDateAndTime(modificationTimestamp));
     return data;
