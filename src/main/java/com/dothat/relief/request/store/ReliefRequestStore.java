@@ -41,10 +41,12 @@ public class ReliefRequestStore {
     return PersistenceService.service().transact(() -> {
       // Create and check the constraint first
       UniqueRequestIdConstraint constraint = new UniqueRequestIdConstraint();
-      Long currentId = constraint.check(data.getSourceType(), data.getSource(), data.getSourceId());
+      Long currentId = constraint.check(data.getSourceType(), data.getSource(), data.getSourceRootId(),
+              data.getSourceId());
       if (currentId != null) {
-        logger.warn("Multiple requests received for creating a Request for Notification with source Id "
-            + data.getSourceId() + " from " + data.getSourceType() + " " + data.getSource());
+        logger.warn("Multiple requests received for creating a Request with for Notification with " +
+                "source Id {} from {} {} and Root {}", data.getSourceId(), data.getSourceType(),data.getSource(),
+                data.getSourceRootId());
         return currentId;
       }
     
@@ -59,7 +61,8 @@ public class ReliefRequestStore {
       data.setRequestId(requestId);
     
       // Save the constraint to avoid future conflicts
-      constraint.store(data.getRequestId(), data.getSourceType(), data.getSource(), data.getSourceId());
+      constraint.store(data.getRequestId(), data.getSourceType(), data.getSource(), data.getSourceRootId(),
+              data.getSourceId());
 
       // If there is a task generator, then generate the task.
       if (taskGenerator != null) {
