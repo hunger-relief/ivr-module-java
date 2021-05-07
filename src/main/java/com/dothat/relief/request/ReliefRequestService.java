@@ -66,11 +66,10 @@ public class ReliefRequestService {
       requests = store.findAllForSource(identityUUID.getIdentifier(), sourceType, source, 5);
     }
 
-    // TODO(abhideep): Eventually, remove the legacy lookup.
-    // For Legacy reasons, lookup all Requests for Identity and then sort them.
-    if (requests == null || requests.isEmpty()) {
-      store.findAllForIdentity(identityUUID.getIdentifier(), 50);
-    }
+    // For Legacy reasons, We used to lookup all Requests for Identity and then sort them.
+//    if (requests == null || requests.isEmpty()) {
+//      store.findAllForIdentity(identityUUID.getIdentifier(), 50);
+//    }
 
     if (requests == null || requests.isEmpty()) {
       logger.warn("No Request found for {}" , identityUUID.getIdentifier());
