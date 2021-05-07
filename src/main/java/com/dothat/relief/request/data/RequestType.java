@@ -14,6 +14,7 @@ public enum RequestType {
   MEDICINE("Medicines"),
   MIGRATION("Migration"),
   MONEY("Financial Help"),
+  OXYGEN("Oxygen"),
   RATION("Ration"),
   UNKNOWN("Not Sure"),
   VACCINE("Vaccine"),
