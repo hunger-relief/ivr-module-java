@@ -36,7 +36,7 @@ public class ReliefRequestGenerator {
 
     data.setSourceType(SourceType.IVR);
     data.setSource(call.getProvider().name());
-    data.setSourceRootId(call.getIvrNumber());
+    data.setSourceRootId(call.getDialedNumber() == null ? call.getIvrNumber() : call.getDialedNumber());
     data.setSourceId(call.getProviderCallId());
     data.setRequestTimestamp(call.getCallTimestamp());
 
