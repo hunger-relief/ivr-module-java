@@ -24,47 +24,30 @@ import java.util.Map;
  */
 public class KaleyraDataExtractor extends GenericIVRDataExtractor {
   
-  private final Map<Field, String> fieldNameMap = new HashMap<>();
-  private final Map<String, Country> countryCodeMap = new HashMap<>();
-  private final Map<String, State<?>> stateCodeMap = new HashMap<>();
-  
+
   public KaleyraDataExtractor() {
     super(IVRProvider.KALEYRA);
-    fieldNameMap.put(IVRDataField.CALLER_NUMBER, "caller");
-    fieldNameMap.put(IVRDataField.DIALED_NUMBER, "called");
-    fieldNameMap.put(IVRDataField.IVR_NUMBER, "number");
-    fieldNameMap.put(IVRDataField.RECEIVER_NUMBER, "dialed");
-    fieldNameMap.put(IVRDataField.RELAY_MODE, "relay");
-    fieldNameMap.put(IVRDataField.CALL_ID, "id");
-    fieldNameMap.put(IVRDataField.COUNTRY, "isocode");
-    fieldNameMap.put(IVRDataField.CIRCLE, "circle");
-    fieldNameMap.put(IVRDataField.CALL_TIMESTAMP, "calltime");
-    fieldNameMap.put(IVRDataField.CALL_DURATION, "duration");
-    fieldNameMap.put(IVRDataField.CALL_NODE_ID, "nodeid");
-    fieldNameMap.put(IVRDataField.KEY_PRESS, "keypress");
-    
-    countryCodeMap.put(CountryCode.INDIA.getCode(), Country.INDIA);
-    
-    stateCodeMap.put("DELHI", IndiaState.DELHI);
-    stateCodeMap.put("HARYANA", IndiaState.HARYANA);
-    stateCodeMap.put("TAMIL NADU", IndiaState.TAMIL_NADU);
+    registerField(IVRDataField.CALLER_NUMBER, "caller");
+    registerField(IVRDataField.DIALED_NUMBER, "called");
+    registerField(IVRDataField.IVR_NUMBER, "number");
+    registerField(IVRDataField.RECEIVER_NUMBER, "dialed");
+    registerField(IVRDataField.RELAY_MODE, "relay");
+    registerField(IVRDataField.CALL_ID, "id");
+    registerField(IVRDataField.COUNTRY, "isocode");
+    registerField(IVRDataField.CIRCLE, "circle");
+    registerField(IVRDataField.CALL_TIMESTAMP, "calltime");
+    registerField(IVRDataField.CALL_DURATION, "duration");
+    registerField(IVRDataField.CALL_NODE_ID, "nodeid");
+    registerField(IVRDataField.KEY_PRESS, "keypress");
+
+    registerCountryCode(CountryCode.INDIA.getCode(), Country.INDIA);
+
+    registerStateCode("DELHI", IndiaState.DELHI);
+    registerStateCode("HARYANA", IndiaState.HARYANA);
+    registerStateCode("TAMIL NADU", IndiaState.TAMIL_NADU);
   }
   
-  @Override
-  protected Map<Field, String> getFieldNameMap() {
-    return fieldNameMap;
-  }
-  
-  @Override
-  protected Map<String, Country> getCountryCodeMap() {
-    return countryCodeMap;
-  }
-  
-  @Override
-  protected Map<String, State<?>> getStateCodeMap() {
-    return stateCodeMap;
-  }
-  
+
   @Override
   public IVRCall extractCall(String uri, JSONObject json) {
     IVRCall data = super.extractCall(uri, json);

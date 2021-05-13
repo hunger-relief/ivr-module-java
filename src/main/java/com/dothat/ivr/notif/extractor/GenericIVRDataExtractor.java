@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,10 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
   private static final Logger logger = LoggerFactory.getLogger(GenericIVRDataExtractor.class);
   
   private final IVRProvider provider;
+  private final Map<Field, String> fieldNameMap = new HashMap<>();
+  private final Map<String, Country> countryCodeMap = new HashMap<>();
+  private final Map<String, State<?>> stateCodeMap = new HashMap<>();
+
   private final List<FieldError> errorList = new ArrayList<>();
   private final List<FieldError> fieldErrorList = new ArrayList<>();
   
@@ -37,17 +42,43 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     return provider;
   }
   
-  protected abstract Map<Field, String> getFieldNameMap();
-  
-  protected abstract Map<String, Country> getCountryCodeMap() ;
-  
-  protected abstract Map<String, State<?>> getStateCodeMap();
-  
+  protected void registerField(Field field, String name) {
+    fieldNameMap.put(field, name);
+  }
+
+  protected Map<Field, String> getFieldNameMap() {
+    return fieldNameMap;
+  }
+
+  protected List<FieldError> getFieldErrorList() {
+    return fieldErrorList;
+  }
+
+  protected void registerCountryCode(String code, Country country) {
+    countryCodeMap.put(code, country);
+  }
+
+  protected Map<String, Country> getCountryCodeMap() {
+    return countryCodeMap;
+  }
+
+  protected void registerStateCode(String code, State<?> state) {
+    stateCodeMap.put(code, state);
+  }
+
+  protected Map<String, State<?>> getStateCodeMap() {
+    return stateCodeMap;
+  }
+
   @Override
   public IVRCall extractCall(String uri, JSONObject json) {
-    IVRCall data = new IVRCall();
     FieldValueExtractor extractor = new FieldValueExtractor(fieldErrorList);
     extractor.init(getFieldNameMap());
+    return extractCall(uri, json, extractor);
+  }
+
+  protected IVRCall extractCall(String uri, JSONObject json, FieldValueExtractor extractor) {
+    IVRCall data = new IVRCall();
 
     data.setProvider(provider);
     data.setNotificationUri(uri);
@@ -65,7 +96,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     }
     data.setCountry(country);
     
-    data.setCircle(extractor.extract(json, IVRDataField.CIRCLE));
+    data.setCircle(extractor.extract(json, IVRDataField.CIRCLE, false));
     State<?> state = getStateCodeMap().get(data.getCircle());
     // State is optional, so let's not mark is it as a parse error
     data.setState(state == null ? "UNKNOWN" : state.getCode());

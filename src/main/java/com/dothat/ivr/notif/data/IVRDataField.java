@@ -5,7 +5,10 @@ import com.dothat.common.field.Field;
 public enum IVRDataField implements Field {
   CALL_ID,
   CALL_NODE_ID,
-  
+  CALL_TYPE,
+  CALL_STATUS,
+  CALL_STATE,
+
   CALLER_NUMBER,
   COUNTRY,
   CIRCLE,
@@ -13,6 +16,7 @@ public enum IVRDataField implements Field {
   
   IVR_NUMBER, // The number for the Bridge or IVR
   DIALED_NUMBER, // The number that was dialed by the caller
+  OVERRIDE_DIALED_NUMBER, // Override the number value - Used for IVR Mapping to different request Type
   RECEIVER_NUMBER, // The number of the agent who received the call
 
   RELAY_MODE,

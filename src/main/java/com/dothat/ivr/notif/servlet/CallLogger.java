@@ -52,16 +52,22 @@ public class CallLogger extends HttpServlet {
     logger.info("Content received on URI " + uri + " : " + json.toString());
     IVRProvider provider = CallLogUrlRegistry.getInstance().getProvider(uri);
     IVRDataExtractor extractor = IVRDataExtractorRegistry.getInstance().getExtractor(provider);
-    Long callId = null;
+    String content = "";
     if (extractor != null) {
       logger.info("Content received on URI " + uri + " will be processed by extractor for " + provider);
       // Extract and Save the call
       IVRCall call = extractor.extractCall(uri, json);
-      callId = new IVRNotificationService().saveCall(call);
+      if (call != null) {
+        Long callId = new IVRNotificationService().saveCall(call);
+        content = "Call Notification Received on uri " + uri + " and saved as Call " + callId;
+      } else {
+        logger.warn("Content received on URI " + uri + " is being ignored for " + provider);
+        content = "Call Notification Received on uri " + uri + " was ignored";
+      }
     }
     // Save the Call
     resp.setContentType("text/plain");
-    resp.getWriter().println("Call Notification Received on uri " + uri + " and saved as Call " + callId);
+    resp.getWriter().println(content);
     resp.flushBuffer();
   }
 }
