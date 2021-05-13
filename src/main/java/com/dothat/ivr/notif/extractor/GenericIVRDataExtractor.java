@@ -96,7 +96,7 @@ public abstract class GenericIVRDataExtractor implements IVRDataExtractor {
     }
     data.setCountry(country);
     
-    data.setCircle(extractor.extract(json, IVRDataField.CIRCLE));
+    data.setCircle(extractor.extract(json, IVRDataField.CIRCLE, false));
     State<?> state = getStateCodeMap().get(data.getCircle());
     // State is optional, so let's not mark is it as a parse error
     data.setState(state == null ? "UNKNOWN" : state.getCode());
